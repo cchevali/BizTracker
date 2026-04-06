@@ -18,3 +18,4 @@
 - Added production base-path support, deployed the app on Vercel + Neon, and published it at `https://microflowops.com/biztracker` through the existing MicroFlowOps host rewrite.
 - Added a GitHub Actions workflow and deployment docs for Git-based preview and production deploys to the `microflowops-biztracker` Vercel project.
 - Adjusted the GitHub Actions deploy workflow to use `npm install` after the first Linux runner execution exposed optional dependency issues with `npm ci`.
+- Simplified the mobile dashboard around search plus score filtering, card-first small-screen results, and an ask-price-low-to-high default sort.

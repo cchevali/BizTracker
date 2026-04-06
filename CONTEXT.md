@@ -8,6 +8,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - One Next.js app, no auth
 - Dashboard with table and card views
 - URL-driven search, filters, sorting, and view mode
+- Mobile dashboard flow trimmed to global search, score filtering, and card-first results on smaller screens
 - Saved filter presets stored in PostgreSQL
 - Workbook export for ChatGPT comparison workflows, including businesses, notes, history, and metadata sheets
 - ChatGPT JSON normalization script for import-prep and score cleanup

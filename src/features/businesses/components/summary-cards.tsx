@@ -32,7 +32,7 @@ const summaryItems = [
 
 export function SummaryCards({ summary }: SummaryCardsProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
       {summaryItems.map((item) => {
         const value =
           item.key === "averageScore"
@@ -42,14 +42,14 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
               : String(summary[item.key]);
 
         return (
-          <Panel key={item.key} className="p-5">
-            <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-muted-ink)]">
+          <Panel key={item.key} className="p-4 sm:p-5">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-[var(--color-muted-ink)] sm:text-xs sm:tracking-[0.18em]">
               {item.label}
             </p>
-            <p className="mt-3 text-3xl font-semibold text-[var(--color-ink)]">
+            <p className="mt-3 text-2xl font-semibold text-[var(--color-ink)] sm:text-3xl">
               {value}
             </p>
-            <p className="mt-2 text-sm text-[var(--color-muted-ink)]">
+            <p className="mt-2 text-xs text-[var(--color-muted-ink)] sm:text-sm">
               {item.helper}
             </p>
           </Panel>

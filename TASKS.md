@@ -14,6 +14,7 @@
 - Added a reusable ChatGPT listing import script and imported the first 24-listing BizBuySell batch
 - Productionized the app on Vercel + Neon and published it at `https://microflowops.com/biztracker`
 - Added GitHub Actions-based preview and production auto-deploys for the `microflowops-biztracker` Vercel project
+- Simplified the mobile dashboard to search plus score filtering and made ask price low-to-high the default sort
 - Verified typecheck, lint, build, migration, and seed
 
 ## In Progress

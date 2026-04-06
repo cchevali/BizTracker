@@ -32,7 +32,7 @@ describe("business.filters", () => {
     expect(filters).toEqual({
       q: "HVAC leads",
       view: "table",
-      sort: "updated",
+      sort: "ask-price",
       state: "NC",
       category: "Home Services",
       minAsk: 1250000,

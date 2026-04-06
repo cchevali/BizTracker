@@ -64,3 +64,8 @@ Consequences: Auto-deploys are now repo-owned and explicit in `.github/workflows
 Decision: Use `npm install` rather than `npm ci` in the GitHub Actions deploy workflow.
 Reason: The repo is maintained on Windows, and the current dependency tree includes Linux-only optional native packages that caused `npm ci` to fail on GitHub's Ubuntu runner even though local installs were healthy.
 Consequences: Deploy automation stays cross-platform and reliable, but the workflow gives up strict lockfile immutability checks during deploy runs.
+
+## 2026-04-06
+Decision: Keep the mobile dashboard focused on global search, score filtering, and card-first results, while changing the default sort to ask price low-to-high.
+Reason: The full desktop filter sidebar and table view were too dense on phones, and ask price is the most practical default browsing order for this acquisition workflow.
+Consequences: Small screens now intentionally hide most filter fields and always render cards for table-mode views, while desktop retains the full filter set and view toggle behavior.

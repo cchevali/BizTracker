@@ -23,6 +23,8 @@
 - Added `DEPLOYMENT.md` to document the hosted topology, release workflow, token rotation, and fallback manual deploy steps.
 - Pushed the workflow to GitHub, observed the first production run fail on `npm ci`, and updated the workflow to use `npm install` for cross-platform optional dependency compatibility.
 - Verified the follow-up GitHub Actions production run succeeded end to end for commit `a655857`.
+- Changed the default dashboard sort to ask price low-to-high.
+- Simplified the mobile dashboard so smaller screens use global search plus score filtering, show a compact sort control, and render cards instead of the table view.
 
 ## What Is Unfinished
 - No UI/integration tests yet
@@ -30,6 +32,7 @@
 - No source URL parsing/import automation beyond manual entry
 - No direct marketplace comparison workflow yet beyond exporting tracker data
 - No in-app JSON import flow yet; normalization and import currently happen via CLI scripts
+
 ## What Should Be Worked On Next
 - Add integration coverage for Prisma-backed reads and a few critical user flows.
 - If deployment polish matters next, add preview URL reporting back into pull requests or GitHub environments.
@@ -45,3 +48,4 @@
 - Public hosting at `microflowops.com/biztracker` depends on the external host repo rewrite in `C:\dev\OSHA_Leads\web\next.config.mjs`; if that rewrite is removed, the public path breaks even if the standalone BizTracker deployment is healthy.
 - The GitHub Actions deploy path depends on repo secret `VERCEL_TOKEN`; forked PRs will not receive that secret, so preview deploys intentionally skip those cases.
 - The deploy workflow uses `npm install` instead of `npm ci` because the lockfile currently trips Linux-only optional dependency checks on GitHub's Ubuntu runner.
+- Mobile users below the `lg` breakpoint now get the simplified score-only filter experience by design; if broader tablet filtering is needed later, the breakpoint or layout can be revisited.

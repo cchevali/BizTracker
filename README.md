@@ -93,7 +93,8 @@ npm run prisma:studio
 - Dashboard card view
 - Global search
 - Filtering by state, category, price, SDE, score, status, and tags
-- Sorting by newest, updated, ask price, SDE, score, and location
+- Sorting by ask price, newest, updated, SDE, score, and location, with ask price low-to-high as the default
+- Mobile dashboard flow focused on global search, score filtering, and card-first results
 - Saved filter presets
 - ChatGPT workbook export for the current tracker view
 - Create and edit flows

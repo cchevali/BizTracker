@@ -4,9 +4,9 @@ export const viewModes = ["table", "cards"] as const;
 export type ViewMode = (typeof viewModes)[number];
 
 export const sortOptionValues = [
+  "ask-price",
   "updated",
   "newest",
-  "ask-price",
   "sde",
   "score",
   "location",
@@ -14,12 +14,12 @@ export const sortOptionValues = [
 export type SortOption = (typeof sortOptionValues)[number];
 
 export const DEFAULT_VIEW_MODE: ViewMode = "table";
-export const DEFAULT_SORT_OPTION: SortOption = "updated";
+export const DEFAULT_SORT_OPTION: SortOption = "ask-price";
 
 export const sortOptions: Array<{ value: SortOption; label: string }> = [
+  { value: "ask-price", label: "Ask price (low to high)" },
   { value: "updated", label: "Recently updated" },
   { value: "newest", label: "Newest added" },
-  { value: "ask-price", label: "Ask price (low to high)" },
   { value: "sde", label: "SDE (high to low)" },
   { value: "score", label: "Score (high to low)" },
   { value: "location", label: "Location (A to Z)" },
