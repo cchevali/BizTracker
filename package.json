@@ -2,6 +2,9 @@
   "name": "business-acquisition-tracker",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -17,12 +20,15 @@
     "db:reset": "prisma migrate reset --force",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
+    "import:listings": "tsx scripts/import-business-listings.ts",
+    "normalize:listings": "tsx scripts/normalize-chatgpt-listings.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
     "dotenv": "^17.2.3",
+    "exceljs": "^4.4.0",
     "next": "16.2.2",
     "pg": "^8.20.0",
     "react": "19.2.4",

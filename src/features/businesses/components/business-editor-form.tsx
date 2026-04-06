@@ -236,7 +236,7 @@ export function BusinessEditorForm({
                 Fit assessment
               </h2>
               <p className="mt-1 text-sm text-[var(--color-muted-ink)]">
-                Ratings can be left blank. If enough ratings are present and no overall score is set, the score is derived automatically.
+                Ratings can be left blank. If enough ratings are present and no overall score is set, the score is derived automatically with owner dependence treated as a negative factor.
               </p>
             </div>
 

@@ -1,6 +1,7 @@
 import { DealStatus } from "@/generated/prisma/enums";
 import { z } from "zod";
 
+import { deriveOverallScoreFromRatings } from "./business-score";
 import {
   parseBusinessFilters,
   serializeBusinessFilters,
@@ -250,11 +251,17 @@ const businessFormSchema = z
       return value;
     }
 
+    const overallScore = deriveOverallScoreFromRatings({
+      ownerDependenceRating: value.ownerDependenceRating,
+      recurringRevenueRating: value.recurringRevenueRating,
+      transferabilityRating: value.transferabilityRating,
+      scheduleControlFitRating: value.scheduleControlFitRating,
+      brotherOperatorFitRating: value.brotherOperatorFitRating,
+    });
+
     return {
       ...value,
-      overallScore: Math.round(
-        (ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length) * 20,
-      ),
+      overallScore,
     };
   });
 

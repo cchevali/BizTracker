@@ -171,6 +171,16 @@ export function serializeBusinessFilters(
 }
 
 export function buildBusinessListHref(query: FilterQueryRecord = {}) {
+  const search = buildSearchParams(query).toString();
+  return search ? `/?${search}` : "/";
+}
+
+export function buildBusinessExportHref(query: FilterQueryRecord = {}) {
+  const search = buildSearchParams(query).toString();
+  return search ? `/exports/businesses?${search}` : "/exports/businesses";
+}
+
+function buildSearchParams(query: FilterQueryRecord) {
   const params = new URLSearchParams();
 
   for (const key of filterQueryKeys) {
@@ -181,8 +191,7 @@ export function buildBusinessListHref(query: FilterQueryRecord = {}) {
     }
   }
 
-  const search = params.toString();
-  return search ? `/?${search}` : "/";
+  return params;
 }
 
 export function patchBusinessListQuery(

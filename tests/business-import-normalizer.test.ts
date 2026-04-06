@@ -1,0 +1,69 @@
+import { describe, expect, it } from "vitest";
+
+import {
+  normalizeChatGptBusinessListing,
+} from "@/features/businesses/domain/business-import-normalizer";
+
+describe("business-import-normalizer", () => {
+  it("normalizes a ChatGPT listing into import-ready shape", () => {
+    const listing = normalizeChatGptBusinessListing({
+      businessName: " Sample Deal ",
+      sourceUrl: "https://www.bizbuysell.com/business-opportunity/test/123/",
+      category: "home services",
+      subcategory: " pest control ",
+      location: "Charlotte, NC",
+      stateCode: "nc",
+      askingPrice: 500000,
+      revenue: 900000,
+      sde: null,
+      ebitda: null,
+      employees: 5,
+      summary: "Facts only.",
+      whyItMayFit: "Strong recurring route density.",
+      risks: "Owner dependence remains unclear.",
+      brokerName: "",
+      brokerFirm: "",
+      listingSource: "",
+      dealStatus: "new",
+      ownerDependenceRating: 2,
+      recurringRevenueRating: 5,
+      transferabilityRating: 4,
+      scheduleControlFitRating: 4,
+      brotherOperatorFitRating: 4,
+      overallScore: 8,
+      notes:
+        "Observed: facts. Inference: ownerDependenceRating uses 1 low dependence to 5 high dependence; other fit ratings use 1 low to 5 high. Missing: SDE.",
+      tags: [" Recurring-Revenue ", "route-based", "route-based"],
+    });
+
+    expect(listing).toEqual({
+      businessName: "Sample Deal",
+      sourceUrl: "https://www.bizbuysell.com/business-opportunity/test/123/",
+      category: "home services",
+      subcategory: "pest control",
+      location: "Charlotte, NC",
+      stateCode: "NC",
+      askingPrice: 500000,
+      revenue: 900000,
+      sde: null,
+      ebitda: null,
+      employees: 5,
+      summary: "Facts only.",
+      whyItMayFit: "Strong recurring route density.",
+      risks: "Owner dependence remains unclear.",
+      brokerName: null,
+      brokerFirm: null,
+      listingSource: "BizBuySell",
+      dealStatus: "NEW",
+      ownerDependenceRating: 2,
+      recurringRevenueRating: 5,
+      transferabilityRating: 4,
+      scheduleControlFitRating: 4,
+      brotherOperatorFitRating: 4,
+      overallScore: 84,
+      notes:
+        "Observed: facts. Inference: owner dependence is recorded on its native 1-low to 5-high scale, while overall score is normalized separately onto the app's 0-100 scale. Missing: SDE.",
+      tags: ["recurring-revenue", "route-based"],
+    });
+  });
+});

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  buildBusinessExportHref,
   buildBusinessListHref,
   countActiveFilters,
   formatTagsForInput,
@@ -87,6 +88,9 @@ describe("business.filters", () => {
     });
     expect(buildBusinessListHref(patched)).toBe(
       "/?q=hvac&view=table&sort=score&minScore=75",
+    );
+    expect(buildBusinessExportHref(patched)).toBe(
+      "/exports/businesses?q=hvac&view=table&sort=score&minScore=75",
     );
   });
 

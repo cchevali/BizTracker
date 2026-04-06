@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import { siteUrl, withBasePath } from "@/lib/site";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,6 +19,10 @@ export const metadata: Metadata = {
   title: "Business Acquisition Tracker",
   description:
     "Local-first acquisition tracker for evaluating, filtering, and updating small-business opportunities.",
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: withBasePath("/"),
+  },
 };
 
 export default function RootLayout({

@@ -244,6 +244,29 @@ export async function getBusinessById(id: string): Promise<BusinessDetail | null
   return mapBusinessDetailRecord(business);
 }
 
+export async function getBusinessesForExport(
+  filters: BusinessFilters,
+): Promise<BusinessDetail[]> {
+  const businesses = await prisma.business.findMany({
+    where: buildWhereInput(filters),
+    orderBy: buildOrderBy(filters.sort),
+    include: {
+      noteEntries: {
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+      historyEvents: {
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+    },
+  });
+
+  return businesses.map(mapBusinessDetailRecord);
+}
+
 function buildBusinessData(input: BusinessFormInput) {
   return {
     businessName: input.businessName,

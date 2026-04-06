@@ -34,3 +34,28 @@ Consequences: Meaningful mutations should continue to create history entries.
 Decision: Add Vitest for focused unit tests and mock Prisma in repository mutation tests.
 Reason: The highest-value coverage at this stage is fast feedback on filter parsing, form validation, and mutation contracts without requiring a separate test database harness.
 Consequences: Repository tests verify Prisma call shapes and mutation behavior, but they do not replace future integration tests against a real database.
+
+## 2026-04-05
+Decision: Export tracker data as a multi-sheet `.xlsx` workbook using an App Router route handler and `exceljs`.
+Reason: ChatGPT comparison workflows benefit from spreadsheet uploads, and `exceljs` avoided the unresolved high-severity audit issues found in `xlsx`.
+Consequences: Workbook shape now lives in `src/features/businesses/domain/business-export.ts`, download delivery lives in `src/app/exports/businesses/route.ts`, and future export changes should preserve the `businesses`, `notes`, `history`, and `metadata` sheets unless there is a strong reason to break compatibility.
+
+## 2026-04-05
+Decision: Treat `ownerDependenceRating` as a negative factor when deriving overall score, and normalize external ChatGPT JSON batches through a dedicated script.
+Reason: The UI records owner dependence as `1 low, 5 high`, so averaging it directly would reward worse businesses. External ChatGPT exports were also arriving with legacy 10-point scores that needed consistent cleanup before import.
+Consequences: Score derivation now inverts owner dependence via `src/features/businesses/domain/business-score.ts`, and future ChatGPT listing batches should run through `scripts/normalize-chatgpt-listings.ts` before import or manual review.
+
+## 2026-04-05
+Decision: Import ChatGPT listing batches through a create-only CLI keyed by `sourceUrl` instead of updating matching records automatically.
+Reason: Imported listings may later receive manual edits, and a conservative create-or-skip import path is safer than silently overwriting analyst changes on reruns.
+Consequences: `scripts/import-business-listings.ts` can be rerun safely for the same batch, but refreshing an already-imported listing now requires a deliberate manual edit or a future update workflow.
+
+## 2026-04-05
+Decision: Deploy BizTracker as its own Vercel app with a `/biztracker` base path, and publish it under `microflowops.com/biztracker` through a rewrite in the existing MicroFlowOps host app.
+Reason: Vercel custom domains attach at the project level, but this app needed to live under an existing apex site path rather than take over the whole domain.
+Consequences: Production hosting now depends on both this repo and `C:\dev\OSHA_Leads\web\next.config.mjs`; future public-routing changes must keep `next.config.ts`, `src/lib/site.ts`, and the host-app rewrite aligned.
+
+## 2026-04-05
+Decision: Use GitHub Actions with a Vercel token for auto-deploys instead of relying on Vercel's native GitHub repository connection.
+Reason: Connecting `cchevali/BizTracker` directly through `vercel git connect` failed from the CLI, likely because the Vercel GitHub integration does not currently have access to that repository.
+Consequences: Auto-deploys are now repo-owned and explicit in `.github/workflows/vercel-deploy.yml`, but they depend on `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` being maintained in GitHub repo settings.

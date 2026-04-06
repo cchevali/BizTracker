@@ -4,6 +4,7 @@ import { buttonStyles } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
 
 import {
+  buildBusinessExportHref,
   buildBusinessListHref,
   patchBusinessListQuery,
 } from "../domain/business.filters";
@@ -38,7 +39,15 @@ export function DashboardToolbar({
             </h2>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href={buildBusinessExportHref(query)}
+              prefetch={false}
+              className={buttonStyles({ variant: "secondary", size: "sm" })}
+            >
+              Generate ChatGPT workbook
+            </Link>
+
             {viewModeOptions.map((option) => (
               <Link
                 key={option.value}

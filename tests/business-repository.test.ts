@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const prismaMock = vi.hoisted(() => ({
   business: {
     create: vi.fn(),
+    findMany: vi.fn(),
     findUnique: vi.fn(),
     update: vi.fn(),
   },
@@ -30,6 +31,7 @@ import {
   addBusinessNote,
   createBusiness,
   deleteFilterPreset,
+  getBusinessesForExport,
   saveFilterPreset,
   updateBusiness,
   updateBusinessStatus,
@@ -107,6 +109,7 @@ function createExistingBusiness(overrides: Record<string, unknown> = {}) {
 describe("business-repository mutations", () => {
   beforeEach(() => {
     prismaMock.business.create.mockReset();
+    prismaMock.business.findMany.mockReset();
     prismaMock.business.findUnique.mockReset();
     prismaMock.business.update.mockReset();
     prismaMock.businessNote.create.mockReset();
@@ -142,6 +145,87 @@ describe("business-repository mutations", () => {
       null,
     );
     expect(prismaMock.business.update).not.toHaveBeenCalled();
+  });
+
+  it("loads export data with related notes and history in filter order", async () => {
+    prismaMock.business.findMany.mockResolvedValue([
+      {
+        ...createExistingBusiness(),
+        noteEntries: [
+          {
+            id: "note-1",
+            businessId: "business-1",
+            body: "Export note",
+            createdAt: new Date("2026-04-05T01:00:00.000Z"),
+            updatedAt: new Date("2026-04-05T01:05:00.000Z"),
+          },
+        ],
+        historyEvents: [
+          {
+            id: "history-1",
+            businessId: "business-1",
+            eventType: "CREATED",
+            description: "Business record created.",
+            metadata: null,
+            createdAt: new Date("2026-04-05T00:00:00.000Z"),
+          },
+        ],
+      },
+    ]);
+
+    const result = await getBusinessesForExport({
+      q: "",
+      view: "table",
+      sort: "score",
+      state: "",
+      category: "",
+      minAsk: undefined,
+      maxAsk: undefined,
+      minSde: undefined,
+      maxSde: undefined,
+      minScore: undefined,
+      maxScore: undefined,
+      status: undefined,
+      tags: [],
+    });
+
+    expect(prismaMock.business.findMany).toHaveBeenCalledWith({
+      where: {},
+      orderBy: [
+        { overallScore: { sort: "desc", nulls: "last" } },
+        { updatedAt: "desc" },
+      ],
+      include: {
+        noteEntries: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+        historyEvents: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+      },
+    });
+    expect(result).toEqual([
+      expect.objectContaining({
+        id: "business-1",
+        businessName: "Anchor Point Bookkeeping",
+        noteEntries: [
+          expect.objectContaining({
+            id: "note-1",
+            body: "Export note",
+          }),
+        ],
+        historyEvents: [
+          expect.objectContaining({
+            id: "history-1",
+            eventType: "CREATED",
+          }),
+        ],
+      }),
+    ]);
   });
 
   it("short-circuits updates when no fields changed", async () => {
