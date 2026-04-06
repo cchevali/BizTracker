@@ -22,6 +22,7 @@
 - Configured GitHub repo secret `VERCEL_TOKEN` and repo variables `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID` for `cchevali/BizTracker`.
 - Added `DEPLOYMENT.md` to document the hosted topology, release workflow, token rotation, and fallback manual deploy steps.
 - Pushed the workflow to GitHub, observed the first production run fail on `npm ci`, and updated the workflow to use `npm install` for cross-platform optional dependency compatibility.
+- Verified the follow-up GitHub Actions production run succeeded end to end for commit `a655857`.
 
 ## What Is Unfinished
 - No UI/integration tests yet
@@ -29,11 +30,9 @@
 - No source URL parsing/import automation beyond manual entry
 - No direct marketplace comparison workflow yet beyond exporting tracker data
 - No in-app JSON import flow yet; normalization and import currently happen via CLI scripts
-- The updated GitHub Actions workflow still needs one successful post-fix run on GitHub to fully validate the deploy path end to end
-
 ## What Should Be Worked On Next
 - Add integration coverage for Prisma-backed reads and a few critical user flows.
-- After the next push, confirm the first GitHub Actions preview/production deploy succeeds and adjust the workflow only if GitHub runtime behavior differs from local assumptions.
+- If deployment polish matters next, add preview URL reporting back into pull requests or GitHub environments.
 - If product work is preferred over deployment polish, the next highest-value feature is an in-app import flow using the new ChatGPT JSON normalizer, or source URL ingestion assistance.
 
 ## Risks Or Bugs

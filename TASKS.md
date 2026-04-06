@@ -27,4 +27,4 @@
 - Build an in-app import flow that uses the JSON normalizer instead of requiring offline prep
 - Add authentication if this ever becomes shared across users
 - Consider Postgres full-text search if global search becomes a bottleneck
-- Watch the first GitHub Actions production run after the next push to confirm the end-to-end auto-deploy path on GitHub itself
+- Optionally add pull-request comments or deployment-status reporting if preview URLs need to surface directly in GitHub discussions
