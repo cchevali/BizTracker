@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f0e8;
+  --foreground: #18211f;
+  --color-panel: rgba(255, 255, 255, 0.88);
+  --color-panel-muted: #ece7dd;
+  --color-border: rgba(24, 33, 31, 0.1);
+  --color-ink: #18211f;
+  --color-ink-soft: #243230;
+  --color-muted-ink: #5f6d68;
+  --color-accent: #236d62;
+  --color-accent-soft: #dcefe9;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-panel: var(--color-panel);
+  --color-panel-muted: var(--color-panel-muted);
+  --color-border: var(--color-border);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-muted-ink: var(--color-muted-ink);
+  --color-accent: var(--color-accent);
+  --color-accent-soft: var(--color-accent-soft);
+}
+
+html {
+  background:
+    radial-gradient(circle at top left, rgba(35, 109, 98, 0.1), transparent 24%),
+    radial-gradient(circle at top right, rgba(161, 123, 63, 0.1), transparent 20%),
+    var(--background);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  color: var(--color-ink);
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+::selection {
+  background: rgba(35, 109, 98, 0.18);
+}

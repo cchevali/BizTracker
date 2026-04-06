@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DealStatus {
+  NEW
+  WATCHLIST
+  RESEARCHING
+  CONTACTED_BROKER
+  UNDER_REVIEW
+  LETTER_OF_INTENT
+  PASSED
+  CLOSED
+}
+
+enum HistoryEventType {
+  CREATED
+  UPDATED
+  STATUS_CHANGED
+  NOTE_ADDED
+}
+
+model Business {
+  id                       String                 @id @default(cuid())
+  businessName             String
+  sourceUrl                String?
+  category                 String
+  subcategory              String?
+  location                 String
+  stateCode                String?
+  askingPrice              Decimal?               @db.Decimal(14, 2)
+  revenue                  Decimal?               @db.Decimal(14, 2)
+  sde                      Decimal?               @db.Decimal(14, 2)
+  ebitda                   Decimal?               @db.Decimal(14, 2)
+  employees                Int?
+  summary                  String                 @db.Text
+  whyItMayFit              String                 @db.Text
+  risks                    String                 @db.Text
+  brokerName               String?
+  brokerFirm               String?
+  listingSource            String?
+  dealStatus               DealStatus             @default(NEW)
+  ownerDependenceRating    Int?
+  recurringRevenueRating   Int?
+  transferabilityRating    Int?
+  scheduleControlFitRating Int?
+  brotherOperatorFitRating Int?
+  overallScore             Int?
+  notes                    String?                @db.Text
+  tags                     String[]               @default([])
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt
+  noteEntries              BusinessNote[]
+  historyEvents            BusinessHistoryEvent[]
+
+  @@index([businessName])
+  @@index([category])
+  @@index([stateCode])
+  @@index([dealStatus])
+  @@index([askingPrice])
+  @@index([sde])
+  @@index([overallScore])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+
+model BusinessNote {
+  id         String   @id @default(cuid())
+  businessId String
+  body       String   @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, createdAt])
+}
+
+model BusinessHistoryEvent {
+  id          String           @id @default(cuid())
+  businessId  String
+  eventType   HistoryEventType
+  description String
+  metadata    Json?
+  createdAt   DateTime         @default(now())
+  business    Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, createdAt])
+}
+
+model FilterPreset {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  query     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([updatedAt])
+}
