@@ -21,6 +21,7 @@
 - Added `.github/workflows/vercel-deploy.yml` for GitHub Actions-based preview and production deploys to the `microflowops-biztracker` Vercel project.
 - Configured GitHub repo secret `VERCEL_TOKEN` and repo variables `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID` for `cchevali/BizTracker`.
 - Added `DEPLOYMENT.md` to document the hosted topology, release workflow, token rotation, and fallback manual deploy steps.
+- Pushed the workflow to GitHub, observed the first production run fail on `npm ci`, and updated the workflow to use `npm install` for cross-platform optional dependency compatibility.
 
 ## What Is Unfinished
 - No UI/integration tests yet
@@ -28,7 +29,7 @@
 - No source URL parsing/import automation beyond manual entry
 - No direct marketplace comparison workflow yet beyond exporting tracker data
 - No in-app JSON import flow yet; normalization and import currently happen via CLI scripts
-- The new GitHub Actions workflow has not been observed running on GitHub yet because it still needs to be committed and pushed
+- The updated GitHub Actions workflow still needs one successful post-fix run on GitHub to fully validate the deploy path end to end
 
 ## What Should Be Worked On Next
 - Add integration coverage for Prisma-backed reads and a few critical user flows.
@@ -44,3 +45,4 @@
 - The current import script skips existing `sourceUrl` matches rather than updating them; this is intentional to protect manual edits.
 - Public hosting at `microflowops.com/biztracker` depends on the external host repo rewrite in `C:\dev\OSHA_Leads\web\next.config.mjs`; if that rewrite is removed, the public path breaks even if the standalone BizTracker deployment is healthy.
 - The GitHub Actions deploy path depends on repo secret `VERCEL_TOKEN`; forked PRs will not receive that secret, so preview deploys intentionally skip those cases.
+- The deploy workflow uses `npm install` instead of `npm ci` because the lockfile currently trips Linux-only optional dependency checks on GitHub's Ubuntu runner.

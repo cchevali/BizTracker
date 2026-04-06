@@ -59,3 +59,8 @@ Consequences: Production hosting now depends on both this repo and `C:\dev\OSHA_
 Decision: Use GitHub Actions with a Vercel token for auto-deploys instead of relying on Vercel's native GitHub repository connection.
 Reason: Connecting `cchevali/BizTracker` directly through `vercel git connect` failed from the CLI, likely because the Vercel GitHub integration does not currently have access to that repository.
 Consequences: Auto-deploys are now repo-owned and explicit in `.github/workflows/vercel-deploy.yml`, but they depend on `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` being maintained in GitHub repo settings.
+
+## 2026-04-05
+Decision: Use `npm install` rather than `npm ci` in the GitHub Actions deploy workflow.
+Reason: The repo is maintained on Windows, and the current dependency tree includes Linux-only optional native packages that caused `npm ci` to fail on GitHub's Ubuntu runner even though local installs were healthy.
+Consequences: Deploy automation stays cross-platform and reliable, but the workflow gives up strict lockfile immutability checks during deploy runs.

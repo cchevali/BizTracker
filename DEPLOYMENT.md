@@ -23,7 +23,7 @@ These values let GitHub Actions deploy without relying on a local `.vercel` link
 
 ## Workflow Behavior
 Each deploy job:
-1. Checks out the repo and installs dependencies with `npm ci`
+1. Checks out the repo and installs dependencies with `npm install`
 2. Runs `npm test`, `npm run lint`, and `npm run typecheck`
 3. Pulls Vercel environment settings for the target environment
 4. Runs `npx prisma migrate deploy`
@@ -41,6 +41,7 @@ That keeps preview and production builds aligned with the app's base-path-aware 
 - Changes to BizTracker code deploy automatically after merge to `main`.
 - Changes to the public `/biztracker` rewrite still live in the external MicroFlowOps host repo and must be deployed from `C:\dev\OSHA_Leads\web`.
 - Preview deploy secrets do not run for forked pull requests because GitHub does not expose repository secrets to untrusted forks.
+- The workflow intentionally uses `npm install` instead of `npm ci` because the current lockfile is generated on Windows and GitHub's Ubuntu runner needs Linux-specific optional native packages that `npm ci` rejected.
 
 ## Rotating Credentials
 If `VERCEL_TOKEN` ever needs rotation:
