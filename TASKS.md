@@ -21,14 +21,18 @@
 - Added tests for scenario calculations, workbook import compatibility, export headers/values, and new filter/sort behavior
 - Added an idempotent thesis cleanup/backfill script that archives selected low-fit deals, seeds the discussed public listings, backfills active businesses, and appends structured analysis notes
 - Updated the default active pipeline to exclude `Passed` deals while keeping them queryable and exportable when explicitly requested
+- Diagnosed and fixed production data drift by restoring missing curated seed records, running the thesis cleanup/backfill against Neon production, and verifying the expected `30 active / 8 passed` state
+- Added production-safe reconciliation and verification scripts plus an automatic production deploy check for reconciliation drift
 - Verified typecheck, lint, build, migration, and seed
 - Verified the acquisition-screening v2 and thesis cleanup pass with `npm run db:migrate`, `npm run backfill:thesis`, `npm run typecheck`, `npm test`, `npm run lint`, and `npm run build`
+- Verified production reconciliation with `npm run reconcile:production`, a second idempotence rerun, and the live export route at `https://microflowops.com/biztracker/exports/businesses`
 
 ## In Progress
 - None
 
 ## Next Recommended Tasks
 - Add a Prisma-backed integration smoke test for workbook export/import and the thesis backfill script against a real test database
+- Consider a scheduled or manually dispatchable GitHub workflow that runs the production reconciliation verifier without requiring a code push
 - Add explicit bulk archive/revive actions in the UI now that the active pipeline intentionally hides `Passed` deals by default
 - Add optional structured source ingestion from pasted listing URLs, workbook uploads, or Codex links
 - Add a marketplace comparison workflow that pairs the workbook export with current-market listing inputs

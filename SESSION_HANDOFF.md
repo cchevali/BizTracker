@@ -1,6 +1,27 @@
 # SESSION_HANDOFF
 
 ## What Changed
+- Diagnosed a live production data drift issue: the app and schema were deployed, but the Neon production database still contained only the original 24 imported businesses and had never received the curated seed records or the April 7, 2026 thesis reconciliation pass.
+- Confirmed production is pointed at the intended Neon database from `.vercel/.env.production.local` for Vercel project `microflowops-biztracker`; this was a data-state mismatch, not a wrong-database issue.
+- Added `scripts/backfill-acquisition-thesis.lib.ts` so the thesis reconciliation logic can be reused outside the local-only wrapper command.
+- Added `scripts/reconciliation-seed.data.ts` for the six curated baseline businesses that production was missing.
+- Added `scripts/reconciliation-env.ts` for explicit env-file loading and production-target safety checks.
+- Added `scripts/reconcile-production-data.ts` plus package script `npm run reconcile:production` to run production migrations, restore missing curated records, run the thesis cleanup/backfill, and verify the result.
+- Added `scripts/verify-biztracker-reconciliation.ts` plus package scripts `npm run verify:reconciliation` and `npm run verify:production-data`.
+- Updated `.github/workflows/vercel-deploy.yml` so production deploys now verify the expected reconciliation state after migrations and fail fast if the live data drifts again.
+- Ran the production reconciliation against Neon and restored these missing curated records:
+  - `Anchor Point Bookkeeping Co.`
+  - `Blue Ridge HVAC Services`
+  - `Northshore Commercial Cleaning`
+  - `Prairie Fire Equipment Rental`
+  - `Maple Lane Pediatric Therapy`
+  - `Riverbend Property Inspection Group`
+- Ran the thesis reconciliation against production, which archived the seven expected low-fit deals and added the eight discussed public listings.
+- Production data state after reconciliation:
+  - Total businesses: `38`
+  - Active businesses: `30`
+  - Passed businesses: `8`
+- Verified the live export route at `https://microflowops.com/biztracker/exports/businesses` now exports `30` businesses by default, includes `Profitable HVAC Air Quality & Duct Cleaning Business Franchise`, and excludes the archived weak-fit deals.
 - Added acquisition-screening v2 support across the Prisma schema, migrations, repository mapping, validation, forms, detail page, list views, sorting, filtering, and workbook export/import paths.
 - Added shared scenario assumptions in `src/features/businesses/domain/business-scenario.ts` for cash to close, annual debt service, conservative SDE, and post-brother cash calculations.
 - Kept legacy `overall_score` semantics intact; new thesis-fit and scenario values are additive and do not reinterpret historical scores.
@@ -39,9 +60,11 @@
 - No in-app workbook or JSON import flow yet; normalization and import currently happen via CLI scripts
 - No bulk archive/revive workflow in the UI even though the active pipeline now intentionally hides `Passed` deals by default
 - No separate thesis score v2 yet; only the new stored fields and scenario values were added
+- Production reconciliation is still a deliberate manual command, not an automatic data-mutation step inside deploys
 
 ## What Should Be Worked On Next
 - Add a real-database integration smoke test that exercises workbook export/import compatibility and the thesis backfill script on a disposable dataset.
+- Consider a scheduled GitHub Actions job or workflow-dispatch check that runs `npm run verify:production-data` even when no code is being deployed.
 - Add bulk archive/revive actions or a clearer archived toggle in the UI now that the default pipeline hides `Passed` deals.
 - If product work is preferred over internal tooling, the next highest-value feature is an in-app import flow for workbook/JSON inputs or source URL ingestion assistance.
 
@@ -59,6 +82,7 @@
 - The deploy workflow uses `npm install` instead of `npm ci` because the lockfile currently trips Linux-only optional dependency checks on GitHub's Ubuntu runner.
 - On April 8, 2026 the GitHub `VERCEL_TOKEN` secret was rotated from the locally authenticated Vercel session after a production run failed with `The token provided via --token argument is not valid.`
 - The deploy workflow now retries `prisma migrate deploy` because a rerun on April 8, 2026 hit Prisma advisory-lock timeout `P1002` while acquiring `pg_advisory_lock(72707369)`.
+- The production verifier intentionally enforces minimum counts plus required-business presence; if the baseline curated set or the April 7, 2026 reconciliation target changes, update `scripts/reconciliation-seed.data.ts` and `scripts/verify-biztracker-reconciliation.ts` together.
 - Mobile users below the `lg` breakpoint now get the simplified score-only filter experience by design; if broader tablet filtering is needed later, the breakpoint or layout can be revisited.
 
 ## Verification
@@ -69,3 +93,8 @@
   - `npm test`
   - `npm run lint`
   - `npm run build`
+- Passed on April 8, 2026 during production-data repair:
+  - `npx tsx scripts/verify-biztracker-reconciliation.ts --target production` before reconciliation, which correctly failed and showed the drift
+  - `npm run reconcile:production`
+  - A second `npm run reconcile:production` idempotence rerun with zero creations/updates
+  - Live export validation from `https://microflowops.com/biztracker/exports/businesses`

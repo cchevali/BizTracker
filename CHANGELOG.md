@@ -30,3 +30,9 @@
 - Added `scripts/backfill-acquisition-thesis.ts` and `scripts/backfill-acquisition-thesis.data.ts` for the April 7, 2026 thesis cleanup pass.
 - Marked seven low-fit deals as passed, added eight discussed public listings, backfilled acquisition-thesis fields for active businesses, and appended structured skeptical analysis notes without overwriting prior notes.
 - Fixed the thesis backfill runner to be idempotent and added duplicate guards for same-run source URL and normalized-title collisions.
+
+## 2026-04-08
+- Diagnosed a production data mismatch where the live Neon database had the new schema but still only held the original 24 imported businesses with no thesis cleanup/backfill applied.
+- Added `scripts/reconciliation-seed.data.ts`, `scripts/reconciliation-env.ts`, `scripts/reconcile-production-data.ts`, and `scripts/verify-biztracker-reconciliation.ts` to make production repair explicit, safe, and repeatable.
+- Restored the six missing curated baseline businesses in production, reran the thesis archive/add/backfill pass against production, and brought the live data to `38 total / 30 active / 8 passed`.
+- Updated the production deploy workflow to verify the expected reconciliation state after migrations so future schema-only deploys cannot silently leave production data half-migrated.

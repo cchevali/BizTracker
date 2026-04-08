@@ -84,3 +84,8 @@ Consequences: `src/features/businesses/domain/business-export.ts` preserves the 
 Decision: Treat `Passed` deals as archived from the default active pipeline without deleting them, and make the thesis cleanup/backfill reproducible through a dedicated script.
 Reason: The product needs a cleaner working set for active evaluation, but archived deals, notes, and history still matter for context and export integrity.
 Consequences: Dashboard queries now exclude `Passed` deals by default unless filters explicitly request them, and `scripts/backfill-acquisition-thesis.ts` can rerun safely to preserve the April 7, 2026 cleanup state.
+
+## 2026-04-08
+Decision: Repair production data drift through an explicit reconciliation command and fail production deploys when the expected thesis-cleanup data state is missing.
+Reason: The production database can be on the correct schema and app version while still missing baseline curated records or the manual thesis cleanup/backfill pass, so deploy success alone is not enough to prove live correctness.
+Consequences: `npm run reconcile:production` now restores missing curated records, reruns the thesis reconciliation safely against the Vercel production env, and verifies the result, while `.github/workflows/vercel-deploy.yml` runs `scripts/verify-biztracker-reconciliation.ts` so future drift is caught automatically.

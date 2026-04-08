@@ -59,7 +59,10 @@ Then read the feature-specific files you will touch.
 - `npm run typecheck`
 - `npm run build`
 - `npm run import:listings -- <input-json-path>`
+- `npm run reconcile:production`
 - `npm run normalize:listings -- <input-json-path> [output-json-path]`
+- `npm run verify:reconciliation`
+- `npm run verify:production-data`
 - `npm run db:start`
 - `npm run db:stop`
 - `npm run db:migrate -- --name <name>`
@@ -77,5 +80,6 @@ Then read the feature-specific files you will touch.
 - Verify meaningful changes with the narrowest relevant commands, then record anything you could not verify.
 - For external ChatGPT listing batches, prefer normalizing them through `scripts/normalize-chatgpt-listings.ts` before import or manual entry.
 - Use `scripts/import-business-listings.ts` for database import batches; it creates missing businesses and skips existing `sourceUrl` matches so reruns do not overwrite manual edits.
+- If production data appears out of sync with the live schema/UI, use `npm run verify:production-data` first, then `npm run reconcile:production` against the pulled Vercel production env rather than editing rows manually.
 - If the task affects public hosting, also inspect `next.config.ts`, `src/lib/site.ts`, and the external host rewrite in `C:\dev\OSHA_Leads\web\next.config.mjs`.
 - If the task affects release automation, also inspect `DEPLOYMENT.md` and `.github/workflows/vercel-deploy.yml`.

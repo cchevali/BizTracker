@@ -20,6 +20,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Create and edit forms with validation
 - Default active pipeline behavior that excludes `Passed` deals unless the filter explicitly asks for them
 - Thesis cleanup/backfill CLI that archives low-fit deals, adds discussed public listings, and backfills active businesses
+- Production-safe reconciliation and verification scripts that compare the live Neon database against the expected thesis-cleanup state
 - Realistic seed data
 - Production deployment on Vercel with Neon Postgres and a `/biztracker` base path
 - GitHub Actions-based auto-deploys for preview and production Vercel releases
@@ -31,6 +32,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Tags are normalized to lowercase strings and stored as a Postgres string array.
 - Saved presets are global because there is no user model yet.
 - Derived cash scenario values are read-only and recomputed from asking price and SDE rather than trusted from imports.
+- Production data reconciliation is explicit and idempotent; schema deploys do not silently run the thesis cleanup/backfill for you.
 - Production requests come through the existing `microflowops.com` host app, which rewrites `/biztracker/*` to the standalone BizTracker Vercel deployment.
 
 ## Constraints
@@ -47,4 +49,5 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - No direct marketplace ingestion or comparison workflow yet beyond exporting tracker data for ChatGPT
 - Global search is simple field matching, not full-text indexing
 - Thesis backfill judgments are intentionally manual and skeptical; they are reproducible through the CLI script, but they are not derived automatically from listing text
+- Production drift can still happen if the database is migrated/deployed without running the reconciliation command; the new verification script detects that state, but it does not auto-heal it inside the deploy job
 - Direct Vercel GitHub-app repo connection is still unavailable; deploy automation currently uses GitHub Actions plus a Vercel token instead

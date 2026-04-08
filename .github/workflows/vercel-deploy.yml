@@ -152,6 +152,9 @@ jobs:
             sleep 15
           done
 
+      - name: Verify production reconciliation state
+        run: npx tsx scripts/verify-biztracker-reconciliation.ts --env-file .vercel/.env.production.local --target production
+
       - name: Build production deployment
         run: |
           set -a

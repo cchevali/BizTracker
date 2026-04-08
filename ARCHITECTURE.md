@@ -32,7 +32,12 @@
 - `scripts/normalize-chatgpt-listings.ts`: CLI normalizer for external ChatGPT listing batches
 - `scripts/import-business-listings.ts`: CLI importer that creates businesses from normalized ChatGPT listing batches
 - `scripts/backfill-acquisition-thesis.data.ts`: manual thesis ratings, benchmark notes, and listing seed data for the April 7, 2026 cleanup pass
+- `scripts/backfill-acquisition-thesis.lib.ts`: reusable archive/add/backfill logic for the thesis cleanup pass
 - `scripts/backfill-acquisition-thesis.ts`: idempotent cleanup/backfill runner for archiving low-fit deals and updating active ones
+- `scripts/reconciliation-seed.data.ts`: baseline curated records that production reconciliation must restore if the production DB was never seeded
+- `scripts/reconciliation-env.ts`: env-file loading and production-target safety checks for reconciliation scripts
+- `scripts/reconcile-production-data.ts`: one-shot production reconciliation runner that migrates, restores missing curated records, runs the thesis cleanup/backfill, and verifies the result
+- `scripts/verify-biztracker-reconciliation.ts`: lightweight DB verification for expected counts, benchmark presence, archive status, and thesis-field coverage
 - `src/lib/prisma.ts`: Prisma client singleton with Pg adapter
 - `src/lib/site.ts`: base-path and site URL helpers for local vs production hosting
 - `src/generated/prisma/*`: generated Prisma client output
@@ -52,7 +57,9 @@
 11. External ChatGPT listing batches can be normalized offline through `scripts/normalize-chatgpt-listings.ts`, which standardizes score semantics before later import.
 12. `scripts/import-business-listings.ts` imports normalized listing batches into PostgreSQL, keyed conservatively by `sourceUrl` when available so repeat runs skip existing records instead of overwriting them.
 13. `scripts/backfill-acquisition-thesis.ts` performs the April 7, 2026 thesis cleanup pass by marking selected deals as passed, seeding missing public listings, and backfilling acquisition-thesis fields plus analysis notes for active records.
-14. In production, `microflowops.com/biztracker` requests are rewritten by `C:\dev\OSHA_Leads\web\next.config.mjs` to the standalone BizTracker Vercel deployment, which serves the app with `NEXT_PUBLIC_BASE_PATH=/biztracker`.
+14. `scripts/reconcile-production-data.ts` is the safe production repair path when schema/code is live but the Neon database still lacks the baseline curated records or thesis cleanup pass.
+15. `scripts/verify-biztracker-reconciliation.ts` provides the same production data assertions for manual use and for the GitHub Actions production deploy job.
+16. In production, `microflowops.com/biztracker` requests are rewritten by `C:\dev\OSHA_Leads\web\next.config.mjs` to the standalone BizTracker Vercel deployment, which serves the app with `NEXT_PUBLIC_BASE_PATH=/biztracker`.
 
 ## Database Model Summary
 - `Business`: primary acquisition record with financials, qualitative assessment, legacy ratings, acquisition-thesis fields, manual diligence notes, score, status, tags, and timestamps

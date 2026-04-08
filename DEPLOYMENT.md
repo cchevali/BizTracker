@@ -27,8 +27,9 @@ Each deploy job:
 2. Runs `npm test`, `npm run lint`, and `npm run typecheck`
 3. Pulls Vercel environment settings for the target environment
 4. Runs `npx prisma migrate deploy` with retry handling for transient Prisma advisory-lock contention
-5. Builds with `npx vercel build`
-6. Deploys with `npx vercel deploy --prebuilt`
+5. Verifies the expected production reconciliation state with `scripts/verify-biztracker-reconciliation.ts`
+6. Builds with `npx vercel build`
+7. Deploys with `npx vercel deploy --prebuilt`
 
 The workflow sets:
 - `NEXT_PUBLIC_BASE_PATH=/biztracker`
@@ -43,6 +44,7 @@ That keeps preview and production builds aligned with the app's base-path-aware 
 - Preview deploy secrets do not run for forked pull requests because GitHub does not expose repository secrets to untrusted forks.
 - The workflow intentionally uses `npm install` instead of `npm ci` because the current lockfile is generated on Windows and GitHub's Ubuntu runner needs Linux-specific optional native packages that `npm ci` rejected.
 - The workflow now retries Prisma migrations up to three times because Neon/Prisma advisory-lock acquisition can time out transiently even when the database is otherwise healthy.
+- The workflow verifies production data state, but it does not run the domain-specific reconciliation automatically; if production data is missing the baseline curated records or thesis cleanup pass, use `npm run reconcile:production`.
 
 ## Rotating Credentials
 If `VERCEL_TOKEN` ever needs rotation:
@@ -56,3 +58,17 @@ If GitHub Actions is unavailable, the manual production fallback remains:
 1. `npx vercel pull --yes --environment=production`
 2. `npx prisma migrate deploy`
 3. `npx vercel --prod --yes`
+
+## Production Data Reconciliation
+When the live schema/UI is deployed but the Neon production data is missing the expected BizTracker records or thesis cleanup pass:
+1. `npm run verify:production-data`
+2. `npm run reconcile:production`
+3. `npm run verify:production-data`
+
+`npm run reconcile:production` is idempotent. It:
+- Confirms the local `.vercel` link targets `microflowops-biztracker`
+- Uses `.vercel/.env.production.local` rather than local `.env`
+- Runs `prisma migrate deploy`
+- Restores the missing curated baseline businesses if production was never seeded
+- Runs the thesis archive/add/backfill pass
+- Verifies the expected production counts, benchmark presence, archive status, and thesis-field coverage
