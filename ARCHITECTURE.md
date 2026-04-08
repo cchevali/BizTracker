@@ -21,34 +21,41 @@
 - `src/features/businesses/domain/business.filters.ts`: URL filter parsing/serialization
 - `src/features/businesses/domain/business.schemas.ts`: server-side validation
 - `src/features/businesses/domain/business-score.ts`: shared rating-to-score logic
+- `src/features/businesses/domain/business-scenario.ts`: shared acquisition scenario assumptions and derived cash calculations
 - `src/features/businesses/domain/business-import-normalizer.ts`: ChatGPT JSON cleanup into import-ready records
 - `src/features/businesses/domain/business-export.ts`: export dataset shaping for workbook downloads
+- `src/features/businesses/domain/business-workbook-import.ts`: workbook parsing for old and v2 tracker exports
 - `src/features/businesses/data/business-repository.ts`: Prisma reads/writes
 - `src/features/businesses/utils/business-export-workbook.ts`: Excel workbook generation
 - `src/features/businesses/actions/business-actions.ts`: server actions
 - `src/app/exports/businesses/route.ts`: workbook download endpoint for current tracker filters
 - `scripts/normalize-chatgpt-listings.ts`: CLI normalizer for external ChatGPT listing batches
 - `scripts/import-business-listings.ts`: CLI importer that creates businesses from normalized ChatGPT listing batches
+- `scripts/backfill-acquisition-thesis.data.ts`: manual thesis ratings, benchmark notes, and listing seed data for the April 7, 2026 cleanup pass
+- `scripts/backfill-acquisition-thesis.ts`: idempotent cleanup/backfill runner for archiving low-fit deals and updating active ones
 - `src/lib/prisma.ts`: Prisma client singleton with Pg adapter
 - `src/lib/site.ts`: base-path and site URL helpers for local vs production hosting
 - `src/generated/prisma/*`: generated Prisma client output
-- `tests/*`: Vitest unit coverage for filters, validation, scoring, import normalization, export shaping, and repository mutations
+- `tests/*`: Vitest unit coverage for filters, validation, scoring, scenario math, workbook import/export shaping, import normalization, and repository mutations
 
 ## Data Flow
 1. Dashboard reads `searchParams`.
 2. `business.filters.ts` parses URL state into typed filters.
-3. `business-repository.ts` builds Prisma queries and returns mapped view models.
+3. `business-repository.ts` builds Prisma queries, applies the default active-pipeline behavior, and returns mapped view models with derived scenario values.
 4. Server components render dashboard/detail pages.
 5. Forms submit to server actions in `business-actions.ts`.
 6. Actions validate input with Zod, call repository functions, then `redirect`, `refresh`, or `revalidatePath`.
-7. Repository writes durable audit context via `BusinessHistoryEvent` and `BusinessNote`.
-8. Workbook export reads the same filter query state, loads matching businesses plus notes/history, shapes rows in `business-export.ts`, and streams an `.xlsx` response from `src/app/exports/businesses/route.ts`.
-9. External ChatGPT listing batches can be normalized offline through `scripts/normalize-chatgpt-listings.ts`, which standardizes score semantics before later import.
-10. `scripts/import-business-listings.ts` imports normalized listing batches into PostgreSQL, keyed conservatively by `sourceUrl` when available so repeat runs skip existing records instead of overwriting them.
-11. In production, `microflowops.com/biztracker` requests are rewritten by `C:\dev\OSHA_Leads\web\next.config.mjs` to the standalone BizTracker Vercel deployment, which serves the app with `NEXT_PUBLIC_BASE_PATH=/biztracker`.
+7. Repository writes durable audit context via `BusinessHistoryEvent` and `BusinessNote`, including new acquisition-screening field changes.
+8. `business-scenario.ts` provides one shared assumptions module for cash-to-close, debt-service, and post-brother cash calculations; list/detail/export views all reuse it.
+9. Workbook export reads the same filter query state, loads matching businesses plus notes/history, shapes rows in `business-export.ts`, and streams an `.xlsx` response from `src/app/exports/businesses/route.ts`.
+10. Workbook import parsing in `business-workbook-import.ts` accepts both the original workbook schema and the v2 appended-column schema, then normalizes the result through the same import-normalizer path.
+11. External ChatGPT listing batches can be normalized offline through `scripts/normalize-chatgpt-listings.ts`, which standardizes score semantics before later import.
+12. `scripts/import-business-listings.ts` imports normalized listing batches into PostgreSQL, keyed conservatively by `sourceUrl` when available so repeat runs skip existing records instead of overwriting them.
+13. `scripts/backfill-acquisition-thesis.ts` performs the April 7, 2026 thesis cleanup pass by marking selected deals as passed, seeding missing public listings, and backfilling acquisition-thesis fields plus analysis notes for active records.
+14. In production, `microflowops.com/biztracker` requests are rewritten by `C:\dev\OSHA_Leads\web\next.config.mjs` to the standalone BizTracker Vercel deployment, which serves the app with `NEXT_PUBLIC_BASE_PATH=/biztracker`.
 
 ## Database Model Summary
-- `Business`: primary acquisition record with financials, qualitative assessment, ratings, score, status, notes, tags, timestamps
+- `Business`: primary acquisition record with financials, qualitative assessment, legacy ratings, acquisition-thesis fields, manual diligence notes, score, status, tags, and timestamps
 - `BusinessNote`: per-business note entries
 - `BusinessHistoryEvent`: durable event log for create/update/status/note changes
 - `FilterPreset`: saved dashboard query states

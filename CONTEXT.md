@@ -10,20 +10,27 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - URL-driven search, filters, sorting, and view mode
 - Mobile dashboard flow trimmed to global search, score filtering, and card-first results on smaller screens
 - Saved filter presets stored in PostgreSQL
-- Workbook export for ChatGPT comparison workflows, including businesses, notes, history, and metadata sheets
+- Workbook export for ChatGPT comparison workflows, including `businesses`, `notes`, `history`, and `metadata` sheets
+- Workbook import parsing for both the original workbook schema and the v2 appended-column schema
 - ChatGPT JSON normalization script for import-prep and score cleanup
 - ChatGPT JSON CLI import script for creating businesses from normalized batches
+- Acquisition-screening v2 fields for thesis fit, financeability, operator dependence, freshness, downside, and operational structure
+- Shared scenario math for cash-to-close, debt service, and post-brother cash outputs based on one assumptions module
 - Detail page with quick status updates, notes, and change history
 - Create and edit forms with validation
+- Default active pipeline behavior that excludes `Passed` deals unless the filter explicitly asks for them
+- Thesis cleanup/backfill CLI that archives low-fit deals, adds discussed public listings, and backfills active businesses
 - Realistic seed data
 - Production deployment on Vercel with Neon Postgres and a `/biztracker` base path
 - GitHub Actions-based auto-deploys for preview and production Vercel releases
 
 ## Key Assumptions
 - This is currently a personal/internal tool, not a multi-user SaaS app.
-- Deal scoring is editable, but if enough ratings exist and no score is set, the app derives a score automatically.
+- Legacy `overall_score` keeps its original meaning; newer acquisition-thesis fields and scenario math are additive rather than reinterpretations of historical scores.
+- Deal scoring is editable, but if enough legacy ratings exist and no score is set, the app derives a score automatically.
 - Tags are normalized to lowercase strings and stored as a Postgres string array.
 - Saved presets are global because there is no user model yet.
+- Derived cash scenario values are read-only and recomputed from asking price and SDE rather than trusted from imports.
 - Production requests come through the existing `microflowops.com` host app, which rewrites `/biztracker/*` to the standalone BizTracker Vercel deployment.
 
 ## Constraints
@@ -36,7 +43,8 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - No authentication or authorization
 - No UI/integration tests yet
 - No pagination or bulk actions
-- No in-app import/parser flow from a source URL yet beyond manual paste and offline JSON normalization/import
+- No in-app import/parser flow from a source URL or workbook upload yet beyond manual paste and offline normalization/import scripts
 - No direct marketplace ingestion or comparison workflow yet beyond exporting tracker data for ChatGPT
 - Global search is simple field matching, not full-text indexing
+- Thesis backfill judgments are intentionally manual and skeptical; they are reproducible through the CLI script, but they are not derived automatically from listing text
 - Direct Vercel GitHub-app repo connection is still unavailable; deploy automation currently uses GitHub Actions plus a Vercel token instead

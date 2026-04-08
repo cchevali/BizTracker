@@ -8,6 +8,7 @@ import {
   normalizeChatGptBusinessListings,
   type NormalizedBusinessListing,
 } from "../src/features/businesses/domain/business-import-normalizer";
+import { parseBusinessWorkbook } from "../src/features/businesses/domain/business-workbook-import";
 import { HistoryEventType } from "../src/generated/prisma/enums";
 import { PrismaClient } from "../src/generated/prisma/client";
 
@@ -37,6 +38,7 @@ function getLookupWhere(listing: NormalizedBusinessListing) {
 async function importListing(
   listing: NormalizedBusinessListing,
   sourceLabel: string,
+  importType: string,
 ) {
   const existing = await prisma.business.findFirst({
     where: getLookupWhere(listing),
@@ -78,6 +80,29 @@ async function importListing(
       transferabilityRating: listing.transferabilityRating,
       scheduleControlFitRating: listing.scheduleControlFitRating,
       brotherOperatorFitRating: listing.brotherOperatorFitRating,
+      aiResistanceScore: listing.aiResistanceScore,
+      keepDayJobFit: listing.keepDayJobFit,
+      quitDayJobFit: listing.quitDayJobFit,
+      primaryUseCase: listing.primaryUseCase,
+      beatsCurrentBenchmark: listing.beatsCurrentBenchmark,
+      benchmarkNotes: listing.benchmarkNotes,
+      financeabilityRating: listing.financeabilityRating,
+      sellerFinancingAvailable: listing.sellerFinancingAvailable,
+      sellerFinancingNotes: listing.sellerFinancingNotes,
+      operatorSkillDependency: listing.operatorSkillDependency,
+      licenseDependency: listing.licenseDependency,
+      afterHoursBurden: listing.afterHoursBurden,
+      capexRisk: listing.capexRisk,
+      regretIfWrongScore: listing.regretIfWrongScore,
+      dataConfidenceScore: listing.dataConfidenceScore,
+      staleListingRisk: listing.staleListingRisk,
+      keyPersonRisk: listing.keyPersonRisk,
+      homeBasedFlag: listing.homeBasedFlag,
+      recurringRevenuePercent: listing.recurringRevenuePercent,
+      ownerHoursClaimed: listing.ownerHoursClaimed,
+      opsManagerExists: listing.opsManagerExists,
+      freshnessVerifiedAt: listing.freshnessVerifiedAt,
+      cashToCloseNotes: listing.cashToCloseNotes,
       overallScore: listing.overallScore,
       notes: listing.notes,
       tags: listing.tags,
@@ -88,7 +113,7 @@ async function importListing(
           metadata: {
             sourceLabel,
             sourceUrl: listing.sourceUrl,
-            importType: "chatgpt-json-batch",
+            importType,
           },
         },
       },
@@ -110,29 +135,37 @@ async function main() {
 
   if (!inputPath) {
     console.error(
-      "Usage: npm run import:listings -- <input-json-path>",
+      "Usage: npm run import:listings -- <input-json-or-xlsx-path>",
     );
     process.exitCode = 1;
     return;
   }
 
-  const raw = await readFile(inputPath, "utf8");
-  const parsed = JSON.parse(raw) as unknown;
+  const extension = path.extname(inputPath).toLowerCase();
+  let normalized: NormalizedBusinessListing[];
 
-  if (!Array.isArray(parsed)) {
-    throw new Error("Expected the input JSON to be an array of business objects.");
+  if (extension === ".xlsx") {
+    normalized = await parseBusinessWorkbook(await readFile(inputPath));
+  } else {
+    const raw = JSON.parse(await readFile(inputPath, "utf8")) as unknown;
+
+    if (!Array.isArray(raw)) {
+      throw new Error("Expected the input JSON to be an array of business objects.");
+    }
+
+    normalized = normalizeChatGptBusinessListings(
+      raw as Record<string, unknown>[],
+    );
   }
 
-  const normalized = normalizeChatGptBusinessListings(
-    parsed as Record<string, unknown>[],
-  );
   const sourceLabel = path.basename(inputPath);
+  const importType = extension === ".xlsx" ? "biztracker-workbook" : "chatgpt-json-batch";
 
   let createdCount = 0;
   let skippedCount = 0;
 
   for (const listing of normalized) {
-    const result = await importListing(listing, sourceLabel);
+    const result = await importListing(listing, sourceLabel, importType);
 
     if (result.status === "created") {
       createdCount += 1;

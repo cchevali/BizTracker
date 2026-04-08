@@ -43,6 +43,19 @@ describe("business.filters", () => {
       maxScore: undefined,
       status: "RESEARCHING",
       tags: ["hvac", "recurring", "service"],
+      primaryUseCase: undefined,
+      minKeepDayJobFit: undefined,
+      minQuitDayJobFit: undefined,
+      minAiResistanceScore: undefined,
+      minFinanceabilityRating: undefined,
+      maxCashToCloseHigh: undefined,
+      minConservativeCashAfterBrother: undefined,
+      sellerFinancingAvailable: undefined,
+      homeBasedFlag: undefined,
+      opsManagerExists: undefined,
+      maxStaleListingRisk: undefined,
+      minDataConfidenceScore: undefined,
+      beatsCurrentBenchmark: undefined,
     });
   });
 
@@ -50,8 +63,11 @@ describe("business.filters", () => {
     const filters = parseBusinessFilters({
       q: "bookkeeping",
       view: "cards",
-      sort: "score",
+      sort: "financeability",
       state: "fl",
+      primaryUseCase: "bridge_while_employed",
+      minKeepDayJobFit: "4",
+      sellerFinancingAvailable: "true",
       tags: " subscription, remote-friendly ",
       minScore: "80",
     });
@@ -59,8 +75,11 @@ describe("business.filters", () => {
     expect(serializeBusinessFilters(filters)).toEqual({
       q: "bookkeeping",
       view: "cards",
-      sort: "score",
+      sort: "financeability",
       state: "FL",
+      primaryUseCase: "bridge_while_employed",
+      minKeepDayJobFit: "4",
+      sellerFinancingAvailable: "true",
       minScore: "80",
       tags: "subscription,remote-friendly",
     });
@@ -78,6 +97,7 @@ describe("business.filters", () => {
       view: "table",
       state: undefined,
       minScore: "75",
+      maxCashToCloseHigh: "200000",
     });
 
     expect(patched).toEqual({
@@ -85,12 +105,13 @@ describe("business.filters", () => {
       view: "table",
       sort: "score",
       minScore: "75",
+      maxCashToCloseHigh: "200000",
     });
     expect(buildBusinessListHref(patched)).toBe(
-      "/?q=hvac&view=table&sort=score&minScore=75",
+      "/?q=hvac&view=table&sort=score&minScore=75&maxCashToCloseHigh=200000",
     );
     expect(buildBusinessExportHref(patched)).toBe(
-      "/exports/businesses?q=hvac&view=table&sort=score&minScore=75",
+      "/exports/businesses?q=hvac&view=table&sort=score&minScore=75&maxCashToCloseHigh=200000",
     );
   });
 
@@ -99,7 +120,7 @@ describe("business.filters", () => {
       q: "cleaning",
       category: "Facility Services",
       minAsk: "1000000",
-      status: "CONTACTED_BROKER",
+      minDataConfidenceScore: "4",
       tags: "b2b, recurring",
     });
 

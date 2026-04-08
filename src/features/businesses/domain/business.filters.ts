@@ -1,4 +1,4 @@
-import type { DealStatus } from "@/generated/prisma/enums";
+import type { DealStatus, PrimaryUseCase } from "@/generated/prisma/enums";
 
 import { uniqueStrings } from "@/lib/utils";
 
@@ -6,6 +6,7 @@ import {
   DEFAULT_SORT_OPTION,
   DEFAULT_VIEW_MODE,
   filterQueryKeys,
+  primaryUseCaseOptions,
   sortOptionValues,
   viewModes,
   type BusinessFilters,
@@ -28,7 +29,7 @@ function normalizeNumberish(value: string) {
   return value.replace(/[$,\s]/g, "").trim();
 }
 
-function parseNonNegativeNumber(value: string) {
+function parseNumber(value: string) {
   const normalized = normalizeNumberish(value);
 
   if (!normalized) {
@@ -36,7 +37,12 @@ function parseNonNegativeNumber(value: string) {
   }
 
   const parsed = Number(normalized);
-  return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function parseNonNegativeNumber(value: string) {
+  const parsed = parseNumber(value);
+  return parsed !== undefined && parsed >= 0 ? parsed : undefined;
 }
 
 function parseScore(value: string) {
@@ -47,6 +53,34 @@ function parseScore(value: string) {
   }
 
   return parsed <= 100 ? parsed : undefined;
+}
+
+function parseRating(value: string) {
+  const parsed = parseNonNegativeNumber(value);
+
+  if (parsed === undefined) {
+    return undefined;
+  }
+
+  return parsed >= 1 && parsed <= 5 ? parsed : undefined;
+}
+
+function parseBoolean(value: string) {
+  const normalized = value.trim().toLowerCase();
+
+  if (!normalized) {
+    return undefined;
+  }
+
+  if (normalized === "true") {
+    return true;
+  }
+
+  if (normalized === "false") {
+    return false;
+  }
+
+  return undefined;
 }
 
 function isViewMode(value: string): value is ViewMode {
@@ -68,6 +102,10 @@ function isDealStatus(value: string): value is DealStatus {
     "PASSED",
     "CLOSED",
   ].includes(value);
+}
+
+function isPrimaryUseCase(value: string): value is PrimaryUseCase {
+  return primaryUseCaseOptions.some((option) => option.value === value);
 }
 
 export function splitTags(input: string) {
@@ -92,6 +130,7 @@ export function parseBusinessFilters(
   const rawState = takeFirst(input.state).trim().toUpperCase();
   const rawCategory = takeFirst(input.category).trim();
   const rawStatus = takeFirst(input.status).trim();
+  const rawPrimaryUseCase = takeFirst(input.primaryUseCase).trim();
 
   return {
     q,
@@ -107,6 +146,31 @@ export function parseBusinessFilters(
     maxScore: parseScore(takeFirst(input.maxScore)),
     status: isDealStatus(rawStatus) ? rawStatus : undefined,
     tags: splitTags(takeFirst(input.tags)),
+    primaryUseCase: isPrimaryUseCase(rawPrimaryUseCase)
+      ? rawPrimaryUseCase
+      : undefined,
+    minKeepDayJobFit: parseRating(takeFirst(input.minKeepDayJobFit)),
+    minQuitDayJobFit: parseRating(takeFirst(input.minQuitDayJobFit)),
+    minAiResistanceScore: parseRating(takeFirst(input.minAiResistanceScore)),
+    minFinanceabilityRating: parseRating(
+      takeFirst(input.minFinanceabilityRating),
+    ),
+    maxCashToCloseHigh: parseNonNegativeNumber(takeFirst(input.maxCashToCloseHigh)),
+    minConservativeCashAfterBrother: parseNumber(
+      takeFirst(input.minConservativeCashAfterBrother),
+    ),
+    sellerFinancingAvailable: parseBoolean(
+      takeFirst(input.sellerFinancingAvailable),
+    ),
+    homeBasedFlag: parseBoolean(takeFirst(input.homeBasedFlag)),
+    opsManagerExists: parseBoolean(takeFirst(input.opsManagerExists)),
+    maxStaleListingRisk: parseRating(takeFirst(input.maxStaleListingRisk)),
+    minDataConfidenceScore: parseRating(
+      takeFirst(input.minDataConfidenceScore),
+    ),
+    beatsCurrentBenchmark: parseBoolean(
+      takeFirst(input.beatsCurrentBenchmark),
+    ),
   };
 }
 
@@ -165,6 +229,64 @@ export function serializeBusinessFilters(
 
   if (filters.tags.length > 0) {
     serialized.tags = filters.tags.join(",");
+  }
+
+  if (filters.primaryUseCase) {
+    serialized.primaryUseCase = filters.primaryUseCase;
+  }
+
+  if (filters.minKeepDayJobFit !== undefined) {
+    serialized.minKeepDayJobFit = String(filters.minKeepDayJobFit);
+  }
+
+  if (filters.minQuitDayJobFit !== undefined) {
+    serialized.minQuitDayJobFit = String(filters.minQuitDayJobFit);
+  }
+
+  if (filters.minAiResistanceScore !== undefined) {
+    serialized.minAiResistanceScore = String(filters.minAiResistanceScore);
+  }
+
+  if (filters.minFinanceabilityRating !== undefined) {
+    serialized.minFinanceabilityRating = String(
+      filters.minFinanceabilityRating,
+    );
+  }
+
+  if (filters.maxCashToCloseHigh !== undefined) {
+    serialized.maxCashToCloseHigh = String(filters.maxCashToCloseHigh);
+  }
+
+  if (filters.minConservativeCashAfterBrother !== undefined) {
+    serialized.minConservativeCashAfterBrother = String(
+      filters.minConservativeCashAfterBrother,
+    );
+  }
+
+  if (filters.sellerFinancingAvailable !== undefined) {
+    serialized.sellerFinancingAvailable = String(
+      filters.sellerFinancingAvailable,
+    );
+  }
+
+  if (filters.homeBasedFlag !== undefined) {
+    serialized.homeBasedFlag = String(filters.homeBasedFlag);
+  }
+
+  if (filters.opsManagerExists !== undefined) {
+    serialized.opsManagerExists = String(filters.opsManagerExists);
+  }
+
+  if (filters.maxStaleListingRisk !== undefined) {
+    serialized.maxStaleListingRisk = String(filters.maxStaleListingRisk);
+  }
+
+  if (filters.minDataConfidenceScore !== undefined) {
+    serialized.minDataConfidenceScore = String(filters.minDataConfidenceScore);
+  }
+
+  if (filters.beatsCurrentBenchmark !== undefined) {
+    serialized.beatsCurrentBenchmark = String(filters.beatsCurrentBenchmark);
   }
 
   return serialized;
@@ -227,10 +349,27 @@ export function countActiveFilters(filters: BusinessFilters) {
     filters.maxScore,
     filters.status,
     filters.tags.length > 0 ? filters.tags.join(",") : "",
+    filters.primaryUseCase,
+    filters.minKeepDayJobFit,
+    filters.minQuitDayJobFit,
+    filters.minAiResistanceScore,
+    filters.minFinanceabilityRating,
+    filters.maxCashToCloseHigh,
+    filters.minConservativeCashAfterBrother,
+    filters.sellerFinancingAvailable,
+    filters.homeBasedFlag,
+    filters.opsManagerExists,
+    filters.maxStaleListingRisk,
+    filters.minDataConfidenceScore,
+    filters.beatsCurrentBenchmark,
   ];
 
   return values.filter((value) => {
     if (typeof value === "number") {
+      return true;
+    }
+
+    if (typeof value === "boolean") {
       return true;
     }
 

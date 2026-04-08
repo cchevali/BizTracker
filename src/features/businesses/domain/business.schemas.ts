@@ -7,6 +7,7 @@ import {
   serializeBusinessFilters,
   splitTags,
 } from "./business.filters";
+import { primaryUseCaseOptions } from "./business.types";
 import type { ActionState } from "./business.types";
 
 const businessFieldNames = [
@@ -33,6 +34,29 @@ const businessFieldNames = [
   "transferabilityRating",
   "scheduleControlFitRating",
   "brotherOperatorFitRating",
+  "aiResistanceScore",
+  "keepDayJobFit",
+  "quitDayJobFit",
+  "primaryUseCase",
+  "beatsCurrentBenchmark",
+  "benchmarkNotes",
+  "financeabilityRating",
+  "sellerFinancingAvailable",
+  "sellerFinancingNotes",
+  "operatorSkillDependency",
+  "licenseDependency",
+  "afterHoursBurden",
+  "capexRisk",
+  "regretIfWrongScore",
+  "dataConfidenceScore",
+  "staleListingRisk",
+  "keyPersonRisk",
+  "homeBasedFlag",
+  "recurringRevenuePercent",
+  "ownerHoursClaimed",
+  "opsManagerExists",
+  "freshnessVerifiedAt",
+  "cashToCloseNotes",
   "overallScore",
   "notes",
   "tags",
@@ -41,6 +65,7 @@ const businessFieldNames = [
 const presetFieldNames = ["name", "query"] as const;
 const noteFieldNames = ["body"] as const;
 const statusFieldNames = ["dealStatus"] as const;
+const primaryUseCaseValues = primaryUseCaseOptions.map((option) => option.value);
 
 function getFormValues<T extends readonly string[]>(formData: FormData, keys: T) {
   return Object.fromEntries(
@@ -120,7 +145,7 @@ function optionalNumberField({
         return;
       }
 
-      const parsed = Number(value.replace(/[$,\s]/g, ""));
+      const parsed = Number(value.replace(/[$,%\s,]/g, ""));
 
       if (!Number.isFinite(parsed)) {
         ctx.addIssue({
@@ -150,7 +175,59 @@ function optionalNumberField({
         return undefined;
       }
 
-      return Number(value.replace(/[$,\s]/g, ""));
+      return Number(value.replace(/[$,%\s,]/g, ""));
+    });
+}
+
+function optionalBooleanField(label: string) {
+  return z
+    .string()
+    .trim()
+    .superRefine((value, ctx) => {
+      if (!value) {
+        return;
+      }
+
+      if (!["true", "false"].includes(value)) {
+        ctx.addIssue({
+          code: "custom",
+          message: `${label} must be Yes, No, or left blank.`,
+        });
+      }
+    })
+    .transform((value) => {
+      if (!value) {
+        return undefined;
+      }
+
+      return value === "true";
+    });
+}
+
+function optionalDateTimeField(label: string) {
+  return z
+    .string()
+    .trim()
+    .superRefine((value, ctx) => {
+      if (!value) {
+        return;
+      }
+
+      const parsed = new Date(value);
+
+      if (Number.isNaN(parsed.getTime())) {
+        ctx.addIssue({
+          code: "custom",
+          message: `Enter a valid ${label.toLowerCase()}.`,
+        });
+      }
+    })
+    .transform((value) => {
+      if (!value) {
+        return undefined;
+      }
+
+      return new Date(value);
     });
 }
 
@@ -223,6 +300,119 @@ const businessFormSchema = z
       min: 1,
       max: 5,
     }),
+    aiResistanceScore: optionalNumberField({
+      label: "AI resistance score",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    keepDayJobFit: optionalNumberField({
+      label: "Keep-day-job fit",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    quitDayJobFit: optionalNumberField({
+      label: "Quit-day-job fit",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    primaryUseCase: z
+      .string()
+      .trim()
+      .superRefine((value, ctx) => {
+        if (!value) {
+          return;
+        }
+
+        if (!primaryUseCaseValues.includes(value as (typeof primaryUseCaseValues)[number])) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Choose a valid primary use case.",
+          });
+        }
+      })
+      .transform((value) =>
+        value === ""
+          ? undefined
+          : (value as (typeof primaryUseCaseValues)[number]),
+      ),
+    beatsCurrentBenchmark: optionalBooleanField("Beats current benchmark"),
+    benchmarkNotes: optionalTextField("Benchmark notes", 2000),
+    financeabilityRating: optionalNumberField({
+      label: "Financeability rating",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    sellerFinancingAvailable: optionalBooleanField(
+      "Seller financing available",
+    ),
+    sellerFinancingNotes: optionalTextField("Seller financing notes", 2000),
+    operatorSkillDependency: optionalNumberField({
+      label: "Operator skill dependency",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    licenseDependency: optionalNumberField({
+      label: "License dependency",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    afterHoursBurden: optionalNumberField({
+      label: "After-hours burden",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    capexRisk: optionalNumberField({
+      label: "Capex risk",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    regretIfWrongScore: optionalNumberField({
+      label: "Regret-if-wrong score",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    dataConfidenceScore: optionalNumberField({
+      label: "Data confidence score",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    staleListingRisk: optionalNumberField({
+      label: "Stale listing risk",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    keyPersonRisk: optionalNumberField({
+      label: "Key-person risk",
+      integer: true,
+      min: 1,
+      max: 5,
+    }),
+    homeBasedFlag: optionalBooleanField("Home-based flag"),
+    recurringRevenuePercent: optionalNumberField({
+      label: "Recurring revenue percent",
+      min: 0,
+      max: 100,
+    }),
+    ownerHoursClaimed: optionalNumberField({
+      label: "Owner hours claimed",
+      integer: true,
+      min: 0,
+      max: 168,
+    }),
+    opsManagerExists: optionalBooleanField("Ops manager exists"),
+    freshnessVerifiedAt: optionalDateTimeField("Freshness verified at"),
+    cashToCloseNotes: optionalTextField("Cash-to-close notes", 2000),
     overallScore: optionalNumberField({
       label: "Overall score",
       integer: true,

@@ -9,6 +9,8 @@ import { Select } from "@/components/ui/select";
 import { formatTagsForInput } from "../domain/business.filters";
 import {
   dealStatusOptions,
+  nullableBooleanOptions,
+  primaryUseCaseOptions,
   type BusinessFilters,
   type FilterOptionSet,
 } from "../domain/business.types";
@@ -31,11 +33,11 @@ export function FilterPanel({
       <div className="space-y-4">
         <div>
           <h2 className="text-lg font-semibold text-[var(--color-ink)]">
-            {isMobile ? "Search and score" : "Search and filters"}
+            {isMobile ? "Search and thesis" : "Search and filters"}
           </h2>
           <p className="mt-1 text-sm text-[var(--color-muted-ink)]">
             {isMobile
-              ? "Keep the phone flow fast with global search plus a simple score range."
+              ? "Keep the phone flow fast with search plus the most useful thesis filters."
               : "The dashboard runs directly from URL state so saved links and future sessions stay in sync."}
           </p>
         </div>
@@ -81,9 +83,42 @@ export function FilterPanel({
           </div>
 
           {isMobile ? (
-            <p className="text-xs leading-5 text-[var(--color-muted-ink)]">
-              Mobile keeps filtering intentionally narrow so it stays quick to scan and use.
-            </p>
+            <>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Primary use case
+                  </span>
+                  <Select
+                    name="primaryUseCase"
+                    defaultValue={filters.primaryUseCase ?? ""}
+                  >
+                    <option value="">Any use case</option>
+                    {primaryUseCaseOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Min keep-day-job fit
+                  </span>
+                  <Input
+                    name="minKeepDayJobFit"
+                    inputMode="numeric"
+                    defaultValue={filters.minKeepDayJobFit ?? ""}
+                    placeholder="1 to 5"
+                  />
+                </label>
+              </div>
+
+              <p className="text-xs leading-5 text-[var(--color-muted-ink)]">
+                Mobile keeps filtering intentionally narrower than desktop, but still defaults to the active pipeline instead of passed deals.
+              </p>
+            </>
           ) : (
             <>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -121,7 +156,7 @@ export function FilterPanel({
                   Deal status
                 </span>
                 <Select name="status" defaultValue={filters.status ?? ""}>
-                  <option value="">All statuses</option>
+                  <option value="">Active pipeline (default)</option>
                   {dealStatusOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -129,6 +164,48 @@ export function FilterPanel({
                   ))}
                 </Select>
               </label>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Primary use case
+                  </span>
+                  <Select
+                    name="primaryUseCase"
+                    defaultValue={filters.primaryUseCase ?? ""}
+                  >
+                    <option value="">Any use case</option>
+                    {primaryUseCaseOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Beats benchmark?
+                  </span>
+                  <Select
+                    name="beatsCurrentBenchmark"
+                    defaultValue={
+                      filters.beatsCurrentBenchmark === undefined
+                        ? ""
+                        : String(filters.beatsCurrentBenchmark)
+                    }
+                  >
+                    <option value="">Either</option>
+                    {nullableBooleanOptions
+                      .filter((option) => option.value !== "")
+                      .map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                  </Select>
+                </label>
+              </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="block space-y-2">
@@ -177,6 +254,177 @@ export function FilterPanel({
                     defaultValue={filters.maxSde ?? ""}
                     placeholder="1000000"
                   />
+                </label>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Min AI resistance
+                  </span>
+                  <Input
+                    name="minAiResistanceScore"
+                    inputMode="numeric"
+                    defaultValue={filters.minAiResistanceScore ?? ""}
+                    placeholder="1 to 5"
+                  />
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Min keep-day-job fit
+                  </span>
+                  <Input
+                    name="minKeepDayJobFit"
+                    inputMode="numeric"
+                    defaultValue={filters.minKeepDayJobFit ?? ""}
+                    placeholder="1 to 5"
+                  />
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Min quit-day-job fit
+                  </span>
+                  <Input
+                    name="minQuitDayJobFit"
+                    inputMode="numeric"
+                    defaultValue={filters.minQuitDayJobFit ?? ""}
+                    placeholder="1 to 5"
+                  />
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Min financeability
+                  </span>
+                  <Input
+                    name="minFinanceabilityRating"
+                    inputMode="numeric"
+                    defaultValue={filters.minFinanceabilityRating ?? ""}
+                    placeholder="1 to 5"
+                  />
+                </label>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Max cash to close high
+                  </span>
+                  <Input
+                    name="maxCashToCloseHigh"
+                    inputMode="decimal"
+                    defaultValue={filters.maxCashToCloseHigh ?? ""}
+                    placeholder="250000"
+                  />
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Min conservative cash after brother
+                  </span>
+                  <Input
+                    name="minConservativeCashAfterBrother"
+                    inputMode="decimal"
+                    defaultValue={filters.minConservativeCashAfterBrother ?? ""}
+                    placeholder="0"
+                  />
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Max stale listing risk
+                  </span>
+                  <Input
+                    name="maxStaleListingRisk"
+                    inputMode="numeric"
+                    defaultValue={filters.maxStaleListingRisk ?? ""}
+                    placeholder="1 to 5"
+                  />
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Min data confidence
+                  </span>
+                  <Input
+                    name="minDataConfidenceScore"
+                    inputMode="numeric"
+                    defaultValue={filters.minDataConfidenceScore ?? ""}
+                    placeholder="1 to 5"
+                  />
+                </label>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Seller financing
+                  </span>
+                  <Select
+                    name="sellerFinancingAvailable"
+                    defaultValue={
+                      filters.sellerFinancingAvailable === undefined
+                        ? ""
+                        : String(filters.sellerFinancingAvailable)
+                    }
+                  >
+                    <option value="">Either</option>
+                    {nullableBooleanOptions
+                      .filter((option) => option.value !== "")
+                      .map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                  </Select>
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Home-based
+                  </span>
+                  <Select
+                    name="homeBasedFlag"
+                    defaultValue={
+                      filters.homeBasedFlag === undefined
+                        ? ""
+                        : String(filters.homeBasedFlag)
+                    }
+                  >
+                    <option value="">Either</option>
+                    {nullableBooleanOptions
+                      .filter((option) => option.value !== "")
+                      .map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                  </Select>
+                </label>
+
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">
+                    Ops manager exists
+                  </span>
+                  <Select
+                    name="opsManagerExists"
+                    defaultValue={
+                      filters.opsManagerExists === undefined
+                        ? ""
+                        : String(filters.opsManagerExists)
+                    }
+                  >
+                    <option value="">Either</option>
+                    {nullableBooleanOptions
+                      .filter((option) => option.value !== "")
+                      .map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                  </Select>
                 </label>
               </div>
 

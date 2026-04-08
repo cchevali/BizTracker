@@ -69,3 +69,18 @@ Consequences: Deploy automation stays cross-platform and reliable, but the workf
 Decision: Keep the mobile dashboard focused on global search, score filtering, and card-first results, while changing the default sort to ask price low-to-high.
 Reason: The full desktop filter sidebar and table view were too dense on phones, and ask price is the most practical default browsing order for this acquisition workflow.
 Consequences: Small screens now intentionally hide most filter fields and always render cards for table-mode views, while desktop retains the full filter set and view toggle behavior.
+
+## 2026-04-07
+Decision: Preserve the meaning of legacy `overall_score` and add acquisition-thesis analysis as separate fields plus shared scenario math.
+Reason: Existing records and exports already use `overall_score`, so silently changing its meaning would make historical comparisons misleading.
+Consequences: New fields such as `keep_day_job_fit`, `quit_day_job_fit`, and financeability metrics live alongside the legacy score, while `src/features/businesses/domain/business-scenario.ts` computes cash-to-close and post-brother cash outputs from shared assumptions.
+
+## 2026-04-07
+Decision: Keep workbook compatibility by appending new export columns, accepting both old and new workbook schemas on import, and recomputing derived scenario fields from base data.
+Reason: ChatGPT workbook workflows already depended on the original businesses-sheet column order, but the new screening fields still needed to round-trip safely.
+Consequences: `src/features/businesses/domain/business-export.ts` preserves the original columns first and appends the v2 fields afterward, while `src/features/businesses/domain/business-workbook-import.ts` tolerates missing new columns and does not trust imported derived values over recalculation.
+
+## 2026-04-07
+Decision: Treat `Passed` deals as archived from the default active pipeline without deleting them, and make the thesis cleanup/backfill reproducible through a dedicated script.
+Reason: The product needs a cleaner working set for active evaluation, but archived deals, notes, and history still matter for context and export integrity.
+Consequences: Dashboard queries now exclude `Passed` deals by default unless filters explicitly request them, and `scripts/backfill-acquisition-thesis.ts` can rerun safely to preserve the April 7, 2026 cleanup state.

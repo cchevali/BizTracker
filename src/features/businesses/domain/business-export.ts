@@ -1,3 +1,4 @@
+import { BUSINESS_SCENARIO_ASSUMPTIONS } from "./business-scenario";
 import { countActiveFilters } from "./business.filters";
 import {
   getDealStatusLabel,
@@ -43,6 +44,36 @@ export type BusinessExportBusinessRow = {
   history_event_count: number;
   created_at: string;
   updated_at: string;
+  ai_resistance_score: number | null;
+  financeability_rating: number | null;
+  seller_financing_available: string;
+  seller_financing_notes: string;
+  operator_skill_dependency: number | null;
+  license_dependency: number | null;
+  after_hours_burden: number | null;
+  capex_risk: number | null;
+  regret_if_wrong_score: number | null;
+  data_confidence_score: number | null;
+  keep_day_job_fit: number | null;
+  quit_day_job_fit: number | null;
+  primary_use_case: string;
+  beats_current_benchmark: string;
+  benchmark_notes: string;
+  freshness_verified_at: string;
+  stale_listing_risk: number | null;
+  home_based_flag: string;
+  recurring_revenue_percent: number | null;
+  owner_hours_claimed: number | null;
+  ops_manager_exists: string;
+  key_person_risk: number | null;
+  cash_to_close_low: number | null;
+  cash_to_close_high: number | null;
+  cash_to_close_notes: string;
+  annual_debt_service_assumed: number | null;
+  brother_cash_comp_assumed: number;
+  conservative_sde_used: number | null;
+  paper_cash_after_brother: number | null;
+  conservative_cash_after_brother: number | null;
 };
 
 export type BusinessExportNoteRow = {
@@ -112,6 +143,36 @@ export const businessExportColumns = {
     "history_event_count",
     "created_at",
     "updated_at",
+    "ai_resistance_score",
+    "financeability_rating",
+    "seller_financing_available",
+    "seller_financing_notes",
+    "operator_skill_dependency",
+    "license_dependency",
+    "after_hours_burden",
+    "capex_risk",
+    "regret_if_wrong_score",
+    "data_confidence_score",
+    "keep_day_job_fit",
+    "quit_day_job_fit",
+    "primary_use_case",
+    "beats_current_benchmark",
+    "benchmark_notes",
+    "freshness_verified_at",
+    "stale_listing_risk",
+    "home_based_flag",
+    "recurring_revenue_percent",
+    "owner_hours_claimed",
+    "ops_manager_exists",
+    "key_person_risk",
+    "cash_to_close_low",
+    "cash_to_close_high",
+    "cash_to_close_notes",
+    "annual_debt_service_assumed",
+    "brother_cash_comp_assumed",
+    "conservative_sde_used",
+    "paper_cash_after_brother",
+    "conservative_cash_after_brother",
   ] as const satisfies ReadonlyArray<keyof BusinessExportBusinessRow>,
   notes: [
     "business_id",
@@ -145,6 +206,14 @@ function formatString(value: string | null | undefined) {
   return value ?? "";
 }
 
+function formatBoolean(value: boolean | null | undefined) {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return value ? "Yes" : "No";
+}
+
 function formatTags(tags: string[]) {
   return tags.join(", ");
 }
@@ -173,6 +242,10 @@ function createMetadataRows(
     {
       field: "generated_at",
       value: generatedAt.toISOString(),
+    },
+    {
+      field: "schema_version",
+      value: 2,
     },
     {
       field: "export_scope",
@@ -224,7 +297,7 @@ function createMetadataRows(
     },
     {
       field: "status_label",
-      value: filters.status ? getDealStatusLabel(filters.status) : "",
+      value: filters.status ? getDealStatusLabel(filters.status) : "Active pipeline default",
     },
     {
       field: "tags",
@@ -253,6 +326,86 @@ function createMetadataRows(
     {
       field: "max_score",
       value: filters.maxScore ?? "",
+    },
+    {
+      field: "primary_use_case",
+      value: filters.primaryUseCase ?? "",
+    },
+    {
+      field: "min_keep_day_job_fit",
+      value: filters.minKeepDayJobFit ?? "",
+    },
+    {
+      field: "min_quit_day_job_fit",
+      value: filters.minQuitDayJobFit ?? "",
+    },
+    {
+      field: "min_ai_resistance_score",
+      value: filters.minAiResistanceScore ?? "",
+    },
+    {
+      field: "min_financeability_rating",
+      value: filters.minFinanceabilityRating ?? "",
+    },
+    {
+      field: "max_cash_to_close_high",
+      value: filters.maxCashToCloseHigh ?? "",
+    },
+    {
+      field: "min_conservative_cash_after_brother",
+      value: filters.minConservativeCashAfterBrother ?? "",
+    },
+    {
+      field: "seller_financing_available",
+      value: formatBoolean(filters.sellerFinancingAvailable),
+    },
+    {
+      field: "home_based_flag",
+      value: formatBoolean(filters.homeBasedFlag),
+    },
+    {
+      field: "ops_manager_exists",
+      value: formatBoolean(filters.opsManagerExists),
+    },
+    {
+      field: "max_stale_listing_risk",
+      value: filters.maxStaleListingRisk ?? "",
+    },
+    {
+      field: "min_data_confidence_score",
+      value: filters.minDataConfidenceScore ?? "",
+    },
+    {
+      field: "beats_current_benchmark",
+      value: formatBoolean(filters.beatsCurrentBenchmark),
+    },
+    {
+      field: "assumption_brother_cash_comp",
+      value: BUSINESS_SCENARIO_ASSUMPTIONS.BROTHER_CASH_COMP,
+    },
+    {
+      field: "assumption_sba_ltv",
+      value: BUSINESS_SCENARIO_ASSUMPTIONS.SBA_LTV,
+    },
+    {
+      field: "assumption_sba_interest_rate",
+      value: BUSINESS_SCENARIO_ASSUMPTIONS.SBA_INTEREST_RATE,
+    },
+    {
+      field: "assumption_sba_term_years",
+      value: BUSINESS_SCENARIO_ASSUMPTIONS.SBA_TERM_YEARS,
+    },
+    {
+      field: "assumption_cash_to_close_low_pct",
+      value: BUSINESS_SCENARIO_ASSUMPTIONS.CASH_TO_CLOSE_LOW_PCT,
+    },
+    {
+      field: "assumption_cash_to_close_high_pct",
+      value: BUSINESS_SCENARIO_ASSUMPTIONS.CASH_TO_CLOSE_HIGH_PCT,
+    },
+    {
+      field: "assumption_conservative_sde_haircut",
+      value: BUSINESS_SCENARIO_ASSUMPTIONS.CONSERVATIVE_SDE_HAIRCUT,
     },
     {
       field: "query_json",
@@ -295,6 +448,36 @@ function mapBusinessRow(business: BusinessDetail): BusinessExportBusinessRow {
     history_event_count: business.historyEvents.length,
     created_at: business.createdAt,
     updated_at: business.updatedAt,
+    ai_resistance_score: business.aiResistanceScore,
+    financeability_rating: business.financeabilityRating,
+    seller_financing_available: formatBoolean(business.sellerFinancingAvailable),
+    seller_financing_notes: formatString(business.sellerFinancingNotes),
+    operator_skill_dependency: business.operatorSkillDependency,
+    license_dependency: business.licenseDependency,
+    after_hours_burden: business.afterHoursBurden,
+    capex_risk: business.capexRisk,
+    regret_if_wrong_score: business.regretIfWrongScore,
+    data_confidence_score: business.dataConfidenceScore,
+    keep_day_job_fit: business.keepDayJobFit,
+    quit_day_job_fit: business.quitDayJobFit,
+    primary_use_case: business.primaryUseCase ?? "",
+    beats_current_benchmark: formatBoolean(business.beatsCurrentBenchmark),
+    benchmark_notes: formatString(business.benchmarkNotes),
+    freshness_verified_at: formatString(business.freshnessVerifiedAt),
+    stale_listing_risk: business.staleListingRisk,
+    home_based_flag: formatBoolean(business.homeBasedFlag),
+    recurring_revenue_percent: business.recurringRevenuePercent,
+    owner_hours_claimed: business.ownerHoursClaimed,
+    ops_manager_exists: formatBoolean(business.opsManagerExists),
+    key_person_risk: business.keyPersonRisk,
+    cash_to_close_low: business.cashToCloseLow,
+    cash_to_close_high: business.cashToCloseHigh,
+    cash_to_close_notes: formatString(business.cashToCloseNotes),
+    annual_debt_service_assumed: business.annualDebtServiceAssumed,
+    brother_cash_comp_assumed: business.brotherCashCompAssumed,
+    conservative_sde_used: business.conservativeSdeUsed,
+    paper_cash_after_brother: business.paperCashAfterBrother,
+    conservative_cash_after_brother: business.conservativeCashAfterBrother,
   };
 }
 

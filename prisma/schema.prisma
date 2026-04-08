@@ -18,6 +18,13 @@ enum DealStatus {
   CLOSED
 }
 
+enum PrimaryUseCase {
+  bridge_while_employed
+  full_time_replacement
+  either
+  neither
+}
+
 enum HistoryEventType {
   CREATED
   UPDATED
@@ -50,6 +57,29 @@ model Business {
   transferabilityRating    Int?
   scheduleControlFitRating Int?
   brotherOperatorFitRating Int?
+  aiResistanceScore        Int?
+  keepDayJobFit            Int?
+  quitDayJobFit            Int?
+  primaryUseCase           PrimaryUseCase?
+  beatsCurrentBenchmark    Boolean?
+  benchmarkNotes           String?                @db.Text
+  financeabilityRating     Int?
+  sellerFinancingAvailable Boolean?
+  sellerFinancingNotes     String?                @db.Text
+  operatorSkillDependency  Int?
+  licenseDependency        Int?
+  afterHoursBurden         Int?
+  capexRisk                Int?
+  regretIfWrongScore       Int?
+  dataConfidenceScore      Int?
+  staleListingRisk         Int?
+  keyPersonRisk            Int?
+  homeBasedFlag            Boolean?
+  recurringRevenuePercent  Decimal?               @db.Decimal(5, 2)
+  ownerHoursClaimed        Int?
+  opsManagerExists         Boolean?
+  freshnessVerifiedAt      DateTime?
+  cashToCloseNotes         String?                @db.Text
   overallScore             Int?
   notes                    String?                @db.Text
   tags                     String[]               @default([])

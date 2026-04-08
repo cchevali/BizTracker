@@ -1,4 +1,10 @@
-import type { DealStatus, HistoryEventType } from "@/generated/prisma/enums";
+import type {
+  DealStatus,
+  HistoryEventType,
+  PrimaryUseCase,
+} from "@/generated/prisma/enums";
+
+import type { BusinessScenario } from "./business-scenario";
 
 export const viewModes = ["table", "cards"] as const;
 export type ViewMode = (typeof viewModes)[number];
@@ -10,6 +16,14 @@ export const sortOptionValues = [
   "sde",
   "score",
   "location",
+  "keep-day-job-fit",
+  "quit-day-job-fit",
+  "ai-resistance",
+  "financeability",
+  "cash-to-close-high",
+  "conservative-cash-after-brother",
+  "stale-listing-risk",
+  "data-confidence",
 ] as const;
 export type SortOption = (typeof sortOptionValues)[number];
 
@@ -23,6 +37,17 @@ export const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: "sde", label: "SDE (high to low)" },
   { value: "score", label: "Score (high to low)" },
   { value: "location", label: "Location (A to Z)" },
+  { value: "keep-day-job-fit", label: "Keep-day-job fit (high to low)" },
+  { value: "quit-day-job-fit", label: "Quit-day-job fit (high to low)" },
+  { value: "ai-resistance", label: "AI resistance (high to low)" },
+  { value: "financeability", label: "Financeability (high to low)" },
+  { value: "cash-to-close-high", label: "Cash to close high (low to high)" },
+  {
+    value: "conservative-cash-after-brother",
+    label: "Conservative cash after brother (high to low)",
+  },
+  { value: "stale-listing-risk", label: "Stale listing risk (low to high)" },
+  { value: "data-confidence", label: "Data confidence (high to low)" },
 ];
 
 export const viewModeOptions: Array<{ value: ViewMode; label: string }> = [
@@ -42,6 +67,22 @@ export const dealStatusOptions: Array<{ value: DealStatus; label: string }> = [
 ];
 
 export const ratingOptions = [1, 2, 3, 4, 5] as const;
+
+export const primaryUseCaseOptions: Array<{
+  value: PrimaryUseCase;
+  label: string;
+}> = [
+  { value: "bridge_while_employed", label: "Bridge while employed" },
+  { value: "full_time_replacement", label: "Full-time replacement" },
+  { value: "either", label: "Either" },
+  { value: "neither", label: "Neither" },
+];
+
+export const nullableBooleanOptions = [
+  { value: "", label: "Not set" },
+  { value: "true", label: "Yes" },
+  { value: "false", label: "No" },
+] as const;
 
 export const activeDealStatuses: DealStatus[] = [
   "NEW",
@@ -66,6 +107,19 @@ export const filterQueryKeys = [
   "maxScore",
   "status",
   "tags",
+  "primaryUseCase",
+  "minKeepDayJobFit",
+  "minQuitDayJobFit",
+  "minAiResistanceScore",
+  "minFinanceabilityRating",
+  "maxCashToCloseHigh",
+  "minConservativeCashAfterBrother",
+  "sellerFinancingAvailable",
+  "homeBasedFlag",
+  "opsManagerExists",
+  "maxStaleListingRisk",
+  "minDataConfidenceScore",
+  "beatsCurrentBenchmark",
 ] as const;
 
 export type FilterQueryKey = (typeof filterQueryKeys)[number];
@@ -89,9 +143,22 @@ export type BusinessFilters = {
   maxScore?: number;
   status?: DealStatus;
   tags: string[];
+  primaryUseCase?: PrimaryUseCase;
+  minKeepDayJobFit?: number;
+  minQuitDayJobFit?: number;
+  minAiResistanceScore?: number;
+  minFinanceabilityRating?: number;
+  maxCashToCloseHigh?: number;
+  minConservativeCashAfterBrother?: number;
+  sellerFinancingAvailable?: boolean;
+  homeBasedFlag?: boolean;
+  opsManagerExists?: boolean;
+  maxStaleListingRisk?: number;
+  minDataConfidenceScore?: number;
+  beatsCurrentBenchmark?: boolean;
 };
 
-export type BusinessListItem = {
+export type BusinessListItem = BusinessScenario & {
   id: string;
   businessName: string;
   sourceUrl: string | null;
@@ -112,6 +179,26 @@ export type BusinessListItem = {
   updatedAt: string;
   listingSource: string | null;
   brokerFirm: string | null;
+  aiResistanceScore: number | null;
+  financeabilityRating: number | null;
+  sellerFinancingAvailable: boolean | null;
+  operatorSkillDependency: number | null;
+  licenseDependency: number | null;
+  afterHoursBurden: number | null;
+  capexRisk: number | null;
+  regretIfWrongScore: number | null;
+  dataConfidenceScore: number | null;
+  keepDayJobFit: number | null;
+  quitDayJobFit: number | null;
+  primaryUseCase: PrimaryUseCase | null;
+  beatsCurrentBenchmark: boolean | null;
+  freshnessVerifiedAt: string | null;
+  staleListingRisk: number | null;
+  homeBasedFlag: boolean | null;
+  recurringRevenuePercent: number | null;
+  ownerHoursClaimed: number | null;
+  opsManagerExists: boolean | null;
+  keyPersonRisk: number | null;
 };
 
 export type BusinessNoteView = {
@@ -139,6 +226,9 @@ export type BusinessDetail = BusinessListItem & {
   transferabilityRating: number | null;
   scheduleControlFitRating: number | null;
   brotherOperatorFitRating: number | null;
+  benchmarkNotes: string | null;
+  sellerFinancingNotes: string | null;
+  cashToCloseNotes: string | null;
   noteEntries: BusinessNoteView[];
   historyEvents: BusinessHistoryView[];
 };
@@ -208,6 +298,29 @@ export type BusinessFormValues = {
   transferabilityRating: string;
   scheduleControlFitRating: string;
   brotherOperatorFitRating: string;
+  aiResistanceScore: string;
+  keepDayJobFit: string;
+  quitDayJobFit: string;
+  primaryUseCase: string;
+  beatsCurrentBenchmark: string;
+  benchmarkNotes: string;
+  financeabilityRating: string;
+  sellerFinancingAvailable: string;
+  sellerFinancingNotes: string;
+  operatorSkillDependency: string;
+  licenseDependency: string;
+  afterHoursBurden: string;
+  capexRisk: string;
+  regretIfWrongScore: string;
+  dataConfidenceScore: string;
+  staleListingRisk: string;
+  keyPersonRisk: string;
+  homeBasedFlag: string;
+  recurringRevenuePercent: string;
+  ownerHoursClaimed: string;
+  opsManagerExists: string;
+  freshnessVerifiedAt: string;
+  cashToCloseNotes: string;
   overallScore: string;
   notes: string;
   tags: string;
@@ -237,6 +350,29 @@ export const emptyBusinessFormValues: BusinessFormValues = {
   transferabilityRating: "",
   scheduleControlFitRating: "",
   brotherOperatorFitRating: "",
+  aiResistanceScore: "",
+  keepDayJobFit: "",
+  quitDayJobFit: "",
+  primaryUseCase: "",
+  beatsCurrentBenchmark: "",
+  benchmarkNotes: "",
+  financeabilityRating: "",
+  sellerFinancingAvailable: "",
+  sellerFinancingNotes: "",
+  operatorSkillDependency: "",
+  licenseDependency: "",
+  afterHoursBurden: "",
+  capexRisk: "",
+  regretIfWrongScore: "",
+  dataConfidenceScore: "",
+  staleListingRisk: "",
+  keyPersonRisk: "",
+  homeBasedFlag: "",
+  recurringRevenuePercent: "",
+  ownerHoursClaimed: "",
+  opsManagerExists: "",
+  freshnessVerifiedAt: "",
+  cashToCloseNotes: "",
   overallScore: "",
   notes: "",
   tags: "",
@@ -244,6 +380,29 @@ export const emptyBusinessFormValues: BusinessFormValues = {
 
 function numberToInput(value: number | null | undefined) {
   return value === null || value === undefined ? "" : String(value);
+}
+
+function booleanToInput(value: boolean | null | undefined) {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return value ? "true" : "false";
+}
+
+function dateTimeToInput(value: string | null | undefined) {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  const timezoneOffset = date.getTimezoneOffset() * 60_000;
+  return new Date(date.getTime() - timezoneOffset).toISOString().slice(0, 16);
 }
 
 export function createBusinessFormValues(
@@ -277,6 +436,31 @@ export function createBusinessFormValues(
     transferabilityRating: numberToInput(business.transferabilityRating),
     scheduleControlFitRating: numberToInput(business.scheduleControlFitRating),
     brotherOperatorFitRating: numberToInput(business.brotherOperatorFitRating),
+    aiResistanceScore: numberToInput(business.aiResistanceScore),
+    keepDayJobFit: numberToInput(business.keepDayJobFit),
+    quitDayJobFit: numberToInput(business.quitDayJobFit),
+    primaryUseCase: business.primaryUseCase ?? "",
+    beatsCurrentBenchmark: booleanToInput(business.beatsCurrentBenchmark),
+    benchmarkNotes: business.benchmarkNotes ?? "",
+    financeabilityRating: numberToInput(business.financeabilityRating),
+    sellerFinancingAvailable: booleanToInput(
+      business.sellerFinancingAvailable,
+    ),
+    sellerFinancingNotes: business.sellerFinancingNotes ?? "",
+    operatorSkillDependency: numberToInput(business.operatorSkillDependency),
+    licenseDependency: numberToInput(business.licenseDependency),
+    afterHoursBurden: numberToInput(business.afterHoursBurden),
+    capexRisk: numberToInput(business.capexRisk),
+    regretIfWrongScore: numberToInput(business.regretIfWrongScore),
+    dataConfidenceScore: numberToInput(business.dataConfidenceScore),
+    staleListingRisk: numberToInput(business.staleListingRisk),
+    keyPersonRisk: numberToInput(business.keyPersonRisk),
+    homeBasedFlag: booleanToInput(business.homeBasedFlag),
+    recurringRevenuePercent: numberToInput(business.recurringRevenuePercent),
+    ownerHoursClaimed: numberToInput(business.ownerHoursClaimed),
+    opsManagerExists: booleanToInput(business.opsManagerExists),
+    freshnessVerifiedAt: dateTimeToInput(business.freshnessVerifiedAt),
+    cashToCloseNotes: business.cashToCloseNotes ?? "",
     overallScore: numberToInput(business.overallScore),
     notes: business.notes ?? "",
     tags: business.tags?.join(", ") ?? "",
@@ -287,6 +471,24 @@ export function getDealStatusLabel(status: DealStatus) {
   return (
     dealStatusOptions.find((option) => option.value === status)?.label ?? status
   );
+}
+
+export function getPrimaryUseCaseLabel(value: PrimaryUseCase | null | undefined) {
+  if (!value) {
+    return "—";
+  }
+
+  return (
+    primaryUseCaseOptions.find((option) => option.value === value)?.label ?? value
+  );
+}
+
+export function getBooleanLabel(value: boolean | null | undefined) {
+  if (value === null || value === undefined) {
+    return "—";
+  }
+
+  return value ? "Yes" : "No";
 }
 
 export function getHistoryEventLabel(eventType: HistoryEventType) {

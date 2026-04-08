@@ -5,9 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { buttonStyles } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
 import {
+  formatBoolean,
   formatCurrency,
+  formatDate,
   formatDateTime,
   formatInteger,
+  formatPercent,
   formatRating,
   formatScore,
 } from "@/lib/format";
@@ -17,6 +20,7 @@ import { NoteForm } from "@/features/businesses/components/note-form";
 import { StatusBadge } from "@/features/businesses/components/status-badge";
 import { StatusForm } from "@/features/businesses/components/status-form";
 import { getBusinessById } from "@/features/businesses/data/business-repository";
+import { getPrimaryUseCaseLabel } from "@/features/businesses/domain/business.types";
 
 type MetricCardProps = {
   label: string;
@@ -32,6 +36,15 @@ function MetricCard({ label, value }: MetricCardProps) {
       <p className="mt-2 text-lg font-semibold text-[var(--color-ink)]">
         {value}
       </p>
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: MetricCardProps) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <span>{label}</span>
+      <strong className="text-right text-[var(--color-ink)]">{value}</strong>
     </div>
   );
 }
@@ -61,6 +74,11 @@ export default async function BusinessDetailPage({ params }: DetailPageProps) {
             <Badge tone="neutral">{business.location}</Badge>
             {business.listingSource ? (
               <Badge tone="neutral">{business.listingSource}</Badge>
+            ) : null}
+            {business.primaryUseCase ? (
+              <Badge tone="neutral">
+                {getPrimaryUseCaseLabel(business.primaryUseCase)}
+              </Badge>
             ) : null}
           </div>
           <div>
@@ -198,39 +216,199 @@ export default async function BusinessDetailPage({ params }: DetailPageProps) {
           <Panel className="p-6">
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-[var(--color-ink)]">
-                Acquisition fit ratings
+                Scenario
+              </h2>
+              <p className="text-sm text-[var(--color-muted-ink)]">
+                Conservative default scenario using the shared close-cash, debt, and brother-comp assumptions.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <MetricCard
+                  label="Cash to close range"
+                  value={`${formatCurrency(business.cashToCloseLow)} to ${formatCurrency(
+                    business.cashToCloseHigh,
+                  )}`}
+                />
+                <MetricCard
+                  label="Annual debt service assumed"
+                  value={formatCurrency(business.annualDebtServiceAssumed)}
+                />
+                <MetricCard
+                  label="Paper cash after paying brother"
+                  value={formatCurrency(business.paperCashAfterBrother)}
+                />
+                <MetricCard
+                  label="Conservative cash after paying brother"
+                  value={formatCurrency(business.conservativeCashAfterBrother)}
+                />
+                <MetricCard
+                  label="Keep / quit fit"
+                  value={`${formatRating(business.keepDayJobFit)} / ${formatRating(
+                    business.quitDayJobFit,
+                  )}`}
+                />
+                <MetricCard
+                  label="Primary use case"
+                  value={getPrimaryUseCaseLabel(business.primaryUseCase)}
+                />
+              </div>
+              {business.cashToCloseNotes ? (
+                <div className="rounded-[24px] bg-[var(--color-panel-muted)] p-4 text-sm leading-7 text-[var(--color-muted-ink)]">
+                  {business.cashToCloseNotes}
+                </div>
+              ) : null}
+            </div>
+          </Panel>
+
+          <Panel className="p-6">
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-[var(--color-ink)]">
+                Investment thesis
               </h2>
               <div className="space-y-3 text-sm text-[var(--color-muted-ink)]">
-                <div className="flex items-center justify-between gap-4">
-                  <span>Owner dependence</span>
-                  <strong className="text-[var(--color-ink)]">
-                    {formatRating(business.ownerDependenceRating)}
-                  </strong>
+                <InfoRow
+                  label="AI resistance"
+                  value={formatRating(business.aiResistanceScore)}
+                />
+                <InfoRow
+                  label="Keep-day-job fit"
+                  value={formatRating(business.keepDayJobFit)}
+                />
+                <InfoRow
+                  label="Quit-day-job fit"
+                  value={formatRating(business.quitDayJobFit)}
+                />
+                <InfoRow
+                  label="Primary use case"
+                  value={getPrimaryUseCaseLabel(business.primaryUseCase)}
+                />
+                <InfoRow
+                  label="Beats current benchmark"
+                  value={formatBoolean(business.beatsCurrentBenchmark)}
+                />
+                <InfoRow
+                  label="Financeability"
+                  value={formatRating(business.financeabilityRating)}
+                />
+              </div>
+              {business.benchmarkNotes ? (
+                <div className="rounded-[24px] bg-[var(--color-panel-muted)] p-4 text-sm leading-7 text-[var(--color-muted-ink)]">
+                  {business.benchmarkNotes}
                 </div>
-                <div className="flex items-center justify-between gap-4">
-                  <span>Recurring revenue</span>
-                  <strong className="text-[var(--color-ink)]">
-                    {formatRating(business.recurringRevenueRating)}
-                  </strong>
+              ) : null}
+            </div>
+          </Panel>
+
+          <Panel className="p-6">
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-[var(--color-ink)]">
+                Operational reality
+              </h2>
+              <div className="space-y-3 text-sm text-[var(--color-muted-ink)]">
+                <InfoRow
+                  label="Operator skill dependency"
+                  value={formatRating(business.operatorSkillDependency)}
+                />
+                <InfoRow
+                  label="License dependency"
+                  value={formatRating(business.licenseDependency)}
+                />
+                <InfoRow
+                  label="After-hours burden"
+                  value={formatRating(business.afterHoursBurden)}
+                />
+                <InfoRow
+                  label="Capex risk"
+                  value={formatRating(business.capexRisk)}
+                />
+                <InfoRow
+                  label="Home-based"
+                  value={formatBoolean(business.homeBasedFlag)}
+                />
+                <InfoRow
+                  label="Recurring revenue %"
+                  value={formatPercent(business.recurringRevenuePercent)}
+                />
+                <InfoRow
+                  label="Owner hours claimed"
+                  value={formatInteger(business.ownerHoursClaimed)}
+                />
+                <InfoRow
+                  label="Ops manager exists"
+                  value={formatBoolean(business.opsManagerExists)}
+                />
+                <InfoRow
+                  label="Key-person risk"
+                  value={formatRating(business.keyPersonRisk)}
+                />
+              </div>
+            </div>
+          </Panel>
+
+          <Panel className="p-6">
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-[var(--color-ink)]">
+                Confidence and downside
+              </h2>
+              <div className="space-y-3 text-sm text-[var(--color-muted-ink)]">
+                <InfoRow
+                  label="Regret-if-wrong score"
+                  value={formatRating(business.regretIfWrongScore)}
+                />
+                <InfoRow
+                  label="Data confidence score"
+                  value={formatRating(business.dataConfidenceScore)}
+                />
+                <InfoRow
+                  label="Stale listing risk"
+                  value={formatRating(business.staleListingRisk)}
+                />
+                <InfoRow
+                  label="Freshness verified"
+                  value={formatDate(business.freshnessVerifiedAt)}
+                />
+                <InfoRow
+                  label="Seller financing available"
+                  value={formatBoolean(business.sellerFinancingAvailable)}
+                />
+              </div>
+              {business.sellerFinancingNotes ? (
+                <div className="rounded-[24px] bg-[var(--color-panel-muted)] p-4 text-sm leading-7 text-[var(--color-muted-ink)]">
+                  {business.sellerFinancingNotes}
                 </div>
-                <div className="flex items-center justify-between gap-4">
-                  <span>Transferability</span>
-                  <strong className="text-[var(--color-ink)]">
-                    {formatRating(business.transferabilityRating)}
-                  </strong>
-                </div>
-                <div className="flex items-center justify-between gap-4">
-                  <span>Schedule-control fit</span>
-                  <strong className="text-[var(--color-ink)]">
-                    {formatRating(business.scheduleControlFitRating)}
-                  </strong>
-                </div>
-                <div className="flex items-center justify-between gap-4">
-                  <span>Brother-operator fit</span>
-                  <strong className="text-[var(--color-ink)]">
-                    {formatRating(business.brotherOperatorFitRating)}
-                  </strong>
-                </div>
+              ) : null}
+            </div>
+          </Panel>
+
+          <Panel className="p-6">
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-[var(--color-ink)]">
+                Legacy ratings
+              </h2>
+              <div className="space-y-3 text-sm text-[var(--color-muted-ink)]">
+                <InfoRow
+                  label="Owner dependence"
+                  value={formatRating(business.ownerDependenceRating)}
+                />
+                <InfoRow
+                  label="Recurring revenue"
+                  value={formatRating(business.recurringRevenueRating)}
+                />
+                <InfoRow
+                  label="Transferability"
+                  value={formatRating(business.transferabilityRating)}
+                />
+                <InfoRow
+                  label="Schedule-control fit"
+                  value={formatRating(business.scheduleControlFitRating)}
+                />
+                <InfoRow
+                  label="Brother-operator fit"
+                  value={formatRating(business.brotherOperatorFitRating)}
+                />
+                <InfoRow
+                  label="Overall score"
+                  value={formatScore(business.overallScore)}
+                />
               </div>
             </div>
           </Panel>

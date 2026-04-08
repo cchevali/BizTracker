@@ -15,6 +15,12 @@ const legacyOwnerDependenceNote =
   "Inference: ownerDependenceRating uses 1 low dependence to 5 high dependence; other fit ratings use 1 low to 5 high.";
 const normalizedOwnerDependenceNote =
   "Inference: owner dependence is recorded on its native 1-low to 5-high scale, while overall score is normalized separately onto the app's 0-100 scale.";
+const validPrimaryUseCases = new Set([
+  "bridge_while_employed",
+  "full_time_replacement",
+  "either",
+  "neither",
+]);
 
 export type NormalizedBusinessListing = {
   businessName: string;
@@ -48,6 +54,34 @@ export type NormalizedBusinessListing = {
   transferabilityRating: number | null;
   scheduleControlFitRating: number | null;
   brotherOperatorFitRating: number | null;
+  aiResistanceScore: number | null;
+  keepDayJobFit: number | null;
+  quitDayJobFit: number | null;
+  primaryUseCase:
+    | "bridge_while_employed"
+    | "full_time_replacement"
+    | "either"
+    | "neither"
+    | null;
+  beatsCurrentBenchmark: boolean | null;
+  benchmarkNotes: string | null;
+  financeabilityRating: number | null;
+  sellerFinancingAvailable: boolean | null;
+  sellerFinancingNotes: string | null;
+  operatorSkillDependency: number | null;
+  licenseDependency: number | null;
+  afterHoursBurden: number | null;
+  capexRisk: number | null;
+  regretIfWrongScore: number | null;
+  dataConfidenceScore: number | null;
+  staleListingRisk: number | null;
+  keyPersonRisk: number | null;
+  homeBasedFlag: boolean | null;
+  recurringRevenuePercent: number | null;
+  ownerHoursClaimed: number | null;
+  opsManagerExists: boolean | null;
+  freshnessVerifiedAt: string | null;
+  cashToCloseNotes: string | null;
   overallScore: number | null;
   notes: string | null;
   tags: string[];
@@ -88,6 +122,61 @@ function normalizeBoundedRating(value: unknown) {
   return normalized !== null && normalized >= 1 && normalized <= 5
     ? normalized
     : null;
+}
+
+function normalizeBoolean(value: unknown) {
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase();
+
+    if (normalized === "true" || normalized === "yes") {
+      return true;
+    }
+
+    if (normalized === "false" || normalized === "no") {
+      return false;
+    }
+  }
+
+  return null;
+}
+
+function normalizePrimaryUseCase(
+  value: unknown,
+): NormalizedBusinessListing["primaryUseCase"] {
+  const normalized = normalizeString(value).toLowerCase();
+
+  if (validPrimaryUseCases.has(normalized)) {
+    return normalized as NormalizedBusinessListing["primaryUseCase"];
+  }
+
+  if (normalized === "bridge while employed") {
+    return "bridge_while_employed";
+  }
+
+  if (normalized === "full-time replacement") {
+    return "full_time_replacement";
+  }
+
+  return null;
+}
+
+function normalizeDateTime(value: unknown) {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString();
+  }
+
+  const normalized = normalizeString(value);
+
+  if (!normalized) {
+    return null;
+  }
+
+  const parsed = new Date(normalized);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
 }
 
 function normalizeTags(value: unknown) {
@@ -175,6 +264,36 @@ export function normalizeChatGptBusinessListing(
     transferabilityRating,
     scheduleControlFitRating,
     brotherOperatorFitRating,
+    aiResistanceScore: normalizeBoundedRating(input.aiResistanceScore),
+    keepDayJobFit: normalizeBoundedRating(input.keepDayJobFit),
+    quitDayJobFit: normalizeBoundedRating(input.quitDayJobFit),
+    primaryUseCase: normalizePrimaryUseCase(input.primaryUseCase),
+    beatsCurrentBenchmark: normalizeBoolean(input.beatsCurrentBenchmark),
+    benchmarkNotes: normalizeNullableString(input.benchmarkNotes),
+    financeabilityRating: normalizeBoundedRating(input.financeabilityRating),
+    sellerFinancingAvailable: normalizeBoolean(input.sellerFinancingAvailable),
+    sellerFinancingNotes: normalizeNullableString(input.sellerFinancingNotes),
+    operatorSkillDependency: normalizeBoundedRating(
+      input.operatorSkillDependency,
+    ),
+    licenseDependency: normalizeBoundedRating(input.licenseDependency),
+    afterHoursBurden: normalizeBoundedRating(input.afterHoursBurden),
+    capexRisk: normalizeBoundedRating(input.capexRisk),
+    regretIfWrongScore: normalizeBoundedRating(input.regretIfWrongScore),
+    dataConfidenceScore: normalizeBoundedRating(input.dataConfidenceScore),
+    staleListingRisk: normalizeBoundedRating(input.staleListingRisk),
+    keyPersonRisk: normalizeBoundedRating(input.keyPersonRisk),
+    homeBasedFlag: normalizeBoolean(input.homeBasedFlag),
+    recurringRevenuePercent: (() => {
+      const normalized = normalizeNumber(input.recurringRevenuePercent);
+      return normalized !== null && normalized >= 0 && normalized <= 100
+        ? normalized
+        : null;
+    })(),
+    ownerHoursClaimed: normalizeInteger(input.ownerHoursClaimed),
+    opsManagerExists: normalizeBoolean(input.opsManagerExists),
+    freshnessVerifiedAt: normalizeDateTime(input.freshnessVerifiedAt),
+    cashToCloseNotes: normalizeNullableString(input.cashToCloseNotes),
     overallScore: normalizeImportedOverallScore(rawOverallScore, {
       ownerDependenceRating,
       recurringRevenueRating,

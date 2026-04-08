@@ -2,9 +2,18 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Panel } from "@/components/ui/panel";
-import { formatCurrency, formatDateTime, formatScore } from "@/lib/format";
+import {
+  formatCurrency,
+  formatDateTime,
+  formatRating,
+  formatScore,
+} from "@/lib/format";
 
-import type { BusinessListItem } from "../domain/business.types";
+import {
+  getBooleanLabel,
+  getPrimaryUseCaseLabel,
+  type BusinessListItem,
+} from "../domain/business.types";
 import { StatusBadge } from "./status-badge";
 
 type BusinessCardGridProps = {
@@ -39,46 +48,50 @@ export function BusinessCardGrid({ businesses }: BusinessCardGridProps) {
           <div className="grid grid-cols-2 gap-3 rounded-[24px] bg-[var(--color-panel-muted)] p-4">
             <div>
               <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-muted-ink)]">
-                Ask
+                Use Case
               </p>
               <p className="mt-1 text-sm font-semibold text-[var(--color-ink)]">
-                {formatCurrency(business.askingPrice)}
+                {getPrimaryUseCaseLabel(business.primaryUseCase)}
               </p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-muted-ink)]">
-                SDE
+                Keep / Quit
               </p>
               <p className="mt-1 text-sm font-semibold text-[var(--color-ink)]">
-                {formatCurrency(business.sde)}
+                {formatRating(business.keepDayJobFit)} / {formatRating(business.quitDayJobFit)}
               </p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-muted-ink)]">
-                Score
+                Conservative Cash
               </p>
               <p className="mt-1 text-sm font-semibold text-[var(--color-ink)]">
-                {formatScore(business.overallScore)}
+                {formatCurrency(business.conservativeCashAfterBrother)}
               </p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-muted-ink)]">
-                Location
+                Cash High
               </p>
               <p className="mt-1 text-sm font-semibold text-[var(--color-ink)]">
-                {business.location}
+                {formatCurrency(business.cashToCloseHigh)}
               </p>
             </div>
           </div>
 
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-wrap gap-2">
+              <Badge>{`Finance ${formatRating(business.financeabilityRating)}`}</Badge>
+              <Badge>{`AI ${formatRating(business.aiResistanceScore)}`}</Badge>
+              <Badge>{`Seller ${getBooleanLabel(business.sellerFinancingAvailable)}`}</Badge>
+              <Badge>{`Benchmark ${getBooleanLabel(business.beatsCurrentBenchmark)}`}</Badge>
               {business.tags.slice(0, 3).map((tag) => (
                 <Badge key={tag}>{tag}</Badge>
               ))}
             </div>
             <span className="text-xs text-[var(--color-muted-ink)]">
-              Updated {formatDateTime(business.updatedAt)}
+              Score {formatScore(business.overallScore)} · Updated {formatDateTime(business.updatedAt)}
             </span>
           </div>
         </Panel>

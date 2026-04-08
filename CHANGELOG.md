@@ -19,3 +19,14 @@
 - Added a GitHub Actions workflow and deployment docs for Git-based preview and production deploys to the `microflowops-biztracker` Vercel project.
 - Adjusted the GitHub Actions deploy workflow to use `npm install` after the first Linux runner execution exposed optional dependency issues with `npm ci`.
 - Simplified the mobile dashboard around search plus score filtering, card-first small-screen results, and an ask-price-low-to-high default sort.
+
+## 2026-04-07
+- Extended the BizTracker schema, validation, repository layer, forms, detail page, filters, sorting, and workbook export to support acquisition-screening v2 fields.
+- Added shared scenario assumptions and derived cash calculations for cash to close, debt service, conservative SDE, and post-brother cash outputs.
+- Preserved workbook compatibility by appending new `businesses` columns after the original schema and adding workbook import support for both old and v2 exports.
+- Added DB-level check constraints for legacy and new 1-to-5 rating fields plus `recurringRevenuePercent`.
+- Added Vitest coverage for scenario math, workbook import compatibility, new filter/sort behavior, and expanded export assertions.
+- Updated the default active pipeline to exclude `Passed` deals unless the filter explicitly requests them.
+- Added `scripts/backfill-acquisition-thesis.ts` and `scripts/backfill-acquisition-thesis.data.ts` for the April 7, 2026 thesis cleanup pass.
+- Marked seven low-fit deals as passed, added eight discussed public listings, backfilled acquisition-thesis fields for active businesses, and appended structured skeptical analysis notes without overwriting prior notes.
+- Fixed the thesis backfill runner to be idempotent and added duplicate guards for same-run source URL and normalized-title collisions.

@@ -6,6 +6,7 @@ import type {
   Prisma,
 } from "@/generated/prisma/client";
 
+import { calculateBusinessScenario } from "../domain/business-scenario";
 import {
   parseBusinessFilters,
   serializeBusinessFilters,
@@ -22,7 +23,14 @@ function decimalToNumber(value: Prisma.Decimal | null) {
   return value ? value.toNumber() : null;
 }
 
+function dateToIso(value: Date | null) {
+  return value ? value.toISOString() : null;
+}
+
 function mapBusinessBase(record: Business): BusinessListItem {
+  const askingPrice = decimalToNumber(record.askingPrice);
+  const sde = decimalToNumber(record.sde);
+
   return {
     id: record.id,
     businessName: record.businessName,
@@ -31,9 +39,9 @@ function mapBusinessBase(record: Business): BusinessListItem {
     subcategory: record.subcategory,
     location: record.location,
     stateCode: record.stateCode,
-    askingPrice: decimalToNumber(record.askingPrice),
+    askingPrice,
     revenue: decimalToNumber(record.revenue),
-    sde: decimalToNumber(record.sde),
+    sde,
     ebitda: decimalToNumber(record.ebitda),
     employees: record.employees,
     summary: record.summary,
@@ -44,6 +52,30 @@ function mapBusinessBase(record: Business): BusinessListItem {
     updatedAt: record.updatedAt.toISOString(),
     listingSource: record.listingSource,
     brokerFirm: record.brokerFirm,
+    aiResistanceScore: record.aiResistanceScore,
+    financeabilityRating: record.financeabilityRating,
+    sellerFinancingAvailable: record.sellerFinancingAvailable,
+    operatorSkillDependency: record.operatorSkillDependency,
+    licenseDependency: record.licenseDependency,
+    afterHoursBurden: record.afterHoursBurden,
+    capexRisk: record.capexRisk,
+    regretIfWrongScore: record.regretIfWrongScore,
+    dataConfidenceScore: record.dataConfidenceScore,
+    keepDayJobFit: record.keepDayJobFit,
+    quitDayJobFit: record.quitDayJobFit,
+    primaryUseCase: record.primaryUseCase,
+    beatsCurrentBenchmark: record.beatsCurrentBenchmark,
+    freshnessVerifiedAt: dateToIso(record.freshnessVerifiedAt),
+    staleListingRisk: record.staleListingRisk,
+    homeBasedFlag: record.homeBasedFlag,
+    recurringRevenuePercent: decimalToNumber(record.recurringRevenuePercent),
+    ownerHoursClaimed: record.ownerHoursClaimed,
+    opsManagerExists: record.opsManagerExists,
+    keyPersonRisk: record.keyPersonRisk,
+    ...calculateBusinessScenario({
+      askingPrice,
+      sde,
+    }),
   };
 }
 
@@ -90,6 +122,9 @@ export function mapBusinessDetailRecord(
     transferabilityRating: record.transferabilityRating,
     scheduleControlFitRating: record.scheduleControlFitRating,
     brotherOperatorFitRating: record.brotherOperatorFitRating,
+    benchmarkNotes: record.benchmarkNotes,
+    sellerFinancingNotes: record.sellerFinancingNotes,
+    cashToCloseNotes: record.cashToCloseNotes,
     noteEntries: record.noteEntries.map(mapNoteRecord),
     historyEvents: record.historyEvents.map(mapHistoryRecord),
   };

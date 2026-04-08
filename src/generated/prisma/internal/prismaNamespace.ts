@@ -767,6 +767,29 @@ export const BusinessScalarFieldEnum = {
   transferabilityRating: 'transferabilityRating',
   scheduleControlFitRating: 'scheduleControlFitRating',
   brotherOperatorFitRating: 'brotherOperatorFitRating',
+  aiResistanceScore: 'aiResistanceScore',
+  keepDayJobFit: 'keepDayJobFit',
+  quitDayJobFit: 'quitDayJobFit',
+  primaryUseCase: 'primaryUseCase',
+  beatsCurrentBenchmark: 'beatsCurrentBenchmark',
+  benchmarkNotes: 'benchmarkNotes',
+  financeabilityRating: 'financeabilityRating',
+  sellerFinancingAvailable: 'sellerFinancingAvailable',
+  sellerFinancingNotes: 'sellerFinancingNotes',
+  operatorSkillDependency: 'operatorSkillDependency',
+  licenseDependency: 'licenseDependency',
+  afterHoursBurden: 'afterHoursBurden',
+  capexRisk: 'capexRisk',
+  regretIfWrongScore: 'regretIfWrongScore',
+  dataConfidenceScore: 'dataConfidenceScore',
+  staleListingRisk: 'staleListingRisk',
+  keyPersonRisk: 'keyPersonRisk',
+  homeBasedFlag: 'homeBasedFlag',
+  recurringRevenuePercent: 'recurringRevenuePercent',
+  ownerHoursClaimed: 'ownerHoursClaimed',
+  opsManagerExists: 'opsManagerExists',
+  freshnessVerifiedAt: 'freshnessVerifiedAt',
+  cashToCloseNotes: 'cashToCloseNotes',
   overallScore: 'overallScore',
   notes: 'notes',
   tags: 'tags',
@@ -918,6 +941,27 @@ export type EnumDealStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'DealStatus[]'
  */
 export type ListEnumDealStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DealStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PrimaryUseCase'
+ */
+export type EnumPrimaryUseCaseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrimaryUseCase'>
+    
+
+
+/**
+ * Reference to a field of type 'PrimaryUseCase[]'
+ */
+export type ListEnumPrimaryUseCaseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrimaryUseCase[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

@@ -88,6 +88,74 @@ describe("business.schemas", () => {
     ]);
   });
 
+  it("parses the new thesis fields and validates their boundaries", () => {
+    const result = parseBusinessForm(
+      createBusinessFormData({
+        aiResistanceScore: "5",
+        keepDayJobFit: "4",
+        quitDayJobFit: "3",
+        primaryUseCase: "bridge_while_employed",
+        beatsCurrentBenchmark: "true",
+        financeabilityRating: "4",
+        sellerFinancingAvailable: "false",
+        operatorSkillDependency: "2",
+        licenseDependency: "1",
+        afterHoursBurden: "2",
+        capexRisk: "3",
+        regretIfWrongScore: "4",
+        dataConfidenceScore: "5",
+        staleListingRisk: "2",
+        keyPersonRisk: "3",
+        homeBasedFlag: "true",
+        recurringRevenuePercent: "87.5",
+        ownerHoursClaimed: "35",
+        opsManagerExists: "false",
+        freshnessVerifiedAt: "2026-04-07T09:30",
+      }),
+    );
+
+    expect(result.success).toBe(true);
+
+    if (!result.success) {
+      throw new Error("Expected thesis fields to parse successfully.");
+    }
+
+    expect(result.data.aiResistanceScore).toBe(5);
+    expect(result.data.primaryUseCase).toBe("bridge_while_employed");
+    expect(result.data.beatsCurrentBenchmark).toBe(true);
+    expect(result.data.recurringRevenuePercent).toBe(87.5);
+    expect(result.data.opsManagerExists).toBe(false);
+    expect(result.data.freshnessVerifiedAt?.toISOString()).toContain(
+      "2026-04-07T",
+    );
+  });
+
+  it("rejects out-of-range thesis ratings and percentages", () => {
+    const result = parseBusinessForm(
+      createBusinessFormData({
+        aiResistanceScore: "0",
+        financeabilityRating: "7",
+        recurringRevenuePercent: "120",
+      }),
+    );
+
+    expect(result.success).toBe(false);
+
+    if (result.success) {
+      throw new Error("Expected thesis validation failure.");
+    }
+
+    expect(result.error.flatten().fieldErrors.aiResistanceScore).toEqual([
+      "AI resistance score must be between 1 and 5.",
+    ]);
+    expect(result.error.flatten().fieldErrors.financeabilityRating).toEqual([
+      "Financeability rating must be between 1 and 5.",
+    ]);
+    expect(result.error.flatten().fieldErrors.recurringRevenuePercent).toEqual([
+      "Recurring revenue percent must be between 0 and 100.",
+    ]);
+  });
+
   it("parses and normalizes preset queries", () => {
     const result = parsePresetForm(
       createFormData({

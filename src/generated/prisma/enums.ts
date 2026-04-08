@@ -23,6 +23,16 @@ export const DealStatus = {
 export type DealStatus = (typeof DealStatus)[keyof typeof DealStatus]
 
 
+export const PrimaryUseCase = {
+  bridge_while_employed: 'bridge_while_employed',
+  full_time_replacement: 'full_time_replacement',
+  either: 'either',
+  neither: 'neither'
+} as const
+
+export type PrimaryUseCase = (typeof PrimaryUseCase)[keyof typeof PrimaryUseCase]
+
+
 export const HistoryEventType = {
   CREATED: 'CREATED',
   UPDATED: 'UPDATED',

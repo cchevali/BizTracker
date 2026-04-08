@@ -18,10 +18,16 @@ import {
   activeDealStatuses,
   type BusinessDetail,
   type BusinessFilters,
+  type BusinessListItem,
   type DashboardData,
   type DashboardSummary,
   type FilterOptionSet,
 } from "../domain/business.types";
+
+const defaultOrderBy: Prisma.BusinessOrderByWithRelationInput[] = [
+  { updatedAt: "desc" },
+  { createdAt: "desc" },
+];
 
 function buildWhereInput(filters: BusinessFilters): Prisma.BusinessWhereInput {
   const andClauses: Prisma.BusinessWhereInput[] = [];
@@ -40,6 +46,11 @@ function buildWhereInput(filters: BusinessFilters): Prisma.BusinessWhereInput {
         { brokerFirm: { contains: filters.q, mode: "insensitive" } },
         { listingSource: { contains: filters.q, mode: "insensitive" } },
         { sourceUrl: { contains: filters.q, mode: "insensitive" } },
+        { benchmarkNotes: { contains: filters.q, mode: "insensitive" } },
+        {
+          sellerFinancingNotes: { contains: filters.q, mode: "insensitive" },
+        },
+        { cashToCloseNotes: { contains: filters.q, mode: "insensitive" } },
       ],
     });
   }
@@ -63,6 +74,12 @@ function buildWhereInput(filters: BusinessFilters): Prisma.BusinessWhereInput {
   if (filters.status) {
     andClauses.push({
       dealStatus: filters.status,
+    });
+  } else {
+    andClauses.push({
+      dealStatus: {
+        in: activeDealStatuses,
+      },
     });
   }
 
@@ -101,39 +118,85 @@ function buildWhereInput(filters: BusinessFilters): Prisma.BusinessWhereInput {
     });
   }
 
-  return andClauses.length > 0 ? { AND: andClauses } : {};
-}
-
-function buildOrderBy(
-  sort: BusinessFilters["sort"],
-): Prisma.BusinessOrderByWithRelationInput[] {
-  switch (sort) {
-    case "newest":
-      return [{ createdAt: "desc" }, { updatedAt: "desc" }];
-    case "ask-price":
-      return [
-        { askingPrice: { sort: "asc", nulls: "last" } },
-        { updatedAt: "desc" },
-      ];
-    case "sde":
-      return [
-        { sde: { sort: "desc", nulls: "last" } },
-        { updatedAt: "desc" },
-      ];
-    case "score":
-      return [
-        { overallScore: { sort: "desc", nulls: "last" } },
-        { updatedAt: "desc" },
-      ];
-    case "location":
-      return [
-        { stateCode: { sort: "asc", nulls: "last" } },
-        { location: "asc" },
-      ];
-    case "updated":
-    default:
-      return [{ updatedAt: "desc" }, { createdAt: "desc" }];
+  if (filters.primaryUseCase) {
+    andClauses.push({
+      primaryUseCase: filters.primaryUseCase,
+    });
   }
+
+  if (filters.minKeepDayJobFit !== undefined) {
+    andClauses.push({
+      keepDayJobFit: {
+        gte: filters.minKeepDayJobFit,
+      },
+    });
+  }
+
+  if (filters.minQuitDayJobFit !== undefined) {
+    andClauses.push({
+      quitDayJobFit: {
+        gte: filters.minQuitDayJobFit,
+      },
+    });
+  }
+
+  if (filters.minAiResistanceScore !== undefined) {
+    andClauses.push({
+      aiResistanceScore: {
+        gte: filters.minAiResistanceScore,
+      },
+    });
+  }
+
+  if (filters.minFinanceabilityRating !== undefined) {
+    andClauses.push({
+      financeabilityRating: {
+        gte: filters.minFinanceabilityRating,
+      },
+    });
+  }
+
+  if (filters.sellerFinancingAvailable !== undefined) {
+    andClauses.push({
+      sellerFinancingAvailable: filters.sellerFinancingAvailable,
+    });
+  }
+
+  if (filters.homeBasedFlag !== undefined) {
+    andClauses.push({
+      homeBasedFlag: filters.homeBasedFlag,
+    });
+  }
+
+  if (filters.opsManagerExists !== undefined) {
+    andClauses.push({
+      opsManagerExists: filters.opsManagerExists,
+    });
+  }
+
+  if (filters.maxStaleListingRisk !== undefined) {
+    andClauses.push({
+      staleListingRisk: {
+        lte: filters.maxStaleListingRisk,
+      },
+    });
+  }
+
+  if (filters.minDataConfidenceScore !== undefined) {
+    andClauses.push({
+      dataConfidenceScore: {
+        gte: filters.minDataConfidenceScore,
+      },
+    });
+  }
+
+  if (filters.beatsCurrentBenchmark !== undefined) {
+    andClauses.push({
+      beatsCurrentBenchmark: filters.beatsCurrentBenchmark,
+    });
+  }
+
+  return andClauses.length > 0 ? { AND: andClauses } : {};
 }
 
 function buildFilterOptions(
@@ -185,6 +248,161 @@ function buildDashboardSummary(businesses: DashboardData["businesses"]): Dashboa
   };
 }
 
+function compareNullableNumber(
+  left: number | null,
+  right: number | null,
+  direction: "asc" | "desc",
+) {
+  if (left === null && right === null) {
+    return 0;
+  }
+
+  if (left === null) {
+    return 1;
+  }
+
+  if (right === null) {
+    return -1;
+  }
+
+  return direction === "asc" ? left - right : right - left;
+}
+
+function compareDateStrings(left: string, right: string, direction: "asc" | "desc") {
+  const leftTime = new Date(left).getTime();
+  const rightTime = new Date(right).getTime();
+  return direction === "asc" ? leftTime - rightTime : rightTime - leftTime;
+}
+
+function sortBusinesses<T extends BusinessListItem | BusinessDetail>(
+  businesses: T[],
+  sort: BusinessFilters["sort"],
+) {
+  return [...businesses].sort((left, right) => {
+    let comparison = 0;
+
+    switch (sort) {
+      case "newest":
+        comparison = compareDateStrings(left.createdAt, right.createdAt, "desc");
+        break;
+      case "ask-price":
+        comparison = compareNullableNumber(
+          left.askingPrice,
+          right.askingPrice,
+          "asc",
+        );
+        break;
+      case "sde":
+        comparison = compareNullableNumber(left.sde, right.sde, "desc");
+        break;
+      case "score":
+        comparison = compareNullableNumber(
+          left.overallScore,
+          right.overallScore,
+          "desc",
+        );
+        break;
+      case "location":
+        comparison =
+          (left.stateCode ?? "").localeCompare(right.stateCode ?? "") ||
+          left.location.localeCompare(right.location);
+        break;
+      case "keep-day-job-fit":
+        comparison = compareNullableNumber(
+          left.keepDayJobFit,
+          right.keepDayJobFit,
+          "desc",
+        );
+        break;
+      case "quit-day-job-fit":
+        comparison = compareNullableNumber(
+          left.quitDayJobFit,
+          right.quitDayJobFit,
+          "desc",
+        );
+        break;
+      case "ai-resistance":
+        comparison = compareNullableNumber(
+          left.aiResistanceScore,
+          right.aiResistanceScore,
+          "desc",
+        );
+        break;
+      case "financeability":
+        comparison = compareNullableNumber(
+          left.financeabilityRating,
+          right.financeabilityRating,
+          "desc",
+        );
+        break;
+      case "cash-to-close-high":
+        comparison = compareNullableNumber(
+          left.cashToCloseHigh,
+          right.cashToCloseHigh,
+          "asc",
+        );
+        break;
+      case "conservative-cash-after-brother":
+        comparison = compareNullableNumber(
+          left.conservativeCashAfterBrother,
+          right.conservativeCashAfterBrother,
+          "desc",
+        );
+        break;
+      case "stale-listing-risk":
+        comparison = compareNullableNumber(
+          left.staleListingRisk,
+          right.staleListingRisk,
+          "asc",
+        );
+        break;
+      case "data-confidence":
+        comparison = compareNullableNumber(
+          left.dataConfidenceScore,
+          right.dataConfidenceScore,
+          "desc",
+        );
+        break;
+      case "updated":
+      default:
+        comparison = compareDateStrings(left.updatedAt, right.updatedAt, "desc");
+        break;
+    }
+
+    if (comparison !== 0) {
+      return comparison;
+    }
+
+    return compareDateStrings(left.updatedAt, right.updatedAt, "desc");
+  });
+}
+
+function applyDerivedFilters<T extends BusinessListItem | BusinessDetail>(
+  businesses: T[],
+  filters: BusinessFilters,
+) {
+  return businesses.filter((business) => {
+    if (
+      filters.maxCashToCloseHigh !== undefined &&
+      (business.cashToCloseHigh === null ||
+        business.cashToCloseHigh > filters.maxCashToCloseHigh)
+    ) {
+      return false;
+    }
+
+    if (
+      filters.minConservativeCashAfterBrother !== undefined &&
+      (business.conservativeCashAfterBrother === null ||
+        business.conservativeCashAfterBrother <
+          filters.minConservativeCashAfterBrother)
+    ) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
 export async function getBusinessesDashboard(
   filters: BusinessFilters,
 ): Promise<DashboardData> {
@@ -193,7 +411,7 @@ export async function getBusinessesDashboard(
   const [businesses, filterSource, presets] = await Promise.all([
     prisma.business.findMany({
       where,
-      orderBy: buildOrderBy(filters.sort),
+      orderBy: defaultOrderBy,
     }),
     prisma.business.findMany({
       select: {
@@ -209,7 +427,10 @@ export async function getBusinessesDashboard(
     }),
   ]);
 
-  const mappedBusinesses = businesses.map(mapBusinessListRecord);
+  const mappedBusinesses = sortBusinesses(
+    applyDerivedFilters(businesses.map(mapBusinessListRecord), filters),
+    filters.sort,
+  );
 
   return {
     filters,
@@ -249,7 +470,7 @@ export async function getBusinessesForExport(
 ): Promise<BusinessDetail[]> {
   const businesses = await prisma.business.findMany({
     where: buildWhereInput(filters),
-    orderBy: buildOrderBy(filters.sort),
+    orderBy: defaultOrderBy,
     include: {
       noteEntries: {
         orderBy: {
@@ -264,7 +485,10 @@ export async function getBusinessesForExport(
     },
   });
 
-  return businesses.map(mapBusinessDetailRecord);
+  return sortBusinesses(
+    applyDerivedFilters(businesses.map(mapBusinessDetailRecord), filters),
+    filters.sort,
+  );
 }
 
 function buildBusinessData(input: BusinessFormInput) {
@@ -292,6 +516,29 @@ function buildBusinessData(input: BusinessFormInput) {
     transferabilityRating: input.transferabilityRating,
     scheduleControlFitRating: input.scheduleControlFitRating,
     brotherOperatorFitRating: input.brotherOperatorFitRating,
+    aiResistanceScore: input.aiResistanceScore,
+    keepDayJobFit: input.keepDayJobFit,
+    quitDayJobFit: input.quitDayJobFit,
+    primaryUseCase: input.primaryUseCase,
+    beatsCurrentBenchmark: input.beatsCurrentBenchmark,
+    benchmarkNotes: input.benchmarkNotes,
+    financeabilityRating: input.financeabilityRating,
+    sellerFinancingAvailable: input.sellerFinancingAvailable,
+    sellerFinancingNotes: input.sellerFinancingNotes,
+    operatorSkillDependency: input.operatorSkillDependency,
+    licenseDependency: input.licenseDependency,
+    afterHoursBurden: input.afterHoursBurden,
+    capexRisk: input.capexRisk,
+    regretIfWrongScore: input.regretIfWrongScore,
+    dataConfidenceScore: input.dataConfidenceScore,
+    staleListingRisk: input.staleListingRisk,
+    keyPersonRisk: input.keyPersonRisk,
+    homeBasedFlag: input.homeBasedFlag,
+    recurringRevenuePercent: input.recurringRevenuePercent,
+    ownerHoursClaimed: input.ownerHoursClaimed,
+    opsManagerExists: input.opsManagerExists,
+    freshnessVerifiedAt: input.freshnessVerifiedAt,
+    cashToCloseNotes: input.cashToCloseNotes,
     overallScore: input.overallScore,
     notes: input.notes,
     tags: input.tags,
@@ -300,6 +547,10 @@ function buildBusinessData(input: BusinessFormInput) {
 
 function decimalToNumber(value: Prisma.Decimal | null) {
   return value ? value.toNumber() : undefined;
+}
+
+function dateToIso(value: Date | null) {
+  return value ? value.toISOString() : undefined;
 }
 
 type BusinessFormComparisonTarget = Business;
@@ -329,6 +580,29 @@ function normalizeExistingBusiness(business: BusinessFormComparisonTarget) {
     transferabilityRating: business.transferabilityRating ?? undefined,
     scheduleControlFitRating: business.scheduleControlFitRating ?? undefined,
     brotherOperatorFitRating: business.brotherOperatorFitRating ?? undefined,
+    aiResistanceScore: business.aiResistanceScore ?? undefined,
+    keepDayJobFit: business.keepDayJobFit ?? undefined,
+    quitDayJobFit: business.quitDayJobFit ?? undefined,
+    primaryUseCase: business.primaryUseCase ?? undefined,
+    beatsCurrentBenchmark: business.beatsCurrentBenchmark ?? undefined,
+    benchmarkNotes: business.benchmarkNotes ?? undefined,
+    financeabilityRating: business.financeabilityRating ?? undefined,
+    sellerFinancingAvailable: business.sellerFinancingAvailable ?? undefined,
+    sellerFinancingNotes: business.sellerFinancingNotes ?? undefined,
+    operatorSkillDependency: business.operatorSkillDependency ?? undefined,
+    licenseDependency: business.licenseDependency ?? undefined,
+    afterHoursBurden: business.afterHoursBurden ?? undefined,
+    capexRisk: business.capexRisk ?? undefined,
+    regretIfWrongScore: business.regretIfWrongScore ?? undefined,
+    dataConfidenceScore: business.dataConfidenceScore ?? undefined,
+    staleListingRisk: business.staleListingRisk ?? undefined,
+    keyPersonRisk: business.keyPersonRisk ?? undefined,
+    homeBasedFlag: business.homeBasedFlag ?? undefined,
+    recurringRevenuePercent: decimalToNumber(business.recurringRevenuePercent),
+    ownerHoursClaimed: business.ownerHoursClaimed ?? undefined,
+    opsManagerExists: business.opsManagerExists ?? undefined,
+    freshnessVerifiedAt: dateToIso(business.freshnessVerifiedAt),
+    cashToCloseNotes: business.cashToCloseNotes ?? undefined,
     overallScore: business.overallScore ?? undefined,
     notes: business.notes ?? undefined,
     tags: [...business.tags].sort(),
@@ -338,6 +612,7 @@ function normalizeExistingBusiness(business: BusinessFormComparisonTarget) {
 function normalizeInput(input: BusinessFormInput) {
   return {
     ...input,
+    freshnessVerifiedAt: input.freshnessVerifiedAt?.toISOString(),
     tags: [...input.tags].sort(),
   };
 }
@@ -366,6 +641,29 @@ const changedFieldLabels: Record<keyof ReturnType<typeof normalizeInput>, string
   transferabilityRating: "transferability rating",
   scheduleControlFitRating: "schedule-control fit rating",
   brotherOperatorFitRating: "brother-operator fit rating",
+  aiResistanceScore: "AI resistance score",
+  keepDayJobFit: "keep-day-job fit",
+  quitDayJobFit: "quit-day-job fit",
+  primaryUseCase: "primary use case",
+  beatsCurrentBenchmark: "benchmark winner flag",
+  benchmarkNotes: "benchmark notes",
+  financeabilityRating: "financeability rating",
+  sellerFinancingAvailable: "seller financing availability",
+  sellerFinancingNotes: "seller financing notes",
+  operatorSkillDependency: "operator skill dependency",
+  licenseDependency: "license dependency",
+  afterHoursBurden: "after-hours burden",
+  capexRisk: "capex risk",
+  regretIfWrongScore: "regret-if-wrong score",
+  dataConfidenceScore: "data confidence score",
+  staleListingRisk: "stale listing risk",
+  keyPersonRisk: "key-person risk",
+  homeBasedFlag: "home-based flag",
+  recurringRevenuePercent: "recurring revenue percent",
+  ownerHoursClaimed: "owner hours claimed",
+  opsManagerExists: "ops manager flag",
+  freshnessVerifiedAt: "freshness verification time",
+  cashToCloseNotes: "cash-to-close notes",
   overallScore: "overall score",
   notes: "notes",
   tags: "tags",

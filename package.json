@@ -21,6 +21,7 @@
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
     "import:listings": "tsx scripts/import-business-listings.ts",
+    "backfill:thesis": "tsx scripts/backfill-acquisition-thesis.ts",
     "normalize:listings": "tsx scripts/normalize-chatgpt-listings.ts",
     "postinstall": "prisma generate"
   },

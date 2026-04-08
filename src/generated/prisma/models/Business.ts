@@ -37,6 +37,20 @@ export type BusinessAvgAggregateOutputType = {
   transferabilityRating: number | null
   scheduleControlFitRating: number | null
   brotherOperatorFitRating: number | null
+  aiResistanceScore: number | null
+  keepDayJobFit: number | null
+  quitDayJobFit: number | null
+  financeabilityRating: number | null
+  operatorSkillDependency: number | null
+  licenseDependency: number | null
+  afterHoursBurden: number | null
+  capexRisk: number | null
+  regretIfWrongScore: number | null
+  dataConfidenceScore: number | null
+  staleListingRisk: number | null
+  keyPersonRisk: number | null
+  recurringRevenuePercent: runtime.Decimal | null
+  ownerHoursClaimed: number | null
   overallScore: number | null
 }
 
@@ -51,6 +65,20 @@ export type BusinessSumAggregateOutputType = {
   transferabilityRating: number | null
   scheduleControlFitRating: number | null
   brotherOperatorFitRating: number | null
+  aiResistanceScore: number | null
+  keepDayJobFit: number | null
+  quitDayJobFit: number | null
+  financeabilityRating: number | null
+  operatorSkillDependency: number | null
+  licenseDependency: number | null
+  afterHoursBurden: number | null
+  capexRisk: number | null
+  regretIfWrongScore: number | null
+  dataConfidenceScore: number | null
+  staleListingRisk: number | null
+  keyPersonRisk: number | null
+  recurringRevenuePercent: runtime.Decimal | null
+  ownerHoursClaimed: number | null
   overallScore: number | null
 }
 
@@ -79,6 +107,29 @@ export type BusinessMinAggregateOutputType = {
   transferabilityRating: number | null
   scheduleControlFitRating: number | null
   brotherOperatorFitRating: number | null
+  aiResistanceScore: number | null
+  keepDayJobFit: number | null
+  quitDayJobFit: number | null
+  primaryUseCase: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark: boolean | null
+  benchmarkNotes: string | null
+  financeabilityRating: number | null
+  sellerFinancingAvailable: boolean | null
+  sellerFinancingNotes: string | null
+  operatorSkillDependency: number | null
+  licenseDependency: number | null
+  afterHoursBurden: number | null
+  capexRisk: number | null
+  regretIfWrongScore: number | null
+  dataConfidenceScore: number | null
+  staleListingRisk: number | null
+  keyPersonRisk: number | null
+  homeBasedFlag: boolean | null
+  recurringRevenuePercent: runtime.Decimal | null
+  ownerHoursClaimed: number | null
+  opsManagerExists: boolean | null
+  freshnessVerifiedAt: Date | null
+  cashToCloseNotes: string | null
   overallScore: number | null
   notes: string | null
   createdAt: Date | null
@@ -110,6 +161,29 @@ export type BusinessMaxAggregateOutputType = {
   transferabilityRating: number | null
   scheduleControlFitRating: number | null
   brotherOperatorFitRating: number | null
+  aiResistanceScore: number | null
+  keepDayJobFit: number | null
+  quitDayJobFit: number | null
+  primaryUseCase: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark: boolean | null
+  benchmarkNotes: string | null
+  financeabilityRating: number | null
+  sellerFinancingAvailable: boolean | null
+  sellerFinancingNotes: string | null
+  operatorSkillDependency: number | null
+  licenseDependency: number | null
+  afterHoursBurden: number | null
+  capexRisk: number | null
+  regretIfWrongScore: number | null
+  dataConfidenceScore: number | null
+  staleListingRisk: number | null
+  keyPersonRisk: number | null
+  homeBasedFlag: boolean | null
+  recurringRevenuePercent: runtime.Decimal | null
+  ownerHoursClaimed: number | null
+  opsManagerExists: boolean | null
+  freshnessVerifiedAt: Date | null
+  cashToCloseNotes: string | null
   overallScore: number | null
   notes: string | null
   createdAt: Date | null
@@ -141,6 +215,29 @@ export type BusinessCountAggregateOutputType = {
   transferabilityRating: number
   scheduleControlFitRating: number
   brotherOperatorFitRating: number
+  aiResistanceScore: number
+  keepDayJobFit: number
+  quitDayJobFit: number
+  primaryUseCase: number
+  beatsCurrentBenchmark: number
+  benchmarkNotes: number
+  financeabilityRating: number
+  sellerFinancingAvailable: number
+  sellerFinancingNotes: number
+  operatorSkillDependency: number
+  licenseDependency: number
+  afterHoursBurden: number
+  capexRisk: number
+  regretIfWrongScore: number
+  dataConfidenceScore: number
+  staleListingRisk: number
+  keyPersonRisk: number
+  homeBasedFlag: number
+  recurringRevenuePercent: number
+  ownerHoursClaimed: number
+  opsManagerExists: number
+  freshnessVerifiedAt: number
+  cashToCloseNotes: number
   overallScore: number
   notes: number
   tags: number
@@ -161,6 +258,20 @@ export type BusinessAvgAggregateInputType = {
   transferabilityRating?: true
   scheduleControlFitRating?: true
   brotherOperatorFitRating?: true
+  aiResistanceScore?: true
+  keepDayJobFit?: true
+  quitDayJobFit?: true
+  financeabilityRating?: true
+  operatorSkillDependency?: true
+  licenseDependency?: true
+  afterHoursBurden?: true
+  capexRisk?: true
+  regretIfWrongScore?: true
+  dataConfidenceScore?: true
+  staleListingRisk?: true
+  keyPersonRisk?: true
+  recurringRevenuePercent?: true
+  ownerHoursClaimed?: true
   overallScore?: true
 }
 
@@ -175,6 +286,20 @@ export type BusinessSumAggregateInputType = {
   transferabilityRating?: true
   scheduleControlFitRating?: true
   brotherOperatorFitRating?: true
+  aiResistanceScore?: true
+  keepDayJobFit?: true
+  quitDayJobFit?: true
+  financeabilityRating?: true
+  operatorSkillDependency?: true
+  licenseDependency?: true
+  afterHoursBurden?: true
+  capexRisk?: true
+  regretIfWrongScore?: true
+  dataConfidenceScore?: true
+  staleListingRisk?: true
+  keyPersonRisk?: true
+  recurringRevenuePercent?: true
+  ownerHoursClaimed?: true
   overallScore?: true
 }
 
@@ -203,6 +328,29 @@ export type BusinessMinAggregateInputType = {
   transferabilityRating?: true
   scheduleControlFitRating?: true
   brotherOperatorFitRating?: true
+  aiResistanceScore?: true
+  keepDayJobFit?: true
+  quitDayJobFit?: true
+  primaryUseCase?: true
+  beatsCurrentBenchmark?: true
+  benchmarkNotes?: true
+  financeabilityRating?: true
+  sellerFinancingAvailable?: true
+  sellerFinancingNotes?: true
+  operatorSkillDependency?: true
+  licenseDependency?: true
+  afterHoursBurden?: true
+  capexRisk?: true
+  regretIfWrongScore?: true
+  dataConfidenceScore?: true
+  staleListingRisk?: true
+  keyPersonRisk?: true
+  homeBasedFlag?: true
+  recurringRevenuePercent?: true
+  ownerHoursClaimed?: true
+  opsManagerExists?: true
+  freshnessVerifiedAt?: true
+  cashToCloseNotes?: true
   overallScore?: true
   notes?: true
   createdAt?: true
@@ -234,6 +382,29 @@ export type BusinessMaxAggregateInputType = {
   transferabilityRating?: true
   scheduleControlFitRating?: true
   brotherOperatorFitRating?: true
+  aiResistanceScore?: true
+  keepDayJobFit?: true
+  quitDayJobFit?: true
+  primaryUseCase?: true
+  beatsCurrentBenchmark?: true
+  benchmarkNotes?: true
+  financeabilityRating?: true
+  sellerFinancingAvailable?: true
+  sellerFinancingNotes?: true
+  operatorSkillDependency?: true
+  licenseDependency?: true
+  afterHoursBurden?: true
+  capexRisk?: true
+  regretIfWrongScore?: true
+  dataConfidenceScore?: true
+  staleListingRisk?: true
+  keyPersonRisk?: true
+  homeBasedFlag?: true
+  recurringRevenuePercent?: true
+  ownerHoursClaimed?: true
+  opsManagerExists?: true
+  freshnessVerifiedAt?: true
+  cashToCloseNotes?: true
   overallScore?: true
   notes?: true
   createdAt?: true
@@ -265,6 +436,29 @@ export type BusinessCountAggregateInputType = {
   transferabilityRating?: true
   scheduleControlFitRating?: true
   brotherOperatorFitRating?: true
+  aiResistanceScore?: true
+  keepDayJobFit?: true
+  quitDayJobFit?: true
+  primaryUseCase?: true
+  beatsCurrentBenchmark?: true
+  benchmarkNotes?: true
+  financeabilityRating?: true
+  sellerFinancingAvailable?: true
+  sellerFinancingNotes?: true
+  operatorSkillDependency?: true
+  licenseDependency?: true
+  afterHoursBurden?: true
+  capexRisk?: true
+  regretIfWrongScore?: true
+  dataConfidenceScore?: true
+  staleListingRisk?: true
+  keyPersonRisk?: true
+  homeBasedFlag?: true
+  recurringRevenuePercent?: true
+  ownerHoursClaimed?: true
+  opsManagerExists?: true
+  freshnessVerifiedAt?: true
+  cashToCloseNotes?: true
   overallScore?: true
   notes?: true
   tags?: true
@@ -384,6 +578,29 @@ export type BusinessGroupByOutputType = {
   transferabilityRating: number | null
   scheduleControlFitRating: number | null
   brotherOperatorFitRating: number | null
+  aiResistanceScore: number | null
+  keepDayJobFit: number | null
+  quitDayJobFit: number | null
+  primaryUseCase: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark: boolean | null
+  benchmarkNotes: string | null
+  financeabilityRating: number | null
+  sellerFinancingAvailable: boolean | null
+  sellerFinancingNotes: string | null
+  operatorSkillDependency: number | null
+  licenseDependency: number | null
+  afterHoursBurden: number | null
+  capexRisk: number | null
+  regretIfWrongScore: number | null
+  dataConfidenceScore: number | null
+  staleListingRisk: number | null
+  keyPersonRisk: number | null
+  homeBasedFlag: boolean | null
+  recurringRevenuePercent: runtime.Decimal | null
+  ownerHoursClaimed: number | null
+  opsManagerExists: boolean | null
+  freshnessVerifiedAt: Date | null
+  cashToCloseNotes: string | null
   overallScore: number | null
   notes: string | null
   tags: string[]
@@ -439,6 +656,29 @@ export type BusinessWhereInput = {
   transferabilityRating?: Prisma.IntNullableFilter<"Business"> | number | null
   scheduleControlFitRating?: Prisma.IntNullableFilter<"Business"> | number | null
   brotherOperatorFitRating?: Prisma.IntNullableFilter<"Business"> | number | null
+  aiResistanceScore?: Prisma.IntNullableFilter<"Business"> | number | null
+  keepDayJobFit?: Prisma.IntNullableFilter<"Business"> | number | null
+  quitDayJobFit?: Prisma.IntNullableFilter<"Business"> | number | null
+  primaryUseCase?: Prisma.EnumPrimaryUseCaseNullableFilter<"Business"> | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.BoolNullableFilter<"Business"> | boolean | null
+  benchmarkNotes?: Prisma.StringNullableFilter<"Business"> | string | null
+  financeabilityRating?: Prisma.IntNullableFilter<"Business"> | number | null
+  sellerFinancingAvailable?: Prisma.BoolNullableFilter<"Business"> | boolean | null
+  sellerFinancingNotes?: Prisma.StringNullableFilter<"Business"> | string | null
+  operatorSkillDependency?: Prisma.IntNullableFilter<"Business"> | number | null
+  licenseDependency?: Prisma.IntNullableFilter<"Business"> | number | null
+  afterHoursBurden?: Prisma.IntNullableFilter<"Business"> | number | null
+  capexRisk?: Prisma.IntNullableFilter<"Business"> | number | null
+  regretIfWrongScore?: Prisma.IntNullableFilter<"Business"> | number | null
+  dataConfidenceScore?: Prisma.IntNullableFilter<"Business"> | number | null
+  staleListingRisk?: Prisma.IntNullableFilter<"Business"> | number | null
+  keyPersonRisk?: Prisma.IntNullableFilter<"Business"> | number | null
+  homeBasedFlag?: Prisma.BoolNullableFilter<"Business"> | boolean | null
+  recurringRevenuePercent?: Prisma.DecimalNullableFilter<"Business"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.IntNullableFilter<"Business"> | number | null
+  opsManagerExists?: Prisma.BoolNullableFilter<"Business"> | boolean | null
+  freshnessVerifiedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
+  cashToCloseNotes?: Prisma.StringNullableFilter<"Business"> | string | null
   overallScore?: Prisma.IntNullableFilter<"Business"> | number | null
   notes?: Prisma.StringNullableFilter<"Business"> | string | null
   tags?: Prisma.StringNullableListFilter<"Business">
@@ -473,6 +713,29 @@ export type BusinessOrderByWithRelationInput = {
   transferabilityRating?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduleControlFitRating?: Prisma.SortOrderInput | Prisma.SortOrder
   brotherOperatorFitRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiResistanceScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  keepDayJobFit?: Prisma.SortOrderInput | Prisma.SortOrder
+  quitDayJobFit?: Prisma.SortOrderInput | Prisma.SortOrder
+  primaryUseCase?: Prisma.SortOrderInput | Prisma.SortOrder
+  beatsCurrentBenchmark?: Prisma.SortOrderInput | Prisma.SortOrder
+  benchmarkNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  financeabilityRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  sellerFinancingAvailable?: Prisma.SortOrderInput | Prisma.SortOrder
+  sellerFinancingNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  operatorSkillDependency?: Prisma.SortOrderInput | Prisma.SortOrder
+  licenseDependency?: Prisma.SortOrderInput | Prisma.SortOrder
+  afterHoursBurden?: Prisma.SortOrderInput | Prisma.SortOrder
+  capexRisk?: Prisma.SortOrderInput | Prisma.SortOrder
+  regretIfWrongScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataConfidenceScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  staleListingRisk?: Prisma.SortOrderInput | Prisma.SortOrder
+  keyPersonRisk?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeBasedFlag?: Prisma.SortOrderInput | Prisma.SortOrder
+  recurringRevenuePercent?: Prisma.SortOrderInput | Prisma.SortOrder
+  ownerHoursClaimed?: Prisma.SortOrderInput | Prisma.SortOrder
+  opsManagerExists?: Prisma.SortOrderInput | Prisma.SortOrder
+  freshnessVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  cashToCloseNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   overallScore?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -510,6 +773,29 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   transferabilityRating?: Prisma.IntNullableFilter<"Business"> | number | null
   scheduleControlFitRating?: Prisma.IntNullableFilter<"Business"> | number | null
   brotherOperatorFitRating?: Prisma.IntNullableFilter<"Business"> | number | null
+  aiResistanceScore?: Prisma.IntNullableFilter<"Business"> | number | null
+  keepDayJobFit?: Prisma.IntNullableFilter<"Business"> | number | null
+  quitDayJobFit?: Prisma.IntNullableFilter<"Business"> | number | null
+  primaryUseCase?: Prisma.EnumPrimaryUseCaseNullableFilter<"Business"> | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.BoolNullableFilter<"Business"> | boolean | null
+  benchmarkNotes?: Prisma.StringNullableFilter<"Business"> | string | null
+  financeabilityRating?: Prisma.IntNullableFilter<"Business"> | number | null
+  sellerFinancingAvailable?: Prisma.BoolNullableFilter<"Business"> | boolean | null
+  sellerFinancingNotes?: Prisma.StringNullableFilter<"Business"> | string | null
+  operatorSkillDependency?: Prisma.IntNullableFilter<"Business"> | number | null
+  licenseDependency?: Prisma.IntNullableFilter<"Business"> | number | null
+  afterHoursBurden?: Prisma.IntNullableFilter<"Business"> | number | null
+  capexRisk?: Prisma.IntNullableFilter<"Business"> | number | null
+  regretIfWrongScore?: Prisma.IntNullableFilter<"Business"> | number | null
+  dataConfidenceScore?: Prisma.IntNullableFilter<"Business"> | number | null
+  staleListingRisk?: Prisma.IntNullableFilter<"Business"> | number | null
+  keyPersonRisk?: Prisma.IntNullableFilter<"Business"> | number | null
+  homeBasedFlag?: Prisma.BoolNullableFilter<"Business"> | boolean | null
+  recurringRevenuePercent?: Prisma.DecimalNullableFilter<"Business"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.IntNullableFilter<"Business"> | number | null
+  opsManagerExists?: Prisma.BoolNullableFilter<"Business"> | boolean | null
+  freshnessVerifiedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
+  cashToCloseNotes?: Prisma.StringNullableFilter<"Business"> | string | null
   overallScore?: Prisma.IntNullableFilter<"Business"> | number | null
   notes?: Prisma.StringNullableFilter<"Business"> | string | null
   tags?: Prisma.StringNullableListFilter<"Business">
@@ -544,6 +830,29 @@ export type BusinessOrderByWithAggregationInput = {
   transferabilityRating?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduleControlFitRating?: Prisma.SortOrderInput | Prisma.SortOrder
   brotherOperatorFitRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiResistanceScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  keepDayJobFit?: Prisma.SortOrderInput | Prisma.SortOrder
+  quitDayJobFit?: Prisma.SortOrderInput | Prisma.SortOrder
+  primaryUseCase?: Prisma.SortOrderInput | Prisma.SortOrder
+  beatsCurrentBenchmark?: Prisma.SortOrderInput | Prisma.SortOrder
+  benchmarkNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  financeabilityRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  sellerFinancingAvailable?: Prisma.SortOrderInput | Prisma.SortOrder
+  sellerFinancingNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  operatorSkillDependency?: Prisma.SortOrderInput | Prisma.SortOrder
+  licenseDependency?: Prisma.SortOrderInput | Prisma.SortOrder
+  afterHoursBurden?: Prisma.SortOrderInput | Prisma.SortOrder
+  capexRisk?: Prisma.SortOrderInput | Prisma.SortOrder
+  regretIfWrongScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataConfidenceScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  staleListingRisk?: Prisma.SortOrderInput | Prisma.SortOrder
+  keyPersonRisk?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeBasedFlag?: Prisma.SortOrderInput | Prisma.SortOrder
+  recurringRevenuePercent?: Prisma.SortOrderInput | Prisma.SortOrder
+  ownerHoursClaimed?: Prisma.SortOrderInput | Prisma.SortOrder
+  opsManagerExists?: Prisma.SortOrderInput | Prisma.SortOrder
+  freshnessVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  cashToCloseNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   overallScore?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -584,6 +893,29 @@ export type BusinessScalarWhereWithAggregatesInput = {
   transferabilityRating?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
   scheduleControlFitRating?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
   brotherOperatorFitRating?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  aiResistanceScore?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  keepDayJobFit?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  quitDayJobFit?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  primaryUseCase?: Prisma.EnumPrimaryUseCaseNullableWithAggregatesFilter<"Business"> | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.BoolNullableWithAggregatesFilter<"Business"> | boolean | null
+  benchmarkNotes?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  financeabilityRating?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  sellerFinancingAvailable?: Prisma.BoolNullableWithAggregatesFilter<"Business"> | boolean | null
+  sellerFinancingNotes?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  operatorSkillDependency?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  licenseDependency?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  afterHoursBurden?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  capexRisk?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  regretIfWrongScore?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  dataConfidenceScore?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  staleListingRisk?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  keyPersonRisk?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  homeBasedFlag?: Prisma.BoolNullableWithAggregatesFilter<"Business"> | boolean | null
+  recurringRevenuePercent?: Prisma.DecimalNullableWithAggregatesFilter<"Business"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  opsManagerExists?: Prisma.BoolNullableWithAggregatesFilter<"Business"> | boolean | null
+  freshnessVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Business"> | Date | string | null
+  cashToCloseNotes?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   overallScore?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   tags?: Prisma.StringNullableListFilter<"Business">
@@ -616,6 +948,29 @@ export type BusinessCreateInput = {
   transferabilityRating?: number | null
   scheduleControlFitRating?: number | null
   brotherOperatorFitRating?: number | null
+  aiResistanceScore?: number | null
+  keepDayJobFit?: number | null
+  quitDayJobFit?: number | null
+  primaryUseCase?: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: boolean | null
+  benchmarkNotes?: string | null
+  financeabilityRating?: number | null
+  sellerFinancingAvailable?: boolean | null
+  sellerFinancingNotes?: string | null
+  operatorSkillDependency?: number | null
+  licenseDependency?: number | null
+  afterHoursBurden?: number | null
+  capexRisk?: number | null
+  regretIfWrongScore?: number | null
+  dataConfidenceScore?: number | null
+  staleListingRisk?: number | null
+  keyPersonRisk?: number | null
+  homeBasedFlag?: boolean | null
+  recurringRevenuePercent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: number | null
+  opsManagerExists?: boolean | null
+  freshnessVerifiedAt?: Date | string | null
+  cashToCloseNotes?: string | null
   overallScore?: number | null
   notes?: string | null
   tags?: Prisma.BusinessCreatetagsInput | string[]
@@ -650,6 +1005,29 @@ export type BusinessUncheckedCreateInput = {
   transferabilityRating?: number | null
   scheduleControlFitRating?: number | null
   brotherOperatorFitRating?: number | null
+  aiResistanceScore?: number | null
+  keepDayJobFit?: number | null
+  quitDayJobFit?: number | null
+  primaryUseCase?: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: boolean | null
+  benchmarkNotes?: string | null
+  financeabilityRating?: number | null
+  sellerFinancingAvailable?: boolean | null
+  sellerFinancingNotes?: string | null
+  operatorSkillDependency?: number | null
+  licenseDependency?: number | null
+  afterHoursBurden?: number | null
+  capexRisk?: number | null
+  regretIfWrongScore?: number | null
+  dataConfidenceScore?: number | null
+  staleListingRisk?: number | null
+  keyPersonRisk?: number | null
+  homeBasedFlag?: boolean | null
+  recurringRevenuePercent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: number | null
+  opsManagerExists?: boolean | null
+  freshnessVerifiedAt?: Date | string | null
+  cashToCloseNotes?: string | null
   overallScore?: number | null
   notes?: string | null
   tags?: Prisma.BusinessCreatetagsInput | string[]
@@ -684,6 +1062,29 @@ export type BusinessUpdateInput = {
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   scheduleControlFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   brotherOperatorFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiResistanceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keepDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  quitDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  primaryUseCase?: Prisma.NullableEnumPrimaryUseCaseFieldUpdateOperationsInput | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  benchmarkNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  financeabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sellerFinancingAvailable?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sellerFinancingNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorSkillDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  licenseDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  afterHoursBurden?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  capexRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  regretIfWrongScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dataConfidenceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  staleListingRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keyPersonRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  homeBasedFlag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  recurringRevenuePercent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  opsManagerExists?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  freshnessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cashToCloseNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   overallScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.BusinessUpdatetagsInput | string[]
@@ -718,6 +1119,29 @@ export type BusinessUncheckedUpdateInput = {
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   scheduleControlFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   brotherOperatorFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiResistanceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keepDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  quitDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  primaryUseCase?: Prisma.NullableEnumPrimaryUseCaseFieldUpdateOperationsInput | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  benchmarkNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  financeabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sellerFinancingAvailable?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sellerFinancingNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorSkillDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  licenseDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  afterHoursBurden?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  capexRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  regretIfWrongScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dataConfidenceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  staleListingRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keyPersonRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  homeBasedFlag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  recurringRevenuePercent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  opsManagerExists?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  freshnessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cashToCloseNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   overallScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.BusinessUpdatetagsInput | string[]
@@ -752,6 +1176,29 @@ export type BusinessCreateManyInput = {
   transferabilityRating?: number | null
   scheduleControlFitRating?: number | null
   brotherOperatorFitRating?: number | null
+  aiResistanceScore?: number | null
+  keepDayJobFit?: number | null
+  quitDayJobFit?: number | null
+  primaryUseCase?: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: boolean | null
+  benchmarkNotes?: string | null
+  financeabilityRating?: number | null
+  sellerFinancingAvailable?: boolean | null
+  sellerFinancingNotes?: string | null
+  operatorSkillDependency?: number | null
+  licenseDependency?: number | null
+  afterHoursBurden?: number | null
+  capexRisk?: number | null
+  regretIfWrongScore?: number | null
+  dataConfidenceScore?: number | null
+  staleListingRisk?: number | null
+  keyPersonRisk?: number | null
+  homeBasedFlag?: boolean | null
+  recurringRevenuePercent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: number | null
+  opsManagerExists?: boolean | null
+  freshnessVerifiedAt?: Date | string | null
+  cashToCloseNotes?: string | null
   overallScore?: number | null
   notes?: string | null
   tags?: Prisma.BusinessCreatetagsInput | string[]
@@ -784,6 +1231,29 @@ export type BusinessUpdateManyMutationInput = {
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   scheduleControlFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   brotherOperatorFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiResistanceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keepDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  quitDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  primaryUseCase?: Prisma.NullableEnumPrimaryUseCaseFieldUpdateOperationsInput | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  benchmarkNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  financeabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sellerFinancingAvailable?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sellerFinancingNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorSkillDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  licenseDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  afterHoursBurden?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  capexRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  regretIfWrongScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dataConfidenceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  staleListingRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keyPersonRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  homeBasedFlag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  recurringRevenuePercent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  opsManagerExists?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  freshnessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cashToCloseNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   overallScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.BusinessUpdatetagsInput | string[]
@@ -816,6 +1286,29 @@ export type BusinessUncheckedUpdateManyInput = {
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   scheduleControlFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   brotherOperatorFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiResistanceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keepDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  quitDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  primaryUseCase?: Prisma.NullableEnumPrimaryUseCaseFieldUpdateOperationsInput | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  benchmarkNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  financeabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sellerFinancingAvailable?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sellerFinancingNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorSkillDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  licenseDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  afterHoursBurden?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  capexRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  regretIfWrongScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dataConfidenceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  staleListingRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keyPersonRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  homeBasedFlag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  recurringRevenuePercent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  opsManagerExists?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  freshnessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cashToCloseNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   overallScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.BusinessUpdatetagsInput | string[]
@@ -856,6 +1349,29 @@ export type BusinessCountOrderByAggregateInput = {
   transferabilityRating?: Prisma.SortOrder
   scheduleControlFitRating?: Prisma.SortOrder
   brotherOperatorFitRating?: Prisma.SortOrder
+  aiResistanceScore?: Prisma.SortOrder
+  keepDayJobFit?: Prisma.SortOrder
+  quitDayJobFit?: Prisma.SortOrder
+  primaryUseCase?: Prisma.SortOrder
+  beatsCurrentBenchmark?: Prisma.SortOrder
+  benchmarkNotes?: Prisma.SortOrder
+  financeabilityRating?: Prisma.SortOrder
+  sellerFinancingAvailable?: Prisma.SortOrder
+  sellerFinancingNotes?: Prisma.SortOrder
+  operatorSkillDependency?: Prisma.SortOrder
+  licenseDependency?: Prisma.SortOrder
+  afterHoursBurden?: Prisma.SortOrder
+  capexRisk?: Prisma.SortOrder
+  regretIfWrongScore?: Prisma.SortOrder
+  dataConfidenceScore?: Prisma.SortOrder
+  staleListingRisk?: Prisma.SortOrder
+  keyPersonRisk?: Prisma.SortOrder
+  homeBasedFlag?: Prisma.SortOrder
+  recurringRevenuePercent?: Prisma.SortOrder
+  ownerHoursClaimed?: Prisma.SortOrder
+  opsManagerExists?: Prisma.SortOrder
+  freshnessVerifiedAt?: Prisma.SortOrder
+  cashToCloseNotes?: Prisma.SortOrder
   overallScore?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -874,6 +1390,20 @@ export type BusinessAvgOrderByAggregateInput = {
   transferabilityRating?: Prisma.SortOrder
   scheduleControlFitRating?: Prisma.SortOrder
   brotherOperatorFitRating?: Prisma.SortOrder
+  aiResistanceScore?: Prisma.SortOrder
+  keepDayJobFit?: Prisma.SortOrder
+  quitDayJobFit?: Prisma.SortOrder
+  financeabilityRating?: Prisma.SortOrder
+  operatorSkillDependency?: Prisma.SortOrder
+  licenseDependency?: Prisma.SortOrder
+  afterHoursBurden?: Prisma.SortOrder
+  capexRisk?: Prisma.SortOrder
+  regretIfWrongScore?: Prisma.SortOrder
+  dataConfidenceScore?: Prisma.SortOrder
+  staleListingRisk?: Prisma.SortOrder
+  keyPersonRisk?: Prisma.SortOrder
+  recurringRevenuePercent?: Prisma.SortOrder
+  ownerHoursClaimed?: Prisma.SortOrder
   overallScore?: Prisma.SortOrder
 }
 
@@ -902,6 +1432,29 @@ export type BusinessMaxOrderByAggregateInput = {
   transferabilityRating?: Prisma.SortOrder
   scheduleControlFitRating?: Prisma.SortOrder
   brotherOperatorFitRating?: Prisma.SortOrder
+  aiResistanceScore?: Prisma.SortOrder
+  keepDayJobFit?: Prisma.SortOrder
+  quitDayJobFit?: Prisma.SortOrder
+  primaryUseCase?: Prisma.SortOrder
+  beatsCurrentBenchmark?: Prisma.SortOrder
+  benchmarkNotes?: Prisma.SortOrder
+  financeabilityRating?: Prisma.SortOrder
+  sellerFinancingAvailable?: Prisma.SortOrder
+  sellerFinancingNotes?: Prisma.SortOrder
+  operatorSkillDependency?: Prisma.SortOrder
+  licenseDependency?: Prisma.SortOrder
+  afterHoursBurden?: Prisma.SortOrder
+  capexRisk?: Prisma.SortOrder
+  regretIfWrongScore?: Prisma.SortOrder
+  dataConfidenceScore?: Prisma.SortOrder
+  staleListingRisk?: Prisma.SortOrder
+  keyPersonRisk?: Prisma.SortOrder
+  homeBasedFlag?: Prisma.SortOrder
+  recurringRevenuePercent?: Prisma.SortOrder
+  ownerHoursClaimed?: Prisma.SortOrder
+  opsManagerExists?: Prisma.SortOrder
+  freshnessVerifiedAt?: Prisma.SortOrder
+  cashToCloseNotes?: Prisma.SortOrder
   overallScore?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -933,6 +1486,29 @@ export type BusinessMinOrderByAggregateInput = {
   transferabilityRating?: Prisma.SortOrder
   scheduleControlFitRating?: Prisma.SortOrder
   brotherOperatorFitRating?: Prisma.SortOrder
+  aiResistanceScore?: Prisma.SortOrder
+  keepDayJobFit?: Prisma.SortOrder
+  quitDayJobFit?: Prisma.SortOrder
+  primaryUseCase?: Prisma.SortOrder
+  beatsCurrentBenchmark?: Prisma.SortOrder
+  benchmarkNotes?: Prisma.SortOrder
+  financeabilityRating?: Prisma.SortOrder
+  sellerFinancingAvailable?: Prisma.SortOrder
+  sellerFinancingNotes?: Prisma.SortOrder
+  operatorSkillDependency?: Prisma.SortOrder
+  licenseDependency?: Prisma.SortOrder
+  afterHoursBurden?: Prisma.SortOrder
+  capexRisk?: Prisma.SortOrder
+  regretIfWrongScore?: Prisma.SortOrder
+  dataConfidenceScore?: Prisma.SortOrder
+  staleListingRisk?: Prisma.SortOrder
+  keyPersonRisk?: Prisma.SortOrder
+  homeBasedFlag?: Prisma.SortOrder
+  recurringRevenuePercent?: Prisma.SortOrder
+  ownerHoursClaimed?: Prisma.SortOrder
+  opsManagerExists?: Prisma.SortOrder
+  freshnessVerifiedAt?: Prisma.SortOrder
+  cashToCloseNotes?: Prisma.SortOrder
   overallScore?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -950,6 +1526,20 @@ export type BusinessSumOrderByAggregateInput = {
   transferabilityRating?: Prisma.SortOrder
   scheduleControlFitRating?: Prisma.SortOrder
   brotherOperatorFitRating?: Prisma.SortOrder
+  aiResistanceScore?: Prisma.SortOrder
+  keepDayJobFit?: Prisma.SortOrder
+  quitDayJobFit?: Prisma.SortOrder
+  financeabilityRating?: Prisma.SortOrder
+  operatorSkillDependency?: Prisma.SortOrder
+  licenseDependency?: Prisma.SortOrder
+  afterHoursBurden?: Prisma.SortOrder
+  capexRisk?: Prisma.SortOrder
+  regretIfWrongScore?: Prisma.SortOrder
+  dataConfidenceScore?: Prisma.SortOrder
+  staleListingRisk?: Prisma.SortOrder
+  keyPersonRisk?: Prisma.SortOrder
+  recurringRevenuePercent?: Prisma.SortOrder
+  ownerHoursClaimed?: Prisma.SortOrder
   overallScore?: Prisma.SortOrder
 }
 
@@ -988,6 +1578,18 @@ export type NullableIntFieldUpdateOperationsInput = {
 
 export type EnumDealStatusFieldUpdateOperationsInput = {
   set?: $Enums.DealStatus
+}
+
+export type NullableEnumPrimaryUseCaseFieldUpdateOperationsInput = {
+  set?: $Enums.PrimaryUseCase | null
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type BusinessUpdatetagsInput = {
@@ -1052,6 +1654,29 @@ export type BusinessCreateWithoutNoteEntriesInput = {
   transferabilityRating?: number | null
   scheduleControlFitRating?: number | null
   brotherOperatorFitRating?: number | null
+  aiResistanceScore?: number | null
+  keepDayJobFit?: number | null
+  quitDayJobFit?: number | null
+  primaryUseCase?: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: boolean | null
+  benchmarkNotes?: string | null
+  financeabilityRating?: number | null
+  sellerFinancingAvailable?: boolean | null
+  sellerFinancingNotes?: string | null
+  operatorSkillDependency?: number | null
+  licenseDependency?: number | null
+  afterHoursBurden?: number | null
+  capexRisk?: number | null
+  regretIfWrongScore?: number | null
+  dataConfidenceScore?: number | null
+  staleListingRisk?: number | null
+  keyPersonRisk?: number | null
+  homeBasedFlag?: boolean | null
+  recurringRevenuePercent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: number | null
+  opsManagerExists?: boolean | null
+  freshnessVerifiedAt?: Date | string | null
+  cashToCloseNotes?: string | null
   overallScore?: number | null
   notes?: string | null
   tags?: Prisma.BusinessCreatetagsInput | string[]
@@ -1085,6 +1710,29 @@ export type BusinessUncheckedCreateWithoutNoteEntriesInput = {
   transferabilityRating?: number | null
   scheduleControlFitRating?: number | null
   brotherOperatorFitRating?: number | null
+  aiResistanceScore?: number | null
+  keepDayJobFit?: number | null
+  quitDayJobFit?: number | null
+  primaryUseCase?: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: boolean | null
+  benchmarkNotes?: string | null
+  financeabilityRating?: number | null
+  sellerFinancingAvailable?: boolean | null
+  sellerFinancingNotes?: string | null
+  operatorSkillDependency?: number | null
+  licenseDependency?: number | null
+  afterHoursBurden?: number | null
+  capexRisk?: number | null
+  regretIfWrongScore?: number | null
+  dataConfidenceScore?: number | null
+  staleListingRisk?: number | null
+  keyPersonRisk?: number | null
+  homeBasedFlag?: boolean | null
+  recurringRevenuePercent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: number | null
+  opsManagerExists?: boolean | null
+  freshnessVerifiedAt?: Date | string | null
+  cashToCloseNotes?: string | null
   overallScore?: number | null
   notes?: string | null
   tags?: Prisma.BusinessCreatetagsInput | string[]
@@ -1134,6 +1782,29 @@ export type BusinessUpdateWithoutNoteEntriesInput = {
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   scheduleControlFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   brotherOperatorFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiResistanceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keepDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  quitDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  primaryUseCase?: Prisma.NullableEnumPrimaryUseCaseFieldUpdateOperationsInput | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  benchmarkNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  financeabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sellerFinancingAvailable?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sellerFinancingNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorSkillDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  licenseDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  afterHoursBurden?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  capexRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  regretIfWrongScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dataConfidenceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  staleListingRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keyPersonRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  homeBasedFlag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  recurringRevenuePercent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  opsManagerExists?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  freshnessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cashToCloseNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   overallScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.BusinessUpdatetagsInput | string[]
@@ -1167,6 +1838,29 @@ export type BusinessUncheckedUpdateWithoutNoteEntriesInput = {
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   scheduleControlFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   brotherOperatorFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiResistanceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keepDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  quitDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  primaryUseCase?: Prisma.NullableEnumPrimaryUseCaseFieldUpdateOperationsInput | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  benchmarkNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  financeabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sellerFinancingAvailable?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sellerFinancingNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorSkillDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  licenseDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  afterHoursBurden?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  capexRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  regretIfWrongScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dataConfidenceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  staleListingRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keyPersonRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  homeBasedFlag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  recurringRevenuePercent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  opsManagerExists?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  freshnessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cashToCloseNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   overallScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.BusinessUpdatetagsInput | string[]
@@ -1200,6 +1894,29 @@ export type BusinessCreateWithoutHistoryEventsInput = {
   transferabilityRating?: number | null
   scheduleControlFitRating?: number | null
   brotherOperatorFitRating?: number | null
+  aiResistanceScore?: number | null
+  keepDayJobFit?: number | null
+  quitDayJobFit?: number | null
+  primaryUseCase?: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: boolean | null
+  benchmarkNotes?: string | null
+  financeabilityRating?: number | null
+  sellerFinancingAvailable?: boolean | null
+  sellerFinancingNotes?: string | null
+  operatorSkillDependency?: number | null
+  licenseDependency?: number | null
+  afterHoursBurden?: number | null
+  capexRisk?: number | null
+  regretIfWrongScore?: number | null
+  dataConfidenceScore?: number | null
+  staleListingRisk?: number | null
+  keyPersonRisk?: number | null
+  homeBasedFlag?: boolean | null
+  recurringRevenuePercent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: number | null
+  opsManagerExists?: boolean | null
+  freshnessVerifiedAt?: Date | string | null
+  cashToCloseNotes?: string | null
   overallScore?: number | null
   notes?: string | null
   tags?: Prisma.BusinessCreatetagsInput | string[]
@@ -1233,6 +1950,29 @@ export type BusinessUncheckedCreateWithoutHistoryEventsInput = {
   transferabilityRating?: number | null
   scheduleControlFitRating?: number | null
   brotherOperatorFitRating?: number | null
+  aiResistanceScore?: number | null
+  keepDayJobFit?: number | null
+  quitDayJobFit?: number | null
+  primaryUseCase?: $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: boolean | null
+  benchmarkNotes?: string | null
+  financeabilityRating?: number | null
+  sellerFinancingAvailable?: boolean | null
+  sellerFinancingNotes?: string | null
+  operatorSkillDependency?: number | null
+  licenseDependency?: number | null
+  afterHoursBurden?: number | null
+  capexRisk?: number | null
+  regretIfWrongScore?: number | null
+  dataConfidenceScore?: number | null
+  staleListingRisk?: number | null
+  keyPersonRisk?: number | null
+  homeBasedFlag?: boolean | null
+  recurringRevenuePercent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: number | null
+  opsManagerExists?: boolean | null
+  freshnessVerifiedAt?: Date | string | null
+  cashToCloseNotes?: string | null
   overallScore?: number | null
   notes?: string | null
   tags?: Prisma.BusinessCreatetagsInput | string[]
@@ -1282,6 +2022,29 @@ export type BusinessUpdateWithoutHistoryEventsInput = {
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   scheduleControlFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   brotherOperatorFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiResistanceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keepDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  quitDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  primaryUseCase?: Prisma.NullableEnumPrimaryUseCaseFieldUpdateOperationsInput | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  benchmarkNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  financeabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sellerFinancingAvailable?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sellerFinancingNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorSkillDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  licenseDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  afterHoursBurden?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  capexRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  regretIfWrongScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dataConfidenceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  staleListingRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keyPersonRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  homeBasedFlag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  recurringRevenuePercent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  opsManagerExists?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  freshnessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cashToCloseNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   overallScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.BusinessUpdatetagsInput | string[]
@@ -1315,6 +2078,29 @@ export type BusinessUncheckedUpdateWithoutHistoryEventsInput = {
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   scheduleControlFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   brotherOperatorFitRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiResistanceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keepDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  quitDayJobFit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  primaryUseCase?: Prisma.NullableEnumPrimaryUseCaseFieldUpdateOperationsInput | $Enums.PrimaryUseCase | null
+  beatsCurrentBenchmark?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  benchmarkNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  financeabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sellerFinancingAvailable?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sellerFinancingNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorSkillDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  licenseDependency?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  afterHoursBurden?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  capexRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  regretIfWrongScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dataConfidenceScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  staleListingRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  keyPersonRisk?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  homeBasedFlag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  recurringRevenuePercent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  ownerHoursClaimed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  opsManagerExists?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  freshnessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cashToCloseNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   overallScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.BusinessUpdatetagsInput | string[]
@@ -1388,6 +2174,29 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   transferabilityRating?: boolean
   scheduleControlFitRating?: boolean
   brotherOperatorFitRating?: boolean
+  aiResistanceScore?: boolean
+  keepDayJobFit?: boolean
+  quitDayJobFit?: boolean
+  primaryUseCase?: boolean
+  beatsCurrentBenchmark?: boolean
+  benchmarkNotes?: boolean
+  financeabilityRating?: boolean
+  sellerFinancingAvailable?: boolean
+  sellerFinancingNotes?: boolean
+  operatorSkillDependency?: boolean
+  licenseDependency?: boolean
+  afterHoursBurden?: boolean
+  capexRisk?: boolean
+  regretIfWrongScore?: boolean
+  dataConfidenceScore?: boolean
+  staleListingRisk?: boolean
+  keyPersonRisk?: boolean
+  homeBasedFlag?: boolean
+  recurringRevenuePercent?: boolean
+  ownerHoursClaimed?: boolean
+  opsManagerExists?: boolean
+  freshnessVerifiedAt?: boolean
+  cashToCloseNotes?: boolean
   overallScore?: boolean
   notes?: boolean
   tags?: boolean
@@ -1423,6 +2232,29 @@ export type BusinessSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   transferabilityRating?: boolean
   scheduleControlFitRating?: boolean
   brotherOperatorFitRating?: boolean
+  aiResistanceScore?: boolean
+  keepDayJobFit?: boolean
+  quitDayJobFit?: boolean
+  primaryUseCase?: boolean
+  beatsCurrentBenchmark?: boolean
+  benchmarkNotes?: boolean
+  financeabilityRating?: boolean
+  sellerFinancingAvailable?: boolean
+  sellerFinancingNotes?: boolean
+  operatorSkillDependency?: boolean
+  licenseDependency?: boolean
+  afterHoursBurden?: boolean
+  capexRisk?: boolean
+  regretIfWrongScore?: boolean
+  dataConfidenceScore?: boolean
+  staleListingRisk?: boolean
+  keyPersonRisk?: boolean
+  homeBasedFlag?: boolean
+  recurringRevenuePercent?: boolean
+  ownerHoursClaimed?: boolean
+  opsManagerExists?: boolean
+  freshnessVerifiedAt?: boolean
+  cashToCloseNotes?: boolean
   overallScore?: boolean
   notes?: boolean
   tags?: boolean
@@ -1455,6 +2287,29 @@ export type BusinessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   transferabilityRating?: boolean
   scheduleControlFitRating?: boolean
   brotherOperatorFitRating?: boolean
+  aiResistanceScore?: boolean
+  keepDayJobFit?: boolean
+  quitDayJobFit?: boolean
+  primaryUseCase?: boolean
+  beatsCurrentBenchmark?: boolean
+  benchmarkNotes?: boolean
+  financeabilityRating?: boolean
+  sellerFinancingAvailable?: boolean
+  sellerFinancingNotes?: boolean
+  operatorSkillDependency?: boolean
+  licenseDependency?: boolean
+  afterHoursBurden?: boolean
+  capexRisk?: boolean
+  regretIfWrongScore?: boolean
+  dataConfidenceScore?: boolean
+  staleListingRisk?: boolean
+  keyPersonRisk?: boolean
+  homeBasedFlag?: boolean
+  recurringRevenuePercent?: boolean
+  ownerHoursClaimed?: boolean
+  opsManagerExists?: boolean
+  freshnessVerifiedAt?: boolean
+  cashToCloseNotes?: boolean
   overallScore?: boolean
   notes?: boolean
   tags?: boolean
@@ -1487,6 +2342,29 @@ export type BusinessSelectScalar = {
   transferabilityRating?: boolean
   scheduleControlFitRating?: boolean
   brotherOperatorFitRating?: boolean
+  aiResistanceScore?: boolean
+  keepDayJobFit?: boolean
+  quitDayJobFit?: boolean
+  primaryUseCase?: boolean
+  beatsCurrentBenchmark?: boolean
+  benchmarkNotes?: boolean
+  financeabilityRating?: boolean
+  sellerFinancingAvailable?: boolean
+  sellerFinancingNotes?: boolean
+  operatorSkillDependency?: boolean
+  licenseDependency?: boolean
+  afterHoursBurden?: boolean
+  capexRisk?: boolean
+  regretIfWrongScore?: boolean
+  dataConfidenceScore?: boolean
+  staleListingRisk?: boolean
+  keyPersonRisk?: boolean
+  homeBasedFlag?: boolean
+  recurringRevenuePercent?: boolean
+  ownerHoursClaimed?: boolean
+  opsManagerExists?: boolean
+  freshnessVerifiedAt?: boolean
+  cashToCloseNotes?: boolean
   overallScore?: boolean
   notes?: boolean
   tags?: boolean
@@ -1494,7 +2372,7 @@ export type BusinessSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessName" | "sourceUrl" | "category" | "subcategory" | "location" | "stateCode" | "askingPrice" | "revenue" | "sde" | "ebitda" | "employees" | "summary" | "whyItMayFit" | "risks" | "brokerName" | "brokerFirm" | "listingSource" | "dealStatus" | "ownerDependenceRating" | "recurringRevenueRating" | "transferabilityRating" | "scheduleControlFitRating" | "brotherOperatorFitRating" | "overallScore" | "notes" | "tags" | "createdAt" | "updatedAt", ExtArgs["result"]["business"]>
+export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessName" | "sourceUrl" | "category" | "subcategory" | "location" | "stateCode" | "askingPrice" | "revenue" | "sde" | "ebitda" | "employees" | "summary" | "whyItMayFit" | "risks" | "brokerName" | "brokerFirm" | "listingSource" | "dealStatus" | "ownerDependenceRating" | "recurringRevenueRating" | "transferabilityRating" | "scheduleControlFitRating" | "brotherOperatorFitRating" | "aiResistanceScore" | "keepDayJobFit" | "quitDayJobFit" | "primaryUseCase" | "beatsCurrentBenchmark" | "benchmarkNotes" | "financeabilityRating" | "sellerFinancingAvailable" | "sellerFinancingNotes" | "operatorSkillDependency" | "licenseDependency" | "afterHoursBurden" | "capexRisk" | "regretIfWrongScore" | "dataConfidenceScore" | "staleListingRisk" | "keyPersonRisk" | "homeBasedFlag" | "recurringRevenuePercent" | "ownerHoursClaimed" | "opsManagerExists" | "freshnessVerifiedAt" | "cashToCloseNotes" | "overallScore" | "notes" | "tags" | "createdAt" | "updatedAt", ExtArgs["result"]["business"]>
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   noteEntries?: boolean | Prisma.Business$noteEntriesArgs<ExtArgs>
   historyEvents?: boolean | Prisma.Business$historyEventsArgs<ExtArgs>
@@ -1534,6 +2412,29 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     transferabilityRating: number | null
     scheduleControlFitRating: number | null
     brotherOperatorFitRating: number | null
+    aiResistanceScore: number | null
+    keepDayJobFit: number | null
+    quitDayJobFit: number | null
+    primaryUseCase: $Enums.PrimaryUseCase | null
+    beatsCurrentBenchmark: boolean | null
+    benchmarkNotes: string | null
+    financeabilityRating: number | null
+    sellerFinancingAvailable: boolean | null
+    sellerFinancingNotes: string | null
+    operatorSkillDependency: number | null
+    licenseDependency: number | null
+    afterHoursBurden: number | null
+    capexRisk: number | null
+    regretIfWrongScore: number | null
+    dataConfidenceScore: number | null
+    staleListingRisk: number | null
+    keyPersonRisk: number | null
+    homeBasedFlag: boolean | null
+    recurringRevenuePercent: runtime.Decimal | null
+    ownerHoursClaimed: number | null
+    opsManagerExists: boolean | null
+    freshnessVerifiedAt: Date | null
+    cashToCloseNotes: string | null
     overallScore: number | null
     notes: string | null
     tags: string[]
@@ -1988,6 +2889,29 @@ export interface BusinessFieldRefs {
   readonly transferabilityRating: Prisma.FieldRef<"Business", 'Int'>
   readonly scheduleControlFitRating: Prisma.FieldRef<"Business", 'Int'>
   readonly brotherOperatorFitRating: Prisma.FieldRef<"Business", 'Int'>
+  readonly aiResistanceScore: Prisma.FieldRef<"Business", 'Int'>
+  readonly keepDayJobFit: Prisma.FieldRef<"Business", 'Int'>
+  readonly quitDayJobFit: Prisma.FieldRef<"Business", 'Int'>
+  readonly primaryUseCase: Prisma.FieldRef<"Business", 'PrimaryUseCase'>
+  readonly beatsCurrentBenchmark: Prisma.FieldRef<"Business", 'Boolean'>
+  readonly benchmarkNotes: Prisma.FieldRef<"Business", 'String'>
+  readonly financeabilityRating: Prisma.FieldRef<"Business", 'Int'>
+  readonly sellerFinancingAvailable: Prisma.FieldRef<"Business", 'Boolean'>
+  readonly sellerFinancingNotes: Prisma.FieldRef<"Business", 'String'>
+  readonly operatorSkillDependency: Prisma.FieldRef<"Business", 'Int'>
+  readonly licenseDependency: Prisma.FieldRef<"Business", 'Int'>
+  readonly afterHoursBurden: Prisma.FieldRef<"Business", 'Int'>
+  readonly capexRisk: Prisma.FieldRef<"Business", 'Int'>
+  readonly regretIfWrongScore: Prisma.FieldRef<"Business", 'Int'>
+  readonly dataConfidenceScore: Prisma.FieldRef<"Business", 'Int'>
+  readonly staleListingRisk: Prisma.FieldRef<"Business", 'Int'>
+  readonly keyPersonRisk: Prisma.FieldRef<"Business", 'Int'>
+  readonly homeBasedFlag: Prisma.FieldRef<"Business", 'Boolean'>
+  readonly recurringRevenuePercent: Prisma.FieldRef<"Business", 'Decimal'>
+  readonly ownerHoursClaimed: Prisma.FieldRef<"Business", 'Int'>
+  readonly opsManagerExists: Prisma.FieldRef<"Business", 'Boolean'>
+  readonly freshnessVerifiedAt: Prisma.FieldRef<"Business", 'DateTime'>
+  readonly cashToCloseNotes: Prisma.FieldRef<"Business", 'String'>
   readonly overallScore: Prisma.FieldRef<"Business", 'Int'>
   readonly notes: Prisma.FieldRef<"Business", 'String'>
   readonly tags: Prisma.FieldRef<"Business", 'String[]'>

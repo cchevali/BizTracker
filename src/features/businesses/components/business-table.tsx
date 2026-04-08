@@ -1,9 +1,18 @@
 import Link from "next/link";
 
 import { Panel } from "@/components/ui/panel";
-import { formatCurrency, formatDateTime, formatScore } from "@/lib/format";
+import {
+  formatCurrency,
+  formatDateTime,
+  formatRating,
+  formatScore,
+} from "@/lib/format";
 
-import type { BusinessListItem } from "../domain/business.types";
+import {
+  getBooleanLabel,
+  getPrimaryUseCaseLabel,
+  type BusinessListItem,
+} from "../domain/business.types";
 import { StatusBadge } from "./status-badge";
 
 type BusinessTableProps = {
@@ -18,11 +27,14 @@ export function BusinessTable({ businesses }: BusinessTableProps) {
           <thead className="bg-[var(--color-panel-muted)]">
             <tr className="text-xs uppercase tracking-[0.18em] text-[var(--color-muted-ink)]">
               <th className="px-5 py-4 font-medium">Business</th>
-              <th className="px-5 py-4 font-medium">Category</th>
-              <th className="px-5 py-4 font-medium">Location</th>
+              <th className="px-5 py-4 font-medium">Use Case</th>
               <th className="px-5 py-4 font-medium">Ask</th>
               <th className="px-5 py-4 font-medium">SDE</th>
-              <th className="px-5 py-4 font-medium">Score</th>
+              <th className="px-5 py-4 font-medium">Keep / Quit</th>
+              <th className="px-5 py-4 font-medium">Financeability</th>
+              <th className="px-5 py-4 font-medium">Cash High</th>
+              <th className="px-5 py-4 font-medium">Conservative Cash</th>
+              <th className="px-5 py-4 font-medium">Benchmark</th>
               <th className="px-5 py-4 font-medium">Status</th>
               <th className="px-5 py-4 font-medium">Updated</th>
             </tr>
@@ -58,13 +70,10 @@ export function BusinessTable({ businesses }: BusinessTableProps) {
                 <td className="px-5 py-4 text-sm text-[var(--color-muted-ink)]">
                   <div className="space-y-1">
                     <p className="font-medium text-[var(--color-ink)]">
-                      {business.category}
+                      {getPrimaryUseCaseLabel(business.primaryUseCase)}
                     </p>
-                    <p>{business.subcategory ?? "—"}</p>
+                    <p>{business.location}</p>
                   </div>
-                </td>
-                <td className="px-5 py-4 text-sm text-[var(--color-muted-ink)]">
-                  {business.location}
                 </td>
                 <td className="px-5 py-4 text-sm font-medium text-[var(--color-ink)]">
                   {formatCurrency(business.askingPrice)}
@@ -73,7 +82,28 @@ export function BusinessTable({ businesses }: BusinessTableProps) {
                   {formatCurrency(business.sde)}
                 </td>
                 <td className="px-5 py-4 text-sm text-[var(--color-muted-ink)]">
-                  {formatScore(business.overallScore)}
+                  <div className="space-y-1">
+                    <p>Keep {formatRating(business.keepDayJobFit)}</p>
+                    <p>Quit {formatRating(business.quitDayJobFit)}</p>
+                  </div>
+                </td>
+                <td className="px-5 py-4 text-sm text-[var(--color-muted-ink)]">
+                  <div className="space-y-1">
+                    <p>{formatRating(business.financeabilityRating)}</p>
+                    <p>AI {formatRating(business.aiResistanceScore)}</p>
+                  </div>
+                </td>
+                <td className="px-5 py-4 text-sm font-medium text-[var(--color-ink)]">
+                  {formatCurrency(business.cashToCloseHigh)}
+                </td>
+                <td className="px-5 py-4 text-sm font-medium text-[var(--color-ink)]">
+                  {formatCurrency(business.conservativeCashAfterBrother)}
+                </td>
+                <td className="px-5 py-4 text-sm text-[var(--color-muted-ink)]">
+                  <div className="space-y-1">
+                    <p>{getBooleanLabel(business.beatsCurrentBenchmark)}</p>
+                    <p>Score {formatScore(business.overallScore)}</p>
+                  </div>
                 </td>
                 <td className="px-5 py-4 text-sm">
                   <StatusBadge status={business.dealStatus} />
