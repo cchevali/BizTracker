@@ -57,6 +57,8 @@
 - Public hosting at `microflowops.com/biztracker` depends on the external host repo rewrite in `C:\dev\OSHA_Leads\web\next.config.mjs`; if that rewrite is removed, the public path breaks even if the standalone BizTracker deployment is healthy.
 - The GitHub Actions deploy path depends on repo secret `VERCEL_TOKEN`; forked PRs will not receive that secret, so preview deploys intentionally skip those cases.
 - The deploy workflow uses `npm install` instead of `npm ci` because the lockfile currently trips Linux-only optional dependency checks on GitHub's Ubuntu runner.
+- On April 8, 2026 the GitHub `VERCEL_TOKEN` secret was rotated from the locally authenticated Vercel session after a production run failed with `The token provided via --token argument is not valid.`
+- The deploy workflow now retries `prisma migrate deploy` because a rerun on April 8, 2026 hit Prisma advisory-lock timeout `P1002` while acquiring `pg_advisory_lock(72707369)`.
 - Mobile users below the `lg` breakpoint now get the simplified score-only filter experience by design; if broader tablet filtering is needed later, the breakpoint or layout can be revisited.
 
 ## Verification

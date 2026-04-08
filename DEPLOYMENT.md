@@ -26,7 +26,7 @@ Each deploy job:
 1. Checks out the repo and installs dependencies with `npm install`
 2. Runs `npm test`, `npm run lint`, and `npm run typecheck`
 3. Pulls Vercel environment settings for the target environment
-4. Runs `npx prisma migrate deploy`
+4. Runs `npx prisma migrate deploy` with retry handling for transient Prisma advisory-lock contention
 5. Builds with `npx vercel build`
 6. Deploys with `npx vercel deploy --prebuilt`
 
@@ -42,6 +42,7 @@ That keeps preview and production builds aligned with the app's base-path-aware 
 - Changes to the public `/biztracker` rewrite still live in the external MicroFlowOps host repo and must be deployed from `C:\dev\OSHA_Leads\web`.
 - Preview deploy secrets do not run for forked pull requests because GitHub does not expose repository secrets to untrusted forks.
 - The workflow intentionally uses `npm install` instead of `npm ci` because the current lockfile is generated on Windows and GitHub's Ubuntu runner needs Linux-specific optional native packages that `npm ci` rejected.
+- The workflow now retries Prisma migrations up to three times because Neon/Prisma advisory-lock acquisition can time out transiently even when the database is otherwise healthy.
 
 ## Rotating Credentials
 If `VERCEL_TOKEN` ever needs rotation:
