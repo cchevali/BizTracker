@@ -89,3 +89,8 @@ Consequences: Dashboard queries now exclude `Passed` deals by default unless fil
 Decision: Repair production data drift through an explicit reconciliation command and fail production deploys when the expected thesis-cleanup data state is missing.
 Reason: The production database can be on the correct schema and app version while still missing baseline curated records or the manual thesis cleanup/backfill pass, so deploy success alone is not enough to prove live correctness.
 Consequences: `npm run reconcile:production` now restores missing curated records, reruns the thesis reconciliation safely against the Vercel production env, and verifies the result, while `.github/workflows/vercel-deploy.yml` runs `scripts/verify-biztracker-reconciliation.ts` so future drift is caught automatically.
+
+## 2026-04-11
+Decision: Treat the 2026-04-11 high-value public listing batch as repo-managed tracker data that upserts full records by `sourceUrl` instead of only creating missing rows or backfilling thesis-only fields.
+Reason: These public listings are now part of the tracked thesis set, and some of them already existed with weaker notes or outdated status, so create-only behavior would either duplicate them or leave stale assessments in place.
+Consequences: `scripts/backfill-acquisition-thesis.ts` now refreshes the managed high-value batch with canonical listing facts, skeptical notes, `RESEARCHING` status, and matching history rows, while unrelated manual note entries and non-managed records remain untouched.

@@ -17,7 +17,6 @@ export const ARCHIVE_BUSINESS_NAMES = [
   "Profitable Home-Based Service Business | Proven Demand & Ready to Grow",
   "Garage Door Installation & Repair",
   "Highly Profitable Chimney Repair and Duct Cleaning Business",
-  "Chimney Cleaning and Repair Service - by Doug Jackson",
   "Garage Door Installation and Service, Commercial and Residential",
   "Highly Reputable Plumbing and HVAC Installation and Service Business",
 ] as const;
@@ -835,50 +834,6 @@ export const existingBackfills: Record<string, BackfillSpec> = {
         "It does not beat the benchmark because the benchmark offers better staffing depth and a cleaner cost-to-risk tradeoff.",
       confidence:
         "Confidence is decent on the facts, but the thesis conclusion is negative because the bench depth is too thin.",
-    },
-  },
-  "Profitable Residential Pest Control Company": {
-    manual: {
-      aiResistanceScore: 5,
-      financeabilityRating: 3,
-      sellerFinancingAvailable: null,
-      sellerFinancingNotes: null,
-      operatorSkillDependency: 3,
-      licenseDependency: 3,
-      afterHoursBurden: 2,
-      capexRisk: 2,
-      regretIfWrongScore: 3,
-      dataConfidenceScore: 3,
-      keepDayJobFit: 3,
-      quitDayJobFit: 4,
-      primaryUseCase: PrimaryUseCase.full_time_replacement,
-      beatsCurrentBenchmark: false,
-      benchmarkNotes:
-        "Compared against Profitable HVAC Air Quality & Duct Cleaning Business Franchise in Fairfax County. The recurring mix is good, but missing SDE and transfer detail keep it from beating the benchmark.",
-      freshnessVerifiedAt: null,
-      staleListingRisk: 3,
-      homeBasedFlag: null,
-      recurringRevenuePercent: 70,
-      ownerHoursClaimed: null,
-      opsManagerExists: null,
-      keyPersonRisk: 3,
-      cashToCloseNotes:
-        "Modeled close cash is not the core issue here; the real underwriting question is what normalized owner cash actually is after replacing the owner.",
-    },
-    analysis: {
-      thesisFit: "Good route-service shape, but the missing SDE prevents a stronger conviction.",
-      mainReasons:
-        "Seventy percent recurring revenue and a seven-person team are strong structural signals.",
-      failureModes:
-        "If the undisclosed owner cash is weaker than it looks, the nice recurring story loses a lot of value quickly.",
-      keepDayJobView:
-        "Decent because the route base and team size are better than many small pest listings.",
-      quitDayJobView:
-        "Potentially strong if the real owner cash is there and licenses transfer cleanly.",
-      benchmarkComparison:
-        "It does not beat the benchmark because the headline looks good but the real economics are still partially hidden.",
-      confidence:
-        "Confidence is moderate because recurring percentage and team size are disclosed, but SDE opacity is too important to ignore.",
     },
   },
   "Profitable Semi-Absentee Air Duct & HVAC Cleaning Biz 30+ Years": {

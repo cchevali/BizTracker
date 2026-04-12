@@ -9,6 +9,9 @@ import {
   newListingSeeds,
   type BackfillSpec,
 } from "./backfill-acquisition-thesis.data";
+import {
+  upsertHighValueListingBatch,
+} from "./high-value-listings-2026-04-11.lib";
 
 const backfillFieldNames = [
   "sourceUrl",
@@ -49,6 +52,8 @@ export type AcquisitionThesisBackfillSummary = {
   createdNames: string[];
   existingUpdatedCount: number;
   newListingUpdatedCount: number;
+  highValueCreatedNames: string[];
+  highValueUpdatedNames: string[];
 };
 
 function buildAnalysisBlock(spec: BackfillSpec["analysis"]) {
@@ -354,12 +359,15 @@ export async function runAcquisitionThesisBackfill(
   const createdNames = await createMissingPublicListings(prisma);
   const existingUpdatedCount = await backfillExistingBusinesses(prisma);
   const newListingUpdatedCount = await backfillNewListings(prisma);
+  const highValueSummary = await upsertHighValueListingBatch(prisma);
 
   return {
     archivedNames,
     createdNames,
     existingUpdatedCount,
     newListingUpdatedCount,
+    highValueCreatedNames: highValueSummary.createdNames,
+    highValueUpdatedNames: highValueSummary.updatedNames,
   };
 }
 
@@ -370,6 +378,12 @@ export function printAcquisitionThesisBackfillSummary(
   console.log(`Created new listings: ${summary.createdNames.length}`);
   console.log(`Updated existing active businesses: ${summary.existingUpdatedCount}`);
   console.log(`Updated or confirmed new listings: ${summary.newListingUpdatedCount}`);
+  console.log(
+    `Created 2026-04-11 high-value listings: ${summary.highValueCreatedNames.length}`,
+  );
+  console.log(
+    `Updated 2026-04-11 high-value listings: ${summary.highValueUpdatedNames.length}`,
+  );
 
   if (summary.archivedNames.length > 0) {
     console.log("Archived businesses:");
@@ -381,6 +395,20 @@ export function printAcquisitionThesisBackfillSummary(
   if (summary.createdNames.length > 0) {
     console.log("Created listings:");
     for (const businessName of summary.createdNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.highValueCreatedNames.length > 0) {
+    console.log("Created high-value listings:");
+    for (const businessName of summary.highValueCreatedNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.highValueUpdatedNames.length > 0) {
+    console.log("Updated high-value listings:");
+    for (const businessName of summary.highValueUpdatedNames) {
       console.log(`- ${businessName}`);
     }
   }

@@ -36,3 +36,9 @@
 - Added `scripts/reconciliation-seed.data.ts`, `scripts/reconciliation-env.ts`, `scripts/reconcile-production-data.ts`, and `scripts/verify-biztracker-reconciliation.ts` to make production repair explicit, safe, and repeatable.
 - Restored the six missing curated baseline businesses in production, reran the thesis archive/add/backfill pass against production, and brought the live data to `38 total / 30 active / 8 passed`.
 - Updated the production deploy workflow to verify the expected reconciliation state after migrations so future schema-only deploys cannot silently leave production data half-migrated.
+
+## 2026-04-11
+- Added `scripts/high-value-listings-2026-04-11.data.ts` and `scripts/high-value-listings-2026-04-11.lib.ts` for a repo-managed high-value public listing batch that upserts full records by `sourceUrl`.
+- Added 14 serious public listing candidates to the managed thesis set, including full skeptical assessment text, tags, taxonomy, and acquisition-screening fields.
+- Removed the Doug Jackson chimney listing from the April 7 archive set and moved the Harrisburg residential pest listing out of the older thesis-only backfill map so the new managed upsert batch can own those records cleanly.
+- Extended the thesis backfill runner and reconciliation verifier to expect the new batch, and added a test that enforces unique source URLs plus the required notes house style for the 2026-04-11 managed listings.

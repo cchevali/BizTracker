@@ -20,6 +20,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Create and edit forms with validation
 - Default active pipeline behavior that excludes `Passed` deals unless the filter explicitly asks for them
 - Thesis cleanup/backfill CLI that archives low-fit deals, adds discussed public listings, and backfills active businesses
+- High-value public listing upsert batch keyed by `sourceUrl` for serious 2026-04-11 candidates, including full listing facts, skeptical assessment text, and history coherence
 - Production-safe reconciliation and verification scripts that compare the live Neon database against the expected thesis-cleanup state
 - Realistic seed data
 - Production deployment on Vercel with Neon Postgres and a `/biztracker` base path
@@ -33,6 +34,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Saved presets are global because there is no user model yet.
 - Derived cash scenario values are read-only and recomputed from asking price and SDE rather than trusted from imports.
 - Production data reconciliation is explicit and idempotent; schema deploys do not silently run the thesis cleanup/backfill for you.
+- Repo-managed public listing batches can intentionally upsert specific `sourceUrl`-backed records when those listing facts and thesis notes are treated as canonical tracker data.
 - Production requests come through the existing `microflowops.com` host app, which rewrites `/biztracker/*` to the standalone BizTracker Vercel deployment.
 
 ## Constraints
@@ -46,6 +48,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - No UI/integration tests yet
 - No pagination or bulk actions
 - No in-app import/parser flow from a source URL or workbook upload yet beyond manual paste and offline normalization/import scripts
+- Public listing refresh is still CLI-driven; there is no in-app source-url refresh or review workflow yet
 - No direct marketplace ingestion or comparison workflow yet beyond exporting tracker data for ChatGPT
 - Global search is simple field matching, not full-text indexing
 - Thesis backfill judgments are intentionally manual and skeptical; they are reproducible through the CLI script, but they are not derived automatically from listing text

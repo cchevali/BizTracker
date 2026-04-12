@@ -3,6 +3,7 @@ import { pathToFileURL } from "node:url";
 import { Client } from "pg";
 
 import { ARCHIVE_BUSINESS_NAMES, newListingSeeds } from "./backfill-acquisition-thesis.data";
+import { highValueListingSeeds } from "./high-value-listings-2026-04-11.data";
 import {
   assertProductionTarget,
   type ReconciliationTarget,
@@ -38,14 +39,15 @@ type VerificationSummary = {
   }>;
 };
 
-const MINIMUM_EXPECTED_ACTIVE_COUNT = 30;
-const MINIMUM_EXPECTED_PASSED_COUNT = 8;
+const MINIMUM_EXPECTED_ACTIVE_COUNT = 42;
+const MINIMUM_EXPECTED_PASSED_COUNT = 7;
 const HVAC_BENCHMARK_NAME =
   "Profitable HVAC Air Quality & Duct Cleaning Business Franchise";
 const sampleBusinessNames = [
   HVAC_BENCHMARK_NAME,
-  "Blue Ridge HVAC Services",
-  "Northshore Commercial Cleaning",
+  "High Income Recession-Proof HVAC Services Business",
+  "Plumbing and Heating Service",
+  "Northeast Virginia Multi-trade Company",
 ] as const;
 
 export async function verifyBizTrackerReconciliation({
@@ -84,6 +86,7 @@ export async function verifyBizTrackerReconciliation({
     const requiredBusinessNames = [
       ...reconciliationSeedBusinesses.map((business) => business.businessName),
       ...newListingSeeds.map((seed) => seed.businessName),
+      ...highValueListingSeeds.map((seed) => seed.businessName),
     ];
 
     const missingRequiredBusinessesResult = await client.query<{

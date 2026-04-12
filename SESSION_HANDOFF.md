@@ -1,100 +1,71 @@
 # SESSION_HANDOFF
 
 ## What Changed
-- Diagnosed a live production data drift issue: the app and schema were deployed, but the Neon production database still contained only the original 24 imported businesses and had never received the curated seed records or the April 7, 2026 thesis reconciliation pass.
-- Confirmed production is pointed at the intended Neon database from `.vercel/.env.production.local` for Vercel project `microflowops-biztracker`; this was a data-state mismatch, not a wrong-database issue.
-- Added `scripts/backfill-acquisition-thesis.lib.ts` so the thesis reconciliation logic can be reused outside the local-only wrapper command.
-- Added `scripts/reconciliation-seed.data.ts` for the six curated baseline businesses that production was missing.
-- Added `scripts/reconciliation-env.ts` for explicit env-file loading and production-target safety checks.
-- Added `scripts/reconcile-production-data.ts` plus package script `npm run reconcile:production` to run production migrations, restore missing curated records, run the thesis cleanup/backfill, and verify the result.
-- Added `scripts/verify-biztracker-reconciliation.ts` plus package scripts `npm run verify:reconciliation` and `npm run verify:production-data`.
-- Updated `.github/workflows/vercel-deploy.yml` so production deploys now verify the expected reconciliation state after migrations and fail fast if the live data drifts again.
-- Ran the production reconciliation against Neon and restored these missing curated records:
-  - `Anchor Point Bookkeeping Co.`
-  - `Blue Ridge HVAC Services`
-  - `Northshore Commercial Cleaning`
-  - `Prairie Fire Equipment Rental`
-  - `Maple Lane Pediatric Therapy`
-  - `Riverbend Property Inspection Group`
-- Ran the thesis reconciliation against production, which archived the seven expected low-fit deals and added the eight discussed public listings.
-- Production data state after reconciliation:
-  - Total businesses: `38`
-  - Active businesses: `30`
-  - Passed businesses: `8`
-- Verified the live export route at `https://microflowops.com/biztracker/exports/businesses` now exports `30` businesses by default, includes `Profitable HVAC Air Quality & Duct Cleaning Business Franchise`, and excludes the archived weak-fit deals.
-- Added acquisition-screening v2 support across the Prisma schema, migrations, repository mapping, validation, forms, detail page, list views, sorting, filtering, and workbook export/import paths.
-- Added shared scenario assumptions in `src/features/businesses/domain/business-scenario.ts` for cash to close, annual debt service, conservative SDE, and post-brother cash calculations.
-- Kept legacy `overall_score` semantics intact; new thesis-fit and scenario values are additive and do not reinterpret historical scores.
-- Added workbook import parsing in `src/features/businesses/domain/business-workbook-import.ts` so both original exports and v2 appended-column exports normalize successfully.
-- Added migration `20260408023947_acquisition_screening_v2` for the new nullable business fields and follow-up migration `20260408050000_acquisition_screening_constraints` for rating/percent check constraints.
-- Added tests covering scenario math, workbook import compatibility, expanded export headers/values, and new filter/sort behavior.
-- Updated the default active pipeline so `Passed` deals are excluded unless the filter explicitly requests them.
-- Added `scripts/backfill-acquisition-thesis.ts` plus `scripts/backfill-acquisition-thesis.data.ts` to make the April 7, 2026 thesis cleanup pass reproducible and idempotent.
-- Marked these businesses as `Passed` during the thesis cleanup pass:
-  - `Exceptional Termite Control Company Tremendous Growth Potential`
-  - `Profitable Home-Based Service Business | Proven Demand & Ready to Grow`
-  - `Garage Door Installation & Repair`
-  - `Highly Profitable Chimney Repair and Duct Cleaning Business`
-  - `Chimney Cleaning and Repair Service - by Doug Jackson`
-  - `Garage Door Installation and Service, Commercial and Residential`
-  - `Highly Reputable Plumbing and HVAC Installation and Service Business`
-- Added these public listings if missing and backfilled them with the new thesis fields:
-  - `Profitable HVAC Air Quality & Duct Cleaning Business Franchise`
-  - `Money Saving Service Business - Dryer Vent Cleaning - Fairfax`
-  - `Turnkey Appliance Repair Biz | Absentee Ownership Possible | SW VA`
-  - `3 FedEx Linehaul Routes - Stafford, VA - Highly Profitable`
-  - `Long-Established Commercial Cleaning & Contracting Company (37 Years)`
-  - `Most profitable business`
-  - `Flowers Bread Route, Fairfax County, Virginia`
-  - `9 FedEx Ground Routes, Manassas VA`
-- Backfilled all remaining active businesses with acquisition-thesis ratings, benchmark notes, freshness/downside fields, cash-to-close commentary, and an appended `Backfill analysis (2026-04-07)` notes block when missing.
-- Fixed an early duplicate-seed bug in the thesis backfill data, removed the accidentally duplicated local records, and hardened the script to guard same-run duplicate source URLs and normalized titles.
-- Local database state after the April 7, 2026 cleanup pass:
-  - Active businesses: `30`
-  - Passed businesses from the cleanup list: `7`
+- Added `scripts/high-value-listings-2026-04-11.data.ts` with 14 repo-managed public listing records for the serious candidates discussed on 2026-04-11.
+- Added `scripts/high-value-listings-2026-04-11.lib.ts` with source-url upsert logic that refreshes full listing facts, notes, tags, deal status, and history rows instead of only creating missing records.
+- Wired the high-value batch into `scripts/backfill-acquisition-thesis.lib.ts`, so `npx tsx scripts/backfill-acquisition-thesis.ts` now does all of the following in one pass:
+  - keeps the April 7 low-fit archive set applied
+  - creates any missing April 7 public listings
+  - backfills thesis fields for the older managed set
+  - upserts the 2026-04-11 high-value listing batch by `sourceUrl`
+- Removed `Chimney Cleaning and Repair Service - by Doug Jackson` from the older April 7 archive list because it is now intentionally tracked as an active high-value comparison candidate.
+- Removed `Profitable Residential Pest Control Company` from the older thesis-only `existingBackfills` map so it does not fight the new 2026-04-11 managed source-url upsert on reruns.
+- Updated `scripts/verify-biztracker-reconciliation.ts` to require the new high-value batch and to expect at least `42 active / 7 passed` instead of the old `30 active / 8 passed` floor.
+- Added `tests/high-value-listings-batch.test.ts` to enforce:
+  - 14 managed high-value seeds
+  - unique `sourceUrl` values
+  - `RESEARCHING` status for the batch
+  - the required notes house style with `Observed:`, `Inference:`, `Missing:`, and `Backfill analysis (2026-04-11)`
+- Updated `CONTEXT.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `TASKS.md`, and `CHANGELOG.md` to reflect the new managed upsert batch and workflow.
+
+## Development DB State
+- Local Docker/Postgres was not available in this session because `npm run db:start` failed with Docker Desktop not running.
+- The new batch was applied against the development database from `.env.local` by exporting that `DATABASE_URL` and running `npx tsx scripts/backfill-acquisition-thesis.ts`.
+- The 2026-04-11 upsert summary against the dev DB was:
+  - `12` created high-value listings
+  - `2` updated high-value listings
+  - Updated records:
+    - `Chimney Cleaning and Repair Service - by Doug Jackson`
+    - `Profitable Residential Pest Control Company`
+- Dev DB verification after the upsert passed with:
+  - Total businesses: `50`
+  - Active businesses: `43`
+  - Passed businesses: `7`
+- A second rerun of `npx tsx scripts/backfill-acquisition-thesis.ts` against the same dev DB was idempotent for the 2026-04-11 batch:
+  - `0` created high-value listings
+  - `0` updated high-value listings
+- The development verifier also confirmed:
+  - no missing required high-value businesses
+  - no archive names still active
+  - full thesis-field coverage across all active businesses
 
 ## What Is Unfinished
-- No Prisma-backed integration test harness yet; current coverage is still unit-heavy
-- No auth or multi-user support
-- No source URL parsing/import automation beyond manual entry and offline scripts
-- No in-app workbook or JSON import flow yet; normalization and import currently happen via CLI scripts
-- No bulk archive/revive workflow in the UI even though the active pipeline now intentionally hides `Passed` deals by default
-- No separate thesis score v2 yet; only the new stored fields and scenario values were added
-- Production reconciliation is still a deliberate manual command, not an automatic data-mutation step inside deploys
+- Production has not been reconciled with the new 2026-04-11 batch yet in this session.
+- There is still no Prisma-backed integration smoke test for the full workbook export/import and backfill path against a disposable database.
+- Public listing refresh remains CLI-driven; there is still no in-app source-url ingestion or refresh workflow.
+- There is still no auth or multi-user support.
 
 ## What Should Be Worked On Next
-- Add a real-database integration smoke test that exercises workbook export/import compatibility and the thesis backfill script on a disposable dataset.
-- Consider a scheduled GitHub Actions job or workflow-dispatch check that runs `npm run verify:production-data` even when no code is being deployed.
-- Add bulk archive/revive actions or a clearer archived toggle in the UI now that the default pipeline hides `Passed` deals.
-- If product work is preferred over internal tooling, the next highest-value feature is an in-app import flow for workbook/JSON inputs or source URL ingestion assistance.
+- Run `npm run reconcile:production` when ready so the live Neon database and public app pick up the 2026-04-11 high-value listing batch too.
+- After production reconciliation, sanity-check the live workbook export at `https://microflowops.com/biztracker/exports/businesses` for the new active-count and required names.
+- Add a real-database integration smoke test that exercises workbook export/import plus the thesis/high-value backfill path together.
 
 ## Risks Or Bugs
-- Dashboard search uses simple `contains` queries, not full-text indexing.
-- Saved presets are global because there is no user model.
-- Local Postgres defaults to port `5433` because `5432` was already occupied on this machine.
-- The workbook export mirrors the active tracker filters and the default active-pipeline behavior; exporting archived deals now requires explicit filter state rather than relying on the default view.
-- Imported legacy batches may still contain factual inconsistencies from the source listing text; the normalizer fixes score semantics and shape, not underlying listing truth.
-- The current JSON import script skips existing `sourceUrl` matches rather than updating them; this is intentional to protect manual edits.
-- Workbook import parsing tolerates old and new schemas, but there is still no in-app upload flow wired to it yet.
-- Thesis backfill judgments are manual and intentionally skeptical; rerunning `npm run backfill:thesis` is safe, but changing the manual dataset file will change future outcomes by design.
-- Public hosting at `microflowops.com/biztracker` depends on the external host repo rewrite in `C:\dev\OSHA_Leads\web\next.config.mjs`; if that rewrite is removed, the public path breaks even if the standalone BizTracker deployment is healthy.
-- The GitHub Actions deploy path depends on repo secret `VERCEL_TOKEN`; forked PRs will not receive that secret, so preview deploys intentionally skip those cases.
-- The deploy workflow uses `npm install` instead of `npm ci` because the lockfile currently trips Linux-only optional dependency checks on GitHub's Ubuntu runner.
-- On April 8, 2026 the GitHub `VERCEL_TOKEN` secret was rotated from the locally authenticated Vercel session after a production run failed with `The token provided via --token argument is not valid.`
-- The deploy workflow now retries `prisma migrate deploy` because a rerun on April 8, 2026 hit Prisma advisory-lock timeout `P1002` while acquiring `pg_advisory_lock(72707369)`.
-- The production verifier intentionally enforces minimum counts plus required-business presence; if the baseline curated set or the April 7, 2026 reconciliation target changes, update `scripts/reconciliation-seed.data.ts` and `scripts/verify-biztracker-reconciliation.ts` together.
-- Mobile users below the `lg` breakpoint now get the simplified score-only filter experience by design; if broader tablet filtering is needed later, the breakpoint or layout can be revisited.
+- Production is currently behind the repo/dev-db data state until `npm run reconcile:production` is run.
+- `npm run db:start` could not be used here because Docker Desktop was not running on this machine.
+- The public listing refresh path is now intentionally repo-managed for the 2026-04-11 batch; if those canonical notes or scores need to change later, update the batch data file and rerun the backfill rather than hand-editing rows.
+- Public hosting at `microflowops.com/biztracker` still depends on the external host rewrite in `C:\dev\OSHA_Leads\web\next.config.mjs`.
+- Workbook export still mirrors live database contents plus the active-pipeline default, so production will not show the new records until the production reconciliation step happens.
 
 ## Verification
-- Passed locally on April 7, 2026:
-  - `npm run db:migrate`
-  - `npm run backfill:thesis`
+- Passed locally in repo code:
   - `npm run typecheck`
   - `npm test`
   - `npm run lint`
   - `npm run build`
-- Passed on April 8, 2026 during production-data repair:
-  - `npx tsx scripts/verify-biztracker-reconciliation.ts --target production` before reconciliation, which correctly failed and showed the drift
-  - `npm run reconcile:production`
-  - A second `npm run reconcile:production` idempotence rerun with zero creations/updates
-  - Live export validation from `https://microflowops.com/biztracker/exports/businesses`
+- Passed against the development database from `.env.local`:
+  - `npx tsx scripts/backfill-acquisition-thesis.ts` with `DATABASE_URL` set from `.env.local`
+  - A second idempotence rerun of `npx tsx scripts/backfill-acquisition-thesis.ts` with the same `.env.local` `DATABASE_URL`
+  - `npx tsx scripts/verify-biztracker-reconciliation.ts --env-file .env.local`
+- Failed locally due environment, not code:
+  - `npm run db:start` because Docker Desktop was not running
