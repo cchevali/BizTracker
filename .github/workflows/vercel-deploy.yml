@@ -57,8 +57,26 @@ jobs:
       - name: Run typecheck
         run: npm run typecheck
 
+      - name: Validate Vercel preview access
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx tsx scripts/check-vercel-access.ts --token-env VERCEL_TOKEN
+
       - name: Pull Vercel preview environment
-        run: npx vercel pull --yes --environment=preview --token="${{ secrets.VERCEL_TOKEN }}"
+        run: |
+          for attempt in 1 2 3; do
+            if npx vercel pull --yes --environment=preview --non-interactive --token="${{ secrets.VERCEL_TOKEN }}"; then
+              break
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "Vercel preview pull failed after 3 attempts. Confirm VERCEL_TOKEN is a current classic PAT with access to microflowops-biztracker and that VERCEL_ORG_ID / VERCEL_PROJECT_ID still match the project."
+              exit 1
+            fi
+
+            echo "Vercel preview pull failed on attempt $attempt. Retrying in 15 seconds..."
+            sleep 15
+          done
 
       - name: Apply preview database migrations
         run: |
@@ -78,17 +96,13 @@ jobs:
             sleep 15
           done
 
-      - name: Build preview deployment
-        run: |
-          set -a
-          source .vercel/.env.preview.local
-          set +a
-          npx vercel build --token="${{ secrets.VERCEL_TOKEN }}"
-
       - name: Deploy preview
         id: deploy
         run: |
-          deployment_url="$(npx vercel deploy --prebuilt --token="${{ secrets.VERCEL_TOKEN }}")"
+          deployment_info_file="$(mktemp)"
+          npx vercel deploy --target=preview --yes --format=json --non-interactive --token="${{ secrets.VERCEL_TOKEN }}" > "$deployment_info_file"
+          cat "$deployment_info_file"
+          deployment_url="$(node -e 'const fs = require(\"node:fs\"); const data = JSON.parse(fs.readFileSync(process.argv[1], \"utf8\")); const url = typeof data.url === \"string\" ? data.url : \"\"; if (!url) { process.exit(1); } process.stdout.write(url.startsWith(\"http\") ? url : `https://${url}`);' "$deployment_info_file")"
           echo "deployment_url=$deployment_url" >> "$GITHUB_OUTPUT"
           echo "preview_url=${deployment_url}/biztracker" >> "$GITHUB_OUTPUT"
 
@@ -131,8 +145,26 @@ jobs:
       - name: Run typecheck
         run: npm run typecheck
 
+      - name: Validate Vercel production access
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx tsx scripts/check-vercel-access.ts --token-env VERCEL_TOKEN
+
       - name: Pull Vercel production environment
-        run: npx vercel pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
+        run: |
+          for attempt in 1 2 3; do
+            if npx vercel pull --yes --environment=production --non-interactive --token="${{ secrets.VERCEL_TOKEN }}"; then
+              break
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "Vercel production pull failed after 3 attempts. Confirm VERCEL_TOKEN is a current classic PAT with access to microflowops-biztracker and that VERCEL_ORG_ID / VERCEL_PROJECT_ID still match the project."
+              exit 1
+            fi
+
+            echo "Vercel production pull failed on attempt $attempt. Retrying in 15 seconds..."
+            sleep 15
+          done
 
       - name: Apply production database migrations
         run: |
@@ -155,17 +187,13 @@ jobs:
       - name: Verify production reconciliation state
         run: npx tsx scripts/verify-biztracker-reconciliation.ts --env-file .vercel/.env.production.local --target production
 
-      - name: Build production deployment
-        run: |
-          set -a
-          source .vercel/.env.production.local
-          set +a
-          npx vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
-
       - name: Deploy production
         id: deploy
         run: |
-          deployment_url="$(npx vercel deploy --prebuilt --prod --token="${{ secrets.VERCEL_TOKEN }}")"
+          deployment_info_file="$(mktemp)"
+          npx vercel deploy --prod --yes --format=json --non-interactive --token="${{ secrets.VERCEL_TOKEN }}" > "$deployment_info_file"
+          cat "$deployment_info_file"
+          deployment_url="$(node -e 'const fs = require(\"node:fs\"); const data = JSON.parse(fs.readFileSync(process.argv[1], \"utf8\")); const url = typeof data.url === \"string\" ? data.url : \"\"; if (!url) { process.exit(1); } process.stdout.write(url.startsWith(\"http\") ? url : `https://${url}`);' "$deployment_info_file")"
           echo "deployment_url=$deployment_url" >> "$GITHUB_OUTPUT"
 
       - name: Write production summary

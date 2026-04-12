@@ -40,6 +40,9 @@
 - `scripts/reconciliation-env.ts`: env-file loading and production-target safety checks for reconciliation scripts
 - `scripts/reconcile-production-data.ts`: one-shot production reconciliation runner that migrates, restores missing curated records, runs the thesis cleanup/backfill, and verifies the result
 - `scripts/verify-biztracker-reconciliation.ts`: lightweight DB verification for expected counts, benchmark presence, archive status, and thesis-field coverage
+- `scripts/check-vercel-access.ts`: validates GitHub Actions Vercel credentials and prints an actionable failure when token/project config drifts
+- `scripts/manual-production-deploy.ts`: repo-native manual production deploy fallback that pulls env, runs migrations, verifies reconciliation state, deploys directly through Vercel, and smoke-checks the live URLs
+- `scripts/vercel-deploy.lib.ts`: small shared helpers for Vercel CLI command execution and JSON output parsing
 - `src/lib/prisma.ts`: Prisma client singleton with Pg adapter
 - `src/lib/site.ts`: base-path and site URL helpers for local vs production hosting
 - `src/generated/prisma/*`: generated Prisma client output
@@ -62,7 +65,9 @@
 14. The thesis backfill runner now also upserts the 2026-04-11 high-value public listing batch by `sourceUrl`, refreshing full listing facts, skeptical assessment text, deal status, and matching history rows for those managed records.
 15. `scripts/reconcile-production-data.ts` is the safe production repair path when schema/code is live but the Neon database still lacks the baseline curated records, thesis cleanup pass, or the managed high-value listing batch.
 16. `scripts/verify-biztracker-reconciliation.ts` provides the same production data assertions for manual use and for the GitHub Actions production deploy job.
-17. In production, `microflowops.com/biztracker` requests are rewritten by `C:\dev\OSHA_Leads\web\next.config.mjs` to the standalone BizTracker Vercel deployment, which serves the app with `NEXT_PUBLIC_BASE_PATH=/biztracker`.
+17. `.github/workflows/vercel-deploy.yml` now validates Vercel access explicitly, retries `vercel pull`, and deploys directly with `vercel deploy --format=json` instead of relying on a separate prebuilt artifact step.
+18. `scripts/manual-production-deploy.ts` mirrors that safer direct-deploy path for local fallback use, then smoke-checks the standalone alias, public path, and workbook export.
+19. In production, `microflowops.com/biztracker` requests are rewritten by `C:\dev\OSHA_Leads\web\next.config.mjs` to the standalone BizTracker Vercel deployment, which serves the app with `NEXT_PUBLIC_BASE_PATH=/biztracker`.
 
 ## Database Model Summary
 - `Business`: primary acquisition record with financials, qualitative assessment, legacy ratings, acquisition-thesis fields, manual diligence notes, score, status, tags, and timestamps
@@ -83,3 +88,4 @@
 - Production database: Neon Postgres connected through Vercel-managed environment variables
 - Public path routing depends on the external MicroFlowOps host repo at `C:\dev\OSHA_Leads\web`
 - Git-based deploy automation is handled in-repo through `.github/workflows/vercel-deploy.yml` using GitHub secrets/variables rather than Vercel's native repo connection
+- Local manual production fallback is `npm run deploy:production:manual`, which intentionally avoids the brittle local `vercel build --prod` path and smoke-checks the live URLs after deploy

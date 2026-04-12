@@ -1,71 +1,51 @@
 # SESSION_HANDOFF
 
 ## What Changed
-- Added `scripts/high-value-listings-2026-04-11.data.ts` with 14 repo-managed public listing records for the serious candidates discussed on 2026-04-11.
-- Added `scripts/high-value-listings-2026-04-11.lib.ts` with source-url upsert logic that refreshes full listing facts, notes, tags, deal status, and history rows instead of only creating missing records.
-- Wired the high-value batch into `scripts/backfill-acquisition-thesis.lib.ts`, so `npx tsx scripts/backfill-acquisition-thesis.ts` now does all of the following in one pass:
-  - keeps the April 7 low-fit archive set applied
-  - creates any missing April 7 public listings
-  - backfills thesis fields for the older managed set
-  - upserts the 2026-04-11 high-value listing batch by `sourceUrl`
-- Removed `Chimney Cleaning and Repair Service - by Doug Jackson` from the older April 7 archive list because it is now intentionally tracked as an active high-value comparison candidate.
-- Removed `Profitable Residential Pest Control Company` from the older thesis-only `existingBackfills` map so it does not fight the new 2026-04-11 managed source-url upsert on reruns.
-- Updated `scripts/verify-biztracker-reconciliation.ts` to require the new high-value batch and to expect at least `42 active / 7 passed` instead of the old `30 active / 8 passed` floor.
-- Added `tests/high-value-listings-batch.test.ts` to enforce:
-  - 14 managed high-value seeds
-  - unique `sourceUrl` values
-  - `RESEARCHING` status for the batch
-  - the required notes house style with `Observed:`, `Inference:`, `Missing:`, and `Backfill analysis (2026-04-11)`
-- Updated `CONTEXT.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `TASKS.md`, and `CHANGELOG.md` to reflect the new managed upsert batch and workflow.
+- Hardened `.github/workflows/vercel-deploy.yml` so preview and production deploys now:
+  - run `scripts/check-vercel-access.ts` before the first Vercel CLI call
+  - retry `vercel pull` up to three times with a clear token/project remediation message
+  - deploy directly with `vercel deploy --format=json` instead of relying on a separate `vercel build` + `--prebuilt` path
+- Added `scripts/check-vercel-access.ts` to verify `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` and to fail with an explicit rotation message when auth drifts.
+- Added `scripts/manual-production-deploy.ts` as the repo-native fallback for production deploys. It:
+  - pulls the production env
+  - confirms the linked Vercel project and production DB target
+  - runs `prisma migrate deploy`
+  - verifies reconciliation state before deploy
+  - deploys directly to production
+  - smoke-checks the returned deployment URL, the standalone alias, the public `/biztracker` path, and the workbook export
+- Added `scripts/vercel-deploy.lib.ts` for the shared Vercel CLI helpers and `tests/vercel-deploy-lib.test.ts` for JSON/url parsing coverage.
+- Updated `AGENTS.md`, `CONTEXT.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `TASKS.md`, `CHANGELOG.md`, and `DEPLOYMENT.md` to reflect the new deploy hardening and fallback workflow.
+- Added package scripts:
+  - `npm run check:vercel-access`
+  - `npm run deploy:production:manual`
+- Updated `reconcile:production` and `verify:production-data` to use `vercel pull --non-interactive`.
 
-## Development DB State
-- Local Docker/Postgres was not available in this session because `npm run db:start` failed with Docker Desktop not running.
-- The new batch was applied against the development database from `.env.local` by exporting that `DATABASE_URL` and running `npx tsx scripts/backfill-acquisition-thesis.ts`.
-- The 2026-04-11 upsert summary against the dev DB was:
-  - `12` created high-value listings
-  - `2` updated high-value listings
-  - Updated records:
-    - `Chimney Cleaning and Repair Service - by Doug Jackson`
-    - `Profitable Residential Pest Control Company`
-- Dev DB verification after the upsert passed with:
-  - Total businesses: `50`
-  - Active businesses: `43`
-  - Passed businesses: `7`
-- A second rerun of `npx tsx scripts/backfill-acquisition-thesis.ts` against the same dev DB was idempotent for the 2026-04-11 batch:
-  - `0` created high-value listings
-  - `0` updated high-value listings
-- The development verifier also confirmed:
-  - no missing required high-value businesses
-  - no archive names still active
-  - full thesis-field coverage across all active businesses
+## Current State
+- Production data was already live from the prior session at `50 total / 43 active / 7 passed`, and the public app/export were previously smoke-checked successfully.
+- This session focused on cleanup and recurrence prevention for the deployment issues, not on changing business data.
+- The repo now has one documented manual production deploy path that matches the working in-session fallback and avoids the failed local Windows `vercel build --prod` path.
 
 ## What Is Unfinished
-- Production has not been reconciled with the new 2026-04-11 batch yet in this session.
-- There is still no Prisma-backed integration smoke test for the full workbook export/import and backfill path against a disposable database.
-- Public listing refresh remains CLI-driven; there is still no in-app source-url ingestion or refresh workflow.
-- There is still no auth or multi-user support.
+- The hardened deploy workflow has only been validated locally with repo checks in this session; it has not yet been pushed to GitHub or exercised in GitHub Actions.
+- The repo still cannot rotate `VERCEL_TOKEN` automatically. If GitHub Actions auth fails again, someone must create a fresh classic Vercel personal token in the Vercel account UI and update the GitHub secret.
+- There is still no real-database integration smoke test for workbook export/import plus thesis backfill together.
 
 ## What Should Be Worked On Next
-- Run `npm run reconcile:production` when ready so the live Neon database and public app pick up the 2026-04-11 high-value listing batch too.
-- After production reconciliation, sanity-check the live workbook export at `https://microflowops.com/biztracker/exports/businesses` for the new active-count and required names.
-- Add a real-database integration smoke test that exercises workbook export/import plus the thesis/high-value backfill path together.
+- Push this deploy-hardening patch and watch the next GitHub Actions `Vercel Deploy` run to confirm the new auth check, pull retry, and direct deploy path behave correctly.
+- If that run still fails at Vercel auth, rotate `VERCEL_TOKEN` in `cchevali/BizTracker` with a fresh classic Vercel personal token from `https://vercel.com/account/tokens`.
+- Add a disposable-database integration smoke test for workbook export/import plus the thesis/high-value backfill path.
 
 ## Risks Or Bugs
-- Production is currently behind the repo/dev-db data state until `npm run reconcile:production` is run.
-- `npm run db:start` could not be used here because Docker Desktop was not running on this machine.
-- The public listing refresh path is now intentionally repo-managed for the 2026-04-11 batch; if those canonical notes or scores need to change later, update the batch data file and rerun the backfill rather than hand-editing rows.
-- Public hosting at `microflowops.com/biztracker` still depends on the external host rewrite in `C:\dev\OSHA_Leads\web\next.config.mjs`.
-- Workbook export still mirrors live database contents plus the active-pipeline default, so production will not show the new records until the production reconciliation step happens.
+- `scripts/manual-production-deploy.ts` intentionally hits real production URLs for smoke checks. Use `--skip-smoke-checks` only if you already have separate live verification coverage.
+- The manual deploy fallback assumes the local `.vercel` link still targets `microflowops-biztracker`; the script checks this and will fail loudly if the local link drifts.
+- GitHub Actions still depends on external repo secrets/variables. The new auth check makes drift obvious, but it cannot repair the secret automatically.
 
 ## Verification
-- Passed locally in repo code:
-  - `npm run typecheck`
+- Passed:
   - `npm test`
   - `npm run lint`
+  - `npm run typecheck`
   - `npm run build`
-- Passed against the development database from `.env.local`:
-  - `npx tsx scripts/backfill-acquisition-thesis.ts` with `DATABASE_URL` set from `.env.local`
-  - A second idempotence rerun of `npx tsx scripts/backfill-acquisition-thesis.ts` with the same `.env.local` `DATABASE_URL`
-  - `npx tsx scripts/verify-biztracker-reconciliation.ts --env-file .env.local`
-- Failed locally due environment, not code:
-  - `npm run db:start` because Docker Desktop was not running
+- Not run in this session:
+  - `npm run deploy:production:manual` (would perform a real production deploy)
+  - GitHub Actions `Vercel Deploy` after the workflow edits

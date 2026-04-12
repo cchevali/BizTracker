@@ -42,3 +42,5 @@
 - Added 14 serious public listing candidates to the managed thesis set, including full skeptical assessment text, tags, taxonomy, and acquisition-screening fields.
 - Removed the Doug Jackson chimney listing from the April 7 archive set and moved the Harrisburg residential pest listing out of the older thesis-only backfill map so the new managed upsert batch can own those records cleanly.
 - Extended the thesis backfill runner and reconciliation verifier to expect the new batch, and added a test that enforces unique source URLs plus the required notes house style for the 2026-04-11 managed listings.
+- Hardened the Vercel deploy workflow with explicit token/project validation, retryable `vercel pull`, and direct `vercel deploy --format=json` deploys instead of the separate prebuilt path.
+- Added `scripts/check-vercel-access.ts`, `scripts/manual-production-deploy.ts`, and `scripts/vercel-deploy.lib.ts` so future sessions have a repo-native way to diagnose Vercel auth drift and run the working manual production deploy sequence with smoke checks.

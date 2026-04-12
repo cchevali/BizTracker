@@ -58,6 +58,8 @@ Then read the feature-specific files you will touch.
 - `npm run lint`
 - `npm run typecheck`
 - `npm run build`
+- `npm run check:vercel-access`
+- `npm run deploy:production:manual`
 - `npm run import:listings -- <input-json-path>`
 - `npm run reconcile:production`
 - `npm run normalize:listings -- <input-json-path> [output-json-path]`
@@ -83,3 +85,4 @@ Then read the feature-specific files you will touch.
 - If production data appears out of sync with the live schema/UI, use `npm run verify:production-data` first, then `npm run reconcile:production` against the pulled Vercel production env rather than editing rows manually.
 - If the task affects public hosting, also inspect `next.config.ts`, `src/lib/site.ts`, and the external host rewrite in `C:\dev\OSHA_Leads\web\next.config.mjs`.
 - If the task affects release automation, also inspect `DEPLOYMENT.md` and `.github/workflows/vercel-deploy.yml`.
+- If GitHub Actions deploy auth fails, verify `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` first; the repo now has `npm run check:vercel-access` for that check and `npm run deploy:production:manual` for the documented direct-deploy fallback.

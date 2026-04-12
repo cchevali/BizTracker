@@ -94,3 +94,8 @@ Consequences: `npm run reconcile:production` now restores missing curated record
 Decision: Treat the 2026-04-11 high-value public listing batch as repo-managed tracker data that upserts full records by `sourceUrl` instead of only creating missing rows or backfilling thesis-only fields.
 Reason: These public listings are now part of the tracked thesis set, and some of them already existed with weaker notes or outdated status, so create-only behavior would either duplicate them or leave stale assessments in place.
 Consequences: `scripts/backfill-acquisition-thesis.ts` now refreshes the managed high-value batch with canonical listing facts, skeptical notes, `RESEARCHING` status, and matching history rows, while unrelated manual note entries and non-managed records remain untouched.
+
+## 2026-04-11
+Decision: Harden Vercel deploy automation around explicit auth validation, retryable environment pulls, and direct `vercel deploy` calls instead of relying on a separate local `vercel build --prebuilt` path.
+Reason: The session exposed two operational weak points: GitHub Actions failures at the Vercel auth/pull step were too opaque, and the local Windows fallback using `vercel build --prod` failed even though a direct `vercel --prod --yes` deploy succeeded.
+Consequences: `.github/workflows/vercel-deploy.yml` now validates Vercel credentials before pull, retries `vercel pull`, and deploys directly from Vercel CLI JSON output, while `scripts/manual-production-deploy.ts` becomes the documented fallback path with smoke checks for the standalone alias, public path, and export route.

@@ -22,6 +22,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Thesis cleanup/backfill CLI that archives low-fit deals, adds discussed public listings, and backfills active businesses
 - High-value public listing upsert batch keyed by `sourceUrl` for serious 2026-04-11 candidates, including full listing facts, skeptical assessment text, and history coherence
 - Production-safe reconciliation and verification scripts that compare the live Neon database against the expected thesis-cleanup state
+- Repo-native Vercel access validation and a manual production deploy script with smoke checks for the standalone app, public path, and workbook export
 - Realistic seed data
 - Production deployment on Vercel with Neon Postgres and a `/biztracker` base path
 - GitHub Actions-based auto-deploys for preview and production Vercel releases
@@ -52,5 +53,6 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - No direct marketplace ingestion or comparison workflow yet beyond exporting tracker data for ChatGPT
 - Global search is simple field matching, not full-text indexing
 - Thesis backfill judgments are intentionally manual and skeptical; they are reproducible through the CLI script, but they are not derived automatically from listing text
-- Production drift can still happen if the database is migrated/deployed without running the reconciliation command; the new verification script detects that state, but it does not auto-heal it inside the deploy job
+- Production drift can still happen if the database is migrated/deployed without running the reconciliation command; the verification script detects that state, but it does not auto-heal it inside the deploy job
 - Direct Vercel GitHub-app repo connection is still unavailable; deploy automation currently uses GitHub Actions plus a Vercel token instead
+- Vercel token rotation is still a manual ops step outside the repo; the new access check makes failures explicit, but it cannot mint or rotate the token for you
