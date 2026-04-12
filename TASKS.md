@@ -33,6 +33,7 @@
 - None
 
 ## Next Recommended Tasks
+- Rotate the GitHub repo `VERCEL_TOKEN` now that the 2026-04-12 production run failed early with `The token provided via --token argument is not valid`
 - Add a Prisma-backed integration smoke test for workbook export/import and the thesis backfill script against a real test database
 - Consider a scheduled or manually dispatchable GitHub workflow that runs the production reconciliation verifier without requiring a code push
 - Add explicit bulk archive/revive actions in the UI now that the active pipeline intentionally hides `Passed` deals by default
@@ -42,4 +43,3 @@
 - Add authentication if this ever becomes shared across users
 - Consider Postgres full-text search if global search becomes a bottleneck
 - Optionally add pull-request comments or deployment-status reporting if preview URLs need to surface directly in GitHub discussions
-- If GitHub Actions deploy auth fails again, rotate the repo `VERCEL_TOKEN` with a fresh classic Vercel personal token; the repo can now validate the failure clearly, but it still cannot self-rotate the secret

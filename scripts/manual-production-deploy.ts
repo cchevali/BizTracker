@@ -47,12 +47,8 @@ function parseArgs(argv: string[]) {
   };
 }
 
-function getSmokeCheckTargets(deploymentUrl: string): SmokeCheckTarget[] {
+function getSmokeCheckTargets(): SmokeCheckTarget[] {
   return [
-    {
-      label: "Deployment URL",
-      url: `${deploymentUrl}/biztracker`,
-    },
     {
       label: "Standalone alias",
       url: `${STANDALONE_ALIAS_URL}/biztracker`,
@@ -102,14 +98,14 @@ async function runSmokeCheck(target: SmokeCheckTarget) {
   };
 }
 
-async function runSmokeChecks(deploymentUrl: string) {
+async function runSmokeChecks() {
   const results: Array<{
     label: string;
     status: number;
     url: string;
   }> = [];
 
-  for (const target of getSmokeCheckTargets(deploymentUrl)) {
+  for (const target of getSmokeCheckTargets()) {
     let lastError: Error | null = null;
 
     for (let attempt = 1; attempt <= 5; attempt += 1) {
@@ -237,7 +233,7 @@ async function main() {
 
   const smokeChecks = skipSmokeChecks
     ? []
-    : await runSmokeChecks(deploymentUrl);
+    : await runSmokeChecks();
 
   console.log(
     JSON.stringify(

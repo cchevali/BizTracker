@@ -25,6 +25,18 @@ describe("vercel deploy helpers", () => {
     ).toBe("https://microflowops-biztracker.vercel.app");
   });
 
+  it("parses deploy output that includes non-json status lines", () => {
+    expect(
+      parseVercelDeployOutput(
+        [
+          "Retrieving project...",
+          "Deploying",
+          JSON.stringify({ url: "microflowops-biztracker-git-main.vercel.app" }),
+        ].join("\n"),
+      ),
+    ).toBe("https://microflowops-biztracker-git-main.vercel.app");
+  });
+
   it("parses whoami json output and keeps rotation guidance actionable", () => {
     expect(
       parseVercelWhoAmIOutput(JSON.stringify({ username: "cchevali" })),

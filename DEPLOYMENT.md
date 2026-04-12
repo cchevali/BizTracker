@@ -71,6 +71,7 @@ That command:
 Use `npm run deploy:production:manual -- --skip-smoke-checks` only if you already have separate smoke coverage and need the fastest possible fallback.
 
 Avoid using a local `vercel build --prod` + `vercel deploy --prebuilt` fallback on this Windows workstation; that path failed in-session with `Unable to find lambda for route: /businesses/new`, while the direct deploy path succeeded.
+Also avoid treating the raw per-deployment Vercel URL as a required smoke target; this project can return `401` there even when the production alias and public app are healthy.
 
 ## Production Data Reconciliation
 When the live schema/UI is deployed but the Neon production data is missing the expected BizTracker records or thesis cleanup pass:

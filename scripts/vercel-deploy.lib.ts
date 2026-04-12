@@ -1,7 +1,7 @@
 import { execFileSync, spawnSync, type SpawnSyncOptions } from "node:child_process";
 
 export function getRunnerBinary(binary: "npm" | "npx") {
-  return process.platform === "win32" ? `${binary}.cmd` : binary;
+  return binary;
 }
 
 export function buildVercelArgs(command: string[], token?: string) {
@@ -21,13 +21,35 @@ export function normalizeVercelUrl(url: string) {
 }
 
 export function parseVercelDeployOutput(rawOutput: string) {
-  const parsed = JSON.parse(rawOutput) as { url?: unknown };
+  const trimmedOutput = rawOutput.trim();
 
-  if (typeof parsed.url !== "string" || parsed.url.trim().length === 0) {
-    throw new Error("Vercel deploy output did not include a deployment URL.");
+  const candidateJsonLines = trimmedOutput
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("{") && line.endsWith("}"))
+    .reverse();
+
+  for (const candidate of [trimmedOutput, ...candidateJsonLines]) {
+    try {
+      const parsed = JSON.parse(candidate) as { url?: unknown };
+
+      if (typeof parsed.url === "string" && parsed.url.trim().length > 0) {
+        return normalizeVercelUrl(parsed.url.trim());
+      }
+    } catch {
+      // Fall through to the next candidate.
+    }
   }
 
-  return normalizeVercelUrl(parsed.url.trim());
+  const urlMatch = trimmedOutput.match(
+    /(https?:\/\/[^\s"]+\.vercel\.app|[a-z0-9-]+\.vercel\.app)/i,
+  );
+
+  if (urlMatch) {
+    return normalizeVercelUrl(urlMatch[1]);
+  }
+
+  throw new Error("Vercel deploy output did not include a deployment URL.");
 }
 
 export function parseVercelWhoAmIOutput(rawOutput: string) {
@@ -60,6 +82,7 @@ export function runCommand(
 ) {
   execFileSync(command, args, {
     stdio: "inherit",
+    shell: process.platform === "win32",
     ...options,
   });
 
@@ -74,6 +97,7 @@ export function runCommandCapture(
 ) {
   const result = spawnSync(command, args, {
     encoding: "utf8",
+    shell: process.platform === "win32",
     stdio: "pipe",
     ...options,
   });

@@ -41,7 +41,7 @@
 - `scripts/reconcile-production-data.ts`: one-shot production reconciliation runner that migrates, restores missing curated records, runs the thesis cleanup/backfill, and verifies the result
 - `scripts/verify-biztracker-reconciliation.ts`: lightweight DB verification for expected counts, benchmark presence, archive status, and thesis-field coverage
 - `scripts/check-vercel-access.ts`: validates GitHub Actions Vercel credentials and prints an actionable failure when token/project config drifts
-- `scripts/manual-production-deploy.ts`: repo-native manual production deploy fallback that pulls env, runs migrations, verifies reconciliation state, deploys directly through Vercel, and smoke-checks the live URLs
+- `scripts/manual-production-deploy.ts`: repo-native manual production deploy fallback that pulls env, runs migrations, verifies reconciliation state, deploys directly through Vercel, and smoke-checks the standalone alias, public path, and workbook export
 - `scripts/vercel-deploy.lib.ts`: small shared helpers for Vercel CLI command execution and JSON output parsing
 - `src/lib/prisma.ts`: Prisma client singleton with Pg adapter
 - `src/lib/site.ts`: base-path and site URL helpers for local vs production hosting
@@ -66,7 +66,7 @@
 15. `scripts/reconcile-production-data.ts` is the safe production repair path when schema/code is live but the Neon database still lacks the baseline curated records, thesis cleanup pass, or the managed high-value listing batch.
 16. `scripts/verify-biztracker-reconciliation.ts` provides the same production data assertions for manual use and for the GitHub Actions production deploy job.
 17. `.github/workflows/vercel-deploy.yml` now validates Vercel access explicitly, retries `vercel pull`, and deploys directly with `vercel deploy --format=json` instead of relying on a separate prebuilt artifact step.
-18. `scripts/manual-production-deploy.ts` mirrors that safer direct-deploy path for local fallback use, then smoke-checks the standalone alias, public path, and workbook export.
+18. `scripts/manual-production-deploy.ts` mirrors that safer direct-deploy path for local fallback use, then smoke-checks the stable public URLs instead of the raw deployment URL.
 19. In production, `microflowops.com/biztracker` requests are rewritten by `C:\dev\OSHA_Leads\web\next.config.mjs` to the standalone BizTracker Vercel deployment, which serves the app with `NEXT_PUBLIC_BASE_PATH=/biztracker`.
 
 ## Database Model Summary

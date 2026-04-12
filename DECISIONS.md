@@ -99,3 +99,8 @@ Consequences: `scripts/backfill-acquisition-thesis.ts` now refreshes the managed
 Decision: Harden Vercel deploy automation around explicit auth validation, retryable environment pulls, and direct `vercel deploy` calls instead of relying on a separate local `vercel build --prebuilt` path.
 Reason: The session exposed two operational weak points: GitHub Actions failures at the Vercel auth/pull step were too opaque, and the local Windows fallback using `vercel build --prod` failed even though a direct `vercel --prod --yes` deploy succeeded.
 Consequences: `.github/workflows/vercel-deploy.yml` now validates Vercel credentials before pull, retries `vercel pull`, and deploys directly from Vercel CLI JSON output, while `scripts/manual-production-deploy.ts` becomes the documented fallback path with smoke checks for the standalone alias, public path, and export route.
+
+## 2026-04-12
+Decision: Treat the stable public production URLs as the required smoke targets for manual production deploys instead of the raw per-deployment Vercel URL.
+Reason: The 2026-04-12 manual production deploy produced a valid deployment and healthy public alias/export responses, but the raw deployment URL returned `401`, which made it a poor health signal for this project.
+Consequences: `scripts/manual-production-deploy.ts` now verifies the standalone alias, public `/biztracker` path, and workbook export only, while still logging the deployment URL for operator reference.
