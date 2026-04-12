@@ -63,7 +63,7 @@ If GitHub Actions is unavailable or the token needs rotation later, the repo-nat
 That command:
 - pulls the production env locally
 - confirms the linked Vercel project and production database target
-- runs `npx prisma migrate deploy`
+- runs `npx prisma migrate deploy` with the same transient advisory-lock retry behavior used in GitHub Actions
 - verifies the expected production reconciliation state before deploying
 - deploys directly with `vercel --prod --yes`
 - smoke-checks the standalone alias, public `/biztracker` path, and workbook export

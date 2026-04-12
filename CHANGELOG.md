@@ -45,3 +45,4 @@
 - Hardened the Vercel deploy workflow with explicit token/project validation, retryable `vercel pull`, and direct `vercel deploy --format=json` deploys instead of the separate prebuilt path.
 - Added `scripts/check-vercel-access.ts`, `scripts/manual-production-deploy.ts`, and `scripts/vercel-deploy.lib.ts` so future sessions have a repo-native way to diagnose Vercel auth drift and run the working manual production deploy sequence with smoke checks.
 - Fixed the repo-native manual production deploy helper on Windows by switching its command runner away from direct `*.cmd` spawning, made Vercel deploy output parsing tolerant of mixed status/json output, and limited smoke checks to the stable public URLs because the raw deployment URL can return `401` even after a healthy production deploy.
+- Added the same transient Prisma advisory-lock retry behavior to the manual production deploy fallback after a live Neon lock timeout interrupted the first retry-free run.

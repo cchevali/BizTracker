@@ -167,6 +167,32 @@ async function pullProductionEnvironment(token?: string) {
   }
 }
 
+async function runPrismaMigrateDeployWithRetry() {
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      runCommand(
+        "prisma-migrate-deploy",
+        getRunnerBinary("npx"),
+        ["prisma", "migrate", "deploy"],
+        {
+          env: process.env,
+        },
+      );
+
+      return;
+    } catch (error) {
+      if (attempt === 3) {
+        throw error;
+      }
+
+      console.log(
+        `Prisma migrate deploy failed on attempt ${attempt}. Waiting 15 seconds before retrying...`,
+      );
+      await sleep(15_000);
+    }
+  }
+}
+
 async function main() {
   const { skipSmokeChecks } = parseArgs(process.argv.slice(2));
   const token = resolveOptionalToken();
@@ -191,14 +217,7 @@ async function main() {
 
   process.env.DATABASE_URL = databaseUrl;
 
-  runCommand(
-    "prisma-migrate-deploy",
-    getRunnerBinary("npx"),
-    ["prisma", "migrate", "deploy"],
-    {
-      env: process.env,
-    },
-  );
+  await runPrismaMigrateDeployWithRetry();
 
   const verificationResult = await verifyBizTrackerReconciliation({
     databaseUrl,

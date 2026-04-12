@@ -10,6 +10,7 @@
 - Found and fixed two real issues in that fallback path:
   - Windows command execution was too brittle when spawning `npx.cmd` directly from Node.
   - `vercel deploy --format=json` output could include non-JSON status lines before the JSON payload.
+- Added retry handling to the manual fallback's `prisma migrate deploy` step after a live Neon advisory-lock timeout interrupted the first retry-free run.
 - Tightened the fallback smoke checks so they verify only the stable public targets:
   - `https://microflowops-biztracker.vercel.app/biztracker`
   - `https://microflowops.com/biztracker`
