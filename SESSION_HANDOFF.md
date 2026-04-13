@@ -60,10 +60,17 @@
   - all 5 new researched listings present with `RESEARCHING` status
 
 ## Git / Push State
-- Changes are ready locally but were **not pushed yet** in this session.
-- The repo remote is still:
+- Committed and pushed to `origin/main`:
+  - commit: `49ff5480d0afe91ba17adaf205f0cf98742de276`
+  - message: `Add researched listing batch and reconcile production`
+- The push triggered GitHub Actions run `24321748636`.
+- That workflow failed in the same known place:
+  - job: `production`
+  - failed step: `Validate Vercel production access`
+  - exact failure: `The token provided via --token argument is not valid. Please provide a valid token.`
+- The repo remote remains:
   - `origin https://github.com/cchevali/BizTracker.git`
-- GitHub Actions production deploys are still expected to fail until the repo secret `VERCEL_TOKEN` is rotated, even though the local manual production path works.
+- Production is already healthy because the local manual reconcile + manual deploy path completed successfully in this session, even though GitHub-hosted deploy automation is still blocked by the bad repo secret.
 
 ## What Should Be Worked On Next
 - Commit the current worktree and push it to `origin/main`.
