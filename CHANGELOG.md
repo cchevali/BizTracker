@@ -46,3 +46,10 @@
 - Added `scripts/check-vercel-access.ts`, `scripts/manual-production-deploy.ts`, and `scripts/vercel-deploy.lib.ts` so future sessions have a repo-native way to diagnose Vercel auth drift and run the working manual production deploy sequence with smoke checks.
 - Fixed the repo-native manual production deploy helper on Windows by switching its command runner away from direct `*.cmd` spawning, made Vercel deploy output parsing tolerant of mixed status/json output, and limited smoke checks to the stable public URLs because the raw deployment URL can return `401` even after a healthy production deploy.
 - Added the same transient Prisma advisory-lock retry behavior to the manual production deploy fallback after a live Neon lock timeout interrupted the first retry-free run.
+
+## 2026-04-12
+- Added `scripts/researched-listings-2026-04-12.data.ts` and `scripts/researched-listings-2026-04-12.lib.ts` for a second repo-managed public listing batch covering five researched additions.
+- Added first-pass underwriting, benchmark notes, skeptical analysis text, and follow-up diligence questions for Buffalo FedEx Ground Routes, Ann Arbor Area Construction Business, the Pittsburgh multi-unit auto paint business, the White Bear Lake healthcare staffing agency, and the Raleigh AI-enhanced wellness listing.
+- Wired the new researched batch into `scripts/backfill-acquisition-thesis.ts` and `scripts/verify-biztracker-reconciliation.ts` so reconciliation now expects and recreates those listings alongside the earlier 2026-04-11 managed batch.
+- Added test coverage for the 2026-04-12 researched batch, including required notes house style and cross-batch source URL and business-name uniqueness.
+- Verified the new researched batch locally against a Docker-backed disposable Postgres database via the focused upsert path, then reconciled and manually redeployed production so the live workbook export now returns `48` active businesses including all five additions.

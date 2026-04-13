@@ -12,6 +12,7 @@ import {
 import {
   upsertHighValueListingBatch,
 } from "./high-value-listings-2026-04-11.lib";
+import { upsertResearchedListingBatch } from "./researched-listings-2026-04-12.lib";
 
 const backfillFieldNames = [
   "sourceUrl",
@@ -54,6 +55,8 @@ export type AcquisitionThesisBackfillSummary = {
   newListingUpdatedCount: number;
   highValueCreatedNames: string[];
   highValueUpdatedNames: string[];
+  researchedCreatedNames: string[];
+  researchedUpdatedNames: string[];
 };
 
 function buildAnalysisBlock(spec: BackfillSpec["analysis"]) {
@@ -360,6 +363,7 @@ export async function runAcquisitionThesisBackfill(
   const existingUpdatedCount = await backfillExistingBusinesses(prisma);
   const newListingUpdatedCount = await backfillNewListings(prisma);
   const highValueSummary = await upsertHighValueListingBatch(prisma);
+  const researchedSummary = await upsertResearchedListingBatch(prisma);
 
   return {
     archivedNames,
@@ -368,6 +372,8 @@ export async function runAcquisitionThesisBackfill(
     newListingUpdatedCount,
     highValueCreatedNames: highValueSummary.createdNames,
     highValueUpdatedNames: highValueSummary.updatedNames,
+    researchedCreatedNames: researchedSummary.createdNames,
+    researchedUpdatedNames: researchedSummary.updatedNames,
   };
 }
 
@@ -383,6 +389,12 @@ export function printAcquisitionThesisBackfillSummary(
   );
   console.log(
     `Updated 2026-04-11 high-value listings: ${summary.highValueUpdatedNames.length}`,
+  );
+  console.log(
+    `Created 2026-04-12 researched listings: ${summary.researchedCreatedNames.length}`,
+  );
+  console.log(
+    `Updated 2026-04-12 researched listings: ${summary.researchedUpdatedNames.length}`,
   );
 
   if (summary.archivedNames.length > 0) {
@@ -409,6 +421,20 @@ export function printAcquisitionThesisBackfillSummary(
   if (summary.highValueUpdatedNames.length > 0) {
     console.log("Updated high-value listings:");
     for (const businessName of summary.highValueUpdatedNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.researchedCreatedNames.length > 0) {
+    console.log("Created researched listings:");
+    for (const businessName of summary.researchedCreatedNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.researchedUpdatedNames.length > 0) {
+    console.log("Updated researched listings:");
+    for (const businessName of summary.researchedUpdatedNames) {
       console.log(`- ${businessName}`);
     }
   }

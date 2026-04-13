@@ -20,7 +20,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Create and edit forms with validation
 - Default active pipeline behavior that excludes `Passed` deals unless the filter explicitly asks for them
 - Thesis cleanup/backfill CLI that archives low-fit deals, adds discussed public listings, and backfills active businesses
-- High-value public listing upsert batch keyed by `sourceUrl` for serious 2026-04-11 candidates, including full listing facts, skeptical assessment text, and history coherence
+- Repo-managed public listing upsert batches keyed by `sourceUrl` for the serious 2026-04-11 candidates and the 2026-04-12 researched additions, including full listing facts, skeptical assessment text, and history coherence
 - Production-safe reconciliation and verification scripts that compare the live Neon database against the expected thesis-cleanup state
 - Repo-native Vercel access validation and a manual production deploy script with smoke checks for the standalone app, public path, and workbook export
 - Realistic seed data

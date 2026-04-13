@@ -104,3 +104,8 @@ Consequences: `.github/workflows/vercel-deploy.yml` now validates Vercel credent
 Decision: Treat the stable public production URLs as the required smoke targets for manual production deploys instead of the raw per-deployment Vercel URL.
 Reason: The 2026-04-12 manual production deploy produced a valid deployment and healthy public alias/export responses, but the raw deployment URL returned `401`, which made it a poor health signal for this project.
 Consequences: `scripts/manual-production-deploy.ts` now verifies the standalone alias, public `/biztracker` path, and workbook export only, while still logging the deployment URL for operator reference.
+
+## 2026-04-12
+Decision: Add the 2026-04-12 researched public listings as a second repo-managed `sourceUrl` upsert batch instead of importing them ad hoc or editing the database manually.
+Reason: These five additions need the same reproducible first-pass underwriting, dedupe protection, and reconciliation behavior as the earlier managed listing batch, while still preserving skeptical notes and nulls for undisclosed facts like the Pittsburgh listing's missing SDE.
+Consequences: `scripts/backfill-acquisition-thesis.ts` now owns both managed public listing batches, verification expects the new researched records to exist after reconciliation, and future refreshes for these exact listings should update the batch files rather than patch rows manually.
