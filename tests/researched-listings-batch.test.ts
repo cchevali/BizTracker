@@ -5,6 +5,8 @@ import {
   researchedListingSeeds,
 } from "../scripts/researched-listings-2026-04-12.data";
 import { highValueListingSeeds } from "../scripts/high-value-listings-2026-04-11.data";
+import { researchedListingSeeds as researchedListingSeeds20260414 } from "../scripts/researched-listings-2026-04-14.data";
+import { extractBizBuySellAdId } from "../scripts/managed-listing-batch.lib";
 
 describe("researched listing batch", () => {
   it("keeps the 2026-04-12 researched source-url batch unique and diligence-ready", () => {
@@ -30,13 +32,26 @@ describe("researched listing batch", () => {
     }
   });
 
-  it("does not collide by source URL or exact business name with the 2026-04-11 managed batch", () => {
+  it("does not collide by source URL, business name, or BizBuySell ad id with the other managed batches", () => {
     const sourceUrls = new Set<string>();
     const businessNames = new Set<string>();
+    const bizBuySellAdIds = new Set<string>();
 
-    for (const seed of [...highValueListingSeeds, ...researchedListingSeeds]) {
+    for (const seed of [
+      ...highValueListingSeeds,
+      ...researchedListingSeeds,
+      ...researchedListingSeeds20260414,
+    ]) {
       expect(sourceUrls.has(seed.sourceUrl)).toBe(false);
       expect(businessNames.has(seed.businessName)).toBe(false);
+
+      const adId = extractBizBuySellAdId(seed.sourceUrl);
+
+      if (adId) {
+        expect(bizBuySellAdIds.has(adId)).toBe(false);
+        bizBuySellAdIds.add(adId);
+      }
+
       sourceUrls.add(seed.sourceUrl);
       businessNames.add(seed.businessName);
     }

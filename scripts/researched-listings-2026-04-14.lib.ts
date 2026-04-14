@@ -1,9 +1,9 @@
 import { Prisma, type PrismaClient } from "../src/generated/prisma/client";
 import { DealStatus, HistoryEventType } from "../src/generated/prisma/enums";
 import {
-  HIGH_VALUE_LISTING_BATCH_DATE,
-  highValueListingSeeds,
-} from "./high-value-listings-2026-04-11.data";
+  RESEARCHED_LISTING_BATCH_DATE,
+  researchedListingSeeds,
+} from "./researched-listings-2026-04-14.data";
 import {
   findManagedBusinessForSeed,
   loadManagedBusinesses,
@@ -12,7 +12,7 @@ import {
   type LoadedManagedBusiness,
 } from "./managed-listing-batch.lib";
 
-export type HighValueListingUpsertSummary = {
+export type ResearchedListing20260414UpsertSummary = {
   createdNames: string[];
   updatedNames: string[];
 };
@@ -38,7 +38,7 @@ function getChangedFields(
 
 async function createSeedBusiness(
   prisma: PrismaClient,
-  seed: (typeof highValueListingSeeds)[number],
+  seed: (typeof researchedListingSeeds)[number],
 ) {
   await prisma.business.create({
     data: {
@@ -47,9 +47,9 @@ async function createSeedBusiness(
         create: [
           {
             eventType: HistoryEventType.CREATED,
-            description: "Added from the 2026-04-11 high-value listing batch.",
+            description: "Added from the 2026-04-14 researched listing batch.",
             metadata: {
-              batchDate: HIGH_VALUE_LISTING_BATCH_DATE,
+              batchDate: RESEARCHED_LISTING_BATCH_DATE,
               sourceUrl: seed.sourceUrl,
             },
           },
@@ -57,7 +57,7 @@ async function createSeedBusiness(
             eventType: HistoryEventType.STATUS_CHANGED,
             description: `Initial seeded status set to ${seed.dealStatus}.`,
             metadata: {
-              batchDate: HIGH_VALUE_LISTING_BATCH_DATE,
+              batchDate: RESEARCHED_LISTING_BATCH_DATE,
               to: seed.dealStatus,
             },
           },
@@ -70,7 +70,7 @@ async function createSeedBusiness(
 async function updateSeedBusiness(
   prisma: PrismaClient,
   business: LoadedManagedBusiness,
-  seed: (typeof highValueListingSeeds)[number],
+  seed: (typeof researchedListingSeeds)[number],
 ) {
   const changedFields = getChangedFields(business, seed.managedBusinessData);
 
@@ -81,9 +81,9 @@ async function updateSeedBusiness(
   const historyEvents: Prisma.BusinessHistoryEventCreateWithoutBusinessInput[] = [
     {
       eventType: HistoryEventType.UPDATED,
-      description: "Updated fields from the 2026-04-11 high-value listing batch.",
+      description: "Updated fields from the 2026-04-14 researched listing batch.",
       metadata: {
-        batchDate: HIGH_VALUE_LISTING_BATCH_DATE,
+        batchDate: RESEARCHED_LISTING_BATCH_DATE,
         sourceUrl: seed.sourceUrl,
         changedFields,
       },
@@ -95,7 +95,7 @@ async function updateSeedBusiness(
       eventType: HistoryEventType.STATUS_CHANGED,
       description: `Status changed from ${business.dealStatus} to ${seed.managedBusinessData.dealStatus}.`,
       metadata: {
-        batchDate: HIGH_VALUE_LISTING_BATCH_DATE,
+        batchDate: RESEARCHED_LISTING_BATCH_DATE,
         from: business.dealStatus,
         to: seed.managedBusinessData.dealStatus,
       },
@@ -121,14 +121,14 @@ async function updateSeedBusiness(
   return true;
 }
 
-export async function upsertHighValueListingBatch(
+export async function upsertResearchedListingBatch20260414(
   prisma: PrismaClient,
-): Promise<HighValueListingUpsertSummary> {
+): Promise<ResearchedListing20260414UpsertSummary> {
   const businesses = await loadManagedBusinesses(prisma);
   const createdNames: string[] = [];
   const updatedNames: string[] = [];
 
-  for (const seed of highValueListingSeeds) {
+  for (const seed of researchedListingSeeds) {
     const existing = findManagedBusinessForSeed(businesses, seed);
 
     if (!existing) {

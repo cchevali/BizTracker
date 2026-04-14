@@ -13,6 +13,7 @@ import {
   upsertHighValueListingBatch,
 } from "./high-value-listings-2026-04-11.lib";
 import { upsertResearchedListingBatch } from "./researched-listings-2026-04-12.lib";
+import { upsertResearchedListingBatch20260414 } from "./researched-listings-2026-04-14.lib";
 
 const backfillFieldNames = [
   "sourceUrl",
@@ -57,6 +58,8 @@ export type AcquisitionThesisBackfillSummary = {
   highValueUpdatedNames: string[];
   researchedCreatedNames: string[];
   researchedUpdatedNames: string[];
+  researched20260414CreatedNames: string[];
+  researched20260414UpdatedNames: string[];
 };
 
 function buildAnalysisBlock(spec: BackfillSpec["analysis"]) {
@@ -364,6 +367,7 @@ export async function runAcquisitionThesisBackfill(
   const newListingUpdatedCount = await backfillNewListings(prisma);
   const highValueSummary = await upsertHighValueListingBatch(prisma);
   const researchedSummary = await upsertResearchedListingBatch(prisma);
+  const researched20260414Summary = await upsertResearchedListingBatch20260414(prisma);
 
   return {
     archivedNames,
@@ -374,6 +378,8 @@ export async function runAcquisitionThesisBackfill(
     highValueUpdatedNames: highValueSummary.updatedNames,
     researchedCreatedNames: researchedSummary.createdNames,
     researchedUpdatedNames: researchedSummary.updatedNames,
+    researched20260414CreatedNames: researched20260414Summary.createdNames,
+    researched20260414UpdatedNames: researched20260414Summary.updatedNames,
   };
 }
 
@@ -395,6 +401,12 @@ export function printAcquisitionThesisBackfillSummary(
   );
   console.log(
     `Updated 2026-04-12 researched listings: ${summary.researchedUpdatedNames.length}`,
+  );
+  console.log(
+    `Created 2026-04-14 researched listings: ${summary.researched20260414CreatedNames.length}`,
+  );
+  console.log(
+    `Updated 2026-04-14 researched listings: ${summary.researched20260414UpdatedNames.length}`,
   );
 
   if (summary.archivedNames.length > 0) {
@@ -435,6 +447,20 @@ export function printAcquisitionThesisBackfillSummary(
   if (summary.researchedUpdatedNames.length > 0) {
     console.log("Updated researched listings:");
     for (const businessName of summary.researchedUpdatedNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.researched20260414CreatedNames.length > 0) {
+    console.log("Created 2026-04-14 researched listings:");
+    for (const businessName of summary.researched20260414CreatedNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.researched20260414UpdatedNames.length > 0) {
+    console.log("Updated 2026-04-14 researched listings:");
+    for (const businessName of summary.researched20260414UpdatedNames) {
       console.log(`- ${businessName}`);
     }
   }

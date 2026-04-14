@@ -5,6 +5,7 @@ import { Client } from "pg";
 import { ARCHIVE_BUSINESS_NAMES, newListingSeeds } from "./backfill-acquisition-thesis.data";
 import { highValueListingSeeds } from "./high-value-listings-2026-04-11.data";
 import { researchedListingSeeds } from "./researched-listings-2026-04-12.data";
+import { researchedListingSeeds as researchedListingSeeds20260414 } from "./researched-listings-2026-04-14.data";
 import {
   assertProductionTarget,
   type ReconciliationTarget,
@@ -40,7 +41,7 @@ type VerificationSummary = {
   }>;
 };
 
-const MINIMUM_EXPECTED_ACTIVE_COUNT = 48;
+const MINIMUM_EXPECTED_ACTIVE_COUNT = 53;
 const MINIMUM_EXPECTED_PASSED_COUNT = 7;
 const HVAC_BENCHMARK_NAME =
   "Profitable HVAC Air Quality & Duct Cleaning Business Franchise";
@@ -51,6 +52,8 @@ const sampleBusinessNames = [
   "Northeast Virginia Multi-trade Company",
   "23 FedEx Ground Routes - Buffalo, NY - Seller & Vehicle Financing",
   "Healthcare Staffing Agency for Sale, 5+M in Revenue with 60+ staffs",
+  "19 FedEx Ground Routes, Colorado Springs, CO",
+  "Commercial Real Estate Service",
 ] as const;
 
 export async function verifyBizTrackerReconciliation({
@@ -91,6 +94,7 @@ export async function verifyBizTrackerReconciliation({
       ...newListingSeeds.map((seed) => seed.businessName),
       ...highValueListingSeeds.map((seed) => seed.businessName),
       ...researchedListingSeeds.map((seed) => seed.businessName),
+      ...researchedListingSeeds20260414.map((seed) => seed.businessName),
     ];
 
     const missingRequiredBusinessesResult = await client.query<{

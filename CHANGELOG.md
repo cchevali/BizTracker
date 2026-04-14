@@ -53,3 +53,9 @@
 - Wired the new researched batch into `scripts/backfill-acquisition-thesis.ts` and `scripts/verify-biztracker-reconciliation.ts` so reconciliation now expects and recreates those listings alongside the earlier 2026-04-11 managed batch.
 - Added test coverage for the 2026-04-12 researched batch, including required notes house style and cross-batch source URL and business-name uniqueness.
 - Verified the new researched batch locally against a Docker-backed disposable Postgres database via the focused upsert path, then reconciled and manually redeployed production so the live workbook export now returns `48` active businesses including all five additions.
+
+## 2026-04-14
+- Added `scripts/researched-listings-2026-04-14.data.ts` and `scripts/researched-listings-2026-04-14.lib.ts` for a third repo-managed researched listing batch covering five missing public listings from the 2026-04-14 workbook snapshot and live-production cross-check.
+- Added `scripts/managed-listing-batch.lib.ts` so managed public listing batches now dedupe by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location before creating new records.
+- Added first-pass underwriting, benchmark notes, skeptical analysis text, and anomaly handling for two Colorado Springs FedEx route listings, the Midvale commercial real-estate service listing, the Grand Rapids restoration listing with the raw public ask preserved, and the Grand Rapids multi-unit paint-and-dent franchise.
+- Added tests for the shared dedupe helper and the 2026-04-14 researched batch, then verified `npm run typecheck`, `npm test`, `npm run lint`, `npm run reconcile:production`, `npm run verify:production-data`, the live export route, and filtered public search/export views.

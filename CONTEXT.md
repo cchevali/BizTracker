@@ -20,7 +20,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Create and edit forms with validation
 - Default active pipeline behavior that excludes `Passed` deals unless the filter explicitly asks for them
 - Thesis cleanup/backfill CLI that archives low-fit deals, adds discussed public listings, and backfills active businesses
-- Repo-managed public listing upsert batches keyed by `sourceUrl` for the serious 2026-04-11 candidates and the 2026-04-12 researched additions, including full listing facts, skeptical assessment text, and history coherence
+- Repo-managed public listing upsert batches keyed by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location for the serious 2026-04-11 candidates plus the 2026-04-12 and 2026-04-14 researched additions, including full listing facts, skeptical assessment text, and history coherence
 - Production-safe reconciliation and verification scripts that compare the live Neon database against the expected thesis-cleanup state
 - Repo-native Vercel access validation and a manual production deploy script with smoke checks for the standalone app, public path, and workbook export
 - Realistic seed data
@@ -35,7 +35,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Saved presets are global because there is no user model yet.
 - Derived cash scenario values are read-only and recomputed from asking price and SDE rather than trusted from imports.
 - Production data reconciliation is explicit and idempotent; schema deploys do not silently run the thesis cleanup/backfill for you.
-- Repo-managed public listing batches can intentionally upsert specific `sourceUrl`-backed records when those listing facts and thesis notes are treated as canonical tracker data.
+- Repo-managed public listing batches can intentionally upsert specific public listings when those facts and thesis notes are treated as canonical tracker data, and the dedupe matcher now falls back from normalized `sourceUrl` to BizBuySell ad id and normalized title + location to avoid duplicate public rows.
 - Production requests come through the existing `microflowops.com` host app, which rewrites `/biztracker/*` to the standalone BizTracker Vercel deployment.
 
 ## Constraints

@@ -109,3 +109,8 @@ Consequences: `scripts/manual-production-deploy.ts` now verifies the standalone 
 Decision: Add the 2026-04-12 researched public listings as a second repo-managed `sourceUrl` upsert batch instead of importing them ad hoc or editing the database manually.
 Reason: These five additions need the same reproducible first-pass underwriting, dedupe protection, and reconciliation behavior as the earlier managed listing batch, while still preserving skeptical notes and nulls for undisclosed facts like the Pittsburgh listing's missing SDE.
 Consequences: `scripts/backfill-acquisition-thesis.ts` now owns both managed public listing batches, verification expects the new researched records to exist after reconciliation, and future refreshes for these exact listings should update the batch files rather than patch rows manually.
+
+## 2026-04-14
+Decision: Add the 2026-04-14 researched public listings as a third repo-managed batch and strengthen managed-batch dedupe to match by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location.
+Reason: The 2026-04-14 workbook snapshot could lag live production, and BizBuySell listing variants can shift slugs or titles while still representing the same ad, so source-url-only matching was too brittle for safe follow-up imports.
+Consequences: `scripts/backfill-acquisition-thesis.ts` now owns three managed public listing batches, reconciliation expects the five new listings to exist after repair, and future public-listing refreshes are less likely to create duplicates when URLs or titles drift.

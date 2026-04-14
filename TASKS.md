@@ -25,8 +25,11 @@
 - Added production-safe reconciliation and verification scripts plus an automatic production deploy check for reconciliation drift
 - Added a repo-managed 2026-04-11 high-value public listing upsert batch keyed by `sourceUrl`, including full listing facts, skeptical assessments, and coherent history/status updates for the tracker's serious public candidates
 - Added a repo-managed 2026-04-12 researched public listing batch keyed by `sourceUrl`, deduped against the active tracker export baseline, with full first-pass underwriting, skeptical notes, and diligence questions for five new listings
+- Added a shared managed-listing dedupe helper that falls back from normalized `sourceUrl` to BizBuySell ad id and normalized title + location before creating repo-managed public listings
+- Added a repo-managed 2026-04-14 researched public listing batch for two Colorado Springs FedEx route packages, the Midvale commercial real-estate service listing, the Grand Rapids restoration anomaly listing, and the Grand Rapids multi-unit paint-and-dent franchise follow-up
 - Hardened Vercel deploy automation with explicit credential validation, retryable `vercel pull`, direct CLI deploys, and a repo-native manual production deploy fallback with smoke checks
 - Reconciled and manually deployed production after the 2026-04-12 researched batch, bringing the live tracker to `55 total / 48 active / 7 passed`
+- Reconciled production after the 2026-04-14 researched batch, bringing the live tracker to `60 total / 53 active / 7 passed`, and verified the live export plus public search/filter views for the new rows
 - Verified typecheck, lint, build, migration, and seed
 - Verified the acquisition-screening v2 and thesis cleanup pass with `npm run db:migrate`, `npm run backfill:thesis`, `npm run typecheck`, `npm test`, `npm run lint`, and `npm run build`
 - Verified production reconciliation with `npm run reconcile:production`, a second idempotence rerun, and the live export route at `https://microflowops.com/biztracker/exports/businesses`
