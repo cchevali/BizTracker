@@ -74,14 +74,21 @@
   - `https://www.bizbuysell.com/business-opportunity/commercial-real-estate-service/2206744/`
   - `https://www.bizbuysell.com/business-opportunity/company-w-high-gross-profits-property-damage-and-restoration/2306305/`
   - `https://www.bizbuysell.com/business-opportunity/grand-rapids-mi-automotive-paint-and-dent-repair-multi-unit-franchise/2238488/`
-- No app runtime deploy was required in this session because the public UI reads production DB state directly and the runtime app code itself did not change.
+- Ran `npm run deploy:production:manual` successfully after push:
+  - deployment URL: `https://microflowops-biztracker-4069hs9zv-chases-projects-6e9e1ba6.vercel.app`
+  - smoke checks passed for:
+    - `https://microflowops-biztracker.vercel.app/biztracker`
+    - `https://microflowops.com/biztracker`
+    - `https://microflowops.com/biztracker/exports/businesses`
 
 ## Git / Push State
-- Worktree has local uncommitted changes.
-- Nothing was committed or pushed in this session.
+- Committed and pushed to `origin/main`:
+  - commit: `d7ed24ca3c494f64899dfcd0207dd84f0e2dd0fa`
+  - message: `Add 2026-04-14 researched listing batch`
+- The repo worktree was clean immediately after that push.
+- This session did not attempt to repair the separate GitHub Actions `VERCEL_TOKEN` secret drift, so the GitHub-hosted production workflow may still fail even though local manual production deploys are healthy.
 
 ## What Should Be Worked On Next
-- Commit the current worktree if the repo owner wants this batch preserved in git history immediately.
 - Rotate the GitHub repo `VERCEL_TOKEN` and rerun the production workflow; that unrelated GitHub-hosted deploy auth issue was not addressed in this session.
 - Consider adding a disposable-database integration test that exercises the full reconciliation runner, not just the batch/unit test paths.
 
