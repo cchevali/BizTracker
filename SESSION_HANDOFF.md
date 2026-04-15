@@ -56,11 +56,19 @@
   - `https://www.bizbuysell.com/business-opportunity/residential-hvac-company-southeast-michigan/2455495/`
   - `https://www.bizbuysell.com/business-opportunity/high-end-residential-remodeling-and-contracting-service/2458857/`
   - `https://www.bizbuysell.com/business-opportunity/longstanding-commercial-hvac-business-sba-pre-qualified/2388349/`
+- Ran `npm run deploy:production:manual` successfully after the reconcile:
+  - deployment URL: `https://microflowops-biztracker-jgo4lfgqv-chases-projects-6e9e1ba6.vercel.app`
+  - smoke checks passed for:
+    - `https://microflowops-biztracker.vercel.app/biztracker`
+    - `https://microflowops.com/biztracker`
+    - `https://microflowops.com/biztracker/exports/businesses`
 
 ## Git / Push State
-- Production data has been reconciled successfully from this workspace.
-- Repo changes are local only right now; this session did not create a commit or push.
-- Expect a dirty worktree with the new batch files, doc updates, and test/helper changes.
+- Production data has been reconciled and deployed successfully from this workspace.
+- Committed and pushed to `origin/main`:
+  - commit: `c0e4e07b50b4db13ec86bb53a4581517b607cb2c`
+  - message: `Add 2026-04-15 researched listing batch`
+- The repo worktree was clean immediately before this handoff-only follow-up update.
 
 ## What Should Be Worked On Next
 - Rotate the GitHub repo `VERCEL_TOKEN` and rerun the GitHub-hosted production workflow; that unrelated deploy auth issue is still not fixed.
