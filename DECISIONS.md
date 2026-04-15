@@ -119,3 +119,8 @@ Consequences: `scripts/backfill-acquisition-thesis.ts` now owns three managed pu
 Decision: Add the 2026-04-15 requested public listings as a fourth repo-managed batch and map live public `Sale Pending` / LOI-style listings into the existing `LETTER_OF_INTENT` tracker status.
 Reason: The user-provided workbook export was the source of truth for what already existed, the four requested listings needed reproducible research-grade inserts rather than ad hoc DB edits, and the schema still lacks a generic pending enum even though the Ohio plumbing page is currently marked `Sale Pending`.
 Consequences: `scripts/backfill-acquisition-thesis.ts` and production reconciliation now own four managed public listing batches, the tracker can preserve strategically relevant pending listings without inventing a new schema state, and future sessions should keep using `LETTER_OF_INTENT` plus pending-style tags until a dedicated pending status is introduced.
+
+## 2026-04-15
+Decision: Add the requested 12-listing public batch as a fifth repo-managed researched batch and require workbook-plus-live-DB dedupe before seeding any new requested public listings.
+Reason: The user explicitly supplied a tracker export workbook as the dedupe source of truth, but workbook snapshots can lag the live database, so safe requested-listing adds needed both the workbook and the current DB checked before creating managed rows.
+Consequences: `scripts/researched-listings-2026-04-15-requested.*` now own these 12 listings through the normal managed-batch path, future sessions should repeat the same workbook-plus-DB dedupe workflow for similar user-requested public batches, and production verification now expects the live tracker to include those rows after reconciliation.

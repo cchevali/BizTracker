@@ -7,6 +7,7 @@ import {
 import { highValueListingSeeds } from "../scripts/high-value-listings-2026-04-11.data";
 import { researchedListingSeeds as researchedListingSeeds20260414 } from "../scripts/researched-listings-2026-04-14.data";
 import { researchedListingSeeds as researchedListingSeeds20260415 } from "../scripts/researched-listings-2026-04-15.data";
+import { researchedListingSeeds as researchedListingSeeds20260415Requested } from "../scripts/researched-listings-2026-04-15-requested.data";
 import { extractBizBuySellAdId } from "../scripts/managed-listing-batch.lib";
 
 describe("researched listing batch", () => {
@@ -43,6 +44,7 @@ describe("researched listing batch", () => {
       ...researchedListingSeeds,
       ...researchedListingSeeds20260414,
       ...researchedListingSeeds20260415,
+      ...researchedListingSeeds20260415Requested,
     ]) {
       expect(sourceUrls.has(seed.sourceUrl)).toBe(false);
       expect(businessNames.has(seed.businessName)).toBe(false);

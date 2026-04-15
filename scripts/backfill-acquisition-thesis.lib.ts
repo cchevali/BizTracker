@@ -15,6 +15,7 @@ import {
 import { upsertResearchedListingBatch } from "./researched-listings-2026-04-12.lib";
 import { upsertResearchedListingBatch20260414 } from "./researched-listings-2026-04-14.lib";
 import { upsertResearchedListingBatch20260415 } from "./researched-listings-2026-04-15.lib";
+import { upsertResearchedListingBatch20260415Requested } from "./researched-listings-2026-04-15-requested.lib";
 
 const backfillFieldNames = [
   "sourceUrl",
@@ -63,6 +64,8 @@ export type AcquisitionThesisBackfillSummary = {
   researched20260414UpdatedNames: string[];
   researched20260415CreatedNames: string[];
   researched20260415UpdatedNames: string[];
+  researched20260415RequestedCreatedNames: string[];
+  researched20260415RequestedUpdatedNames: string[];
 };
 
 function buildAnalysisBlock(spec: BackfillSpec["analysis"]) {
@@ -372,6 +375,8 @@ export async function runAcquisitionThesisBackfill(
   const researchedSummary = await upsertResearchedListingBatch(prisma);
   const researched20260414Summary = await upsertResearchedListingBatch20260414(prisma);
   const researched20260415Summary = await upsertResearchedListingBatch20260415(prisma);
+  const researched20260415RequestedSummary =
+    await upsertResearchedListingBatch20260415Requested(prisma);
 
   return {
     archivedNames,
@@ -386,6 +391,10 @@ export async function runAcquisitionThesisBackfill(
     researched20260414UpdatedNames: researched20260414Summary.updatedNames,
     researched20260415CreatedNames: researched20260415Summary.createdNames,
     researched20260415UpdatedNames: researched20260415Summary.updatedNames,
+    researched20260415RequestedCreatedNames:
+      researched20260415RequestedSummary.createdNames,
+    researched20260415RequestedUpdatedNames:
+      researched20260415RequestedSummary.updatedNames,
   };
 }
 
@@ -419,6 +428,12 @@ export function printAcquisitionThesisBackfillSummary(
   );
   console.log(
     `Updated 2026-04-15 researched listings: ${summary.researched20260415UpdatedNames.length}`,
+  );
+  console.log(
+    `Created 2026-04-15 requested researched listings: ${summary.researched20260415RequestedCreatedNames.length}`,
+  );
+  console.log(
+    `Updated 2026-04-15 requested researched listings: ${summary.researched20260415RequestedUpdatedNames.length}`,
   );
 
   if (summary.archivedNames.length > 0) {
@@ -487,6 +502,20 @@ export function printAcquisitionThesisBackfillSummary(
   if (summary.researched20260415UpdatedNames.length > 0) {
     console.log("Updated 2026-04-15 researched listings:");
     for (const businessName of summary.researched20260415UpdatedNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.researched20260415RequestedCreatedNames.length > 0) {
+    console.log("Created 2026-04-15 requested researched listings:");
+    for (const businessName of summary.researched20260415RequestedCreatedNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.researched20260415RequestedUpdatedNames.length > 0) {
+    console.log("Updated 2026-04-15 requested researched listings:");
+    for (const businessName of summary.researched20260415RequestedUpdatedNames) {
       console.log(`- ${businessName}`);
     }
   }

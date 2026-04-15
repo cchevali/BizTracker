@@ -28,10 +28,12 @@
 - Added a shared managed-listing dedupe helper that falls back from normalized `sourceUrl` to BizBuySell ad id and normalized title + location before creating repo-managed public listings
 - Added a repo-managed 2026-04-14 researched public listing batch for two Colorado Springs FedEx route packages, the Midvale commercial real-estate service listing, the Grand Rapids restoration anomaly listing, and the Grand Rapids multi-unit paint-and-dent franchise follow-up
 - Added a repo-managed 2026-04-15 researched public listing batch for the Columbus-area plumbing listing, the Southeast Michigan residential HVAC listing, the Fairfax remodeling listing, and the Charlotte commercial HVAC listing, including conservative scorecards and a pending-to-`LETTER_OF_INTENT` mapping for the live sale-pending plumbing deal
+- Added a repo-managed 2026-04-15 requested researched public listing batch for 12 missing BizBuySell listings across HVAC, plumbing, pool, landscaping, air-duct, lawn-care, and pest-control categories, using the user-supplied workbook export plus the live database as the dedupe baseline
 - Hardened Vercel deploy automation with explicit credential validation, retryable `vercel pull`, direct CLI deploys, and a repo-native manual production deploy fallback with smoke checks
 - Reconciled and manually deployed production after the 2026-04-12 researched batch, bringing the live tracker to `55 total / 48 active / 7 passed`
 - Reconciled production after the 2026-04-14 researched batch, bringing the live tracker to `60 total / 53 active / 7 passed`, and verified the live export plus public search/filter views for the new rows
 - Reconciled production after the 2026-04-15 researched batch, bringing the live tracker to `64 total / 57 active / 7 passed`, and verified the live export includes each new source URL exactly once
+- Reconciled production after the 2026-04-15 requested 12-listing batch, bringing the live tracker to `76 total / 69 active / 7 passed`, and verified the live app search/status filters plus export workbook show each new source URL exactly once
 - Verified typecheck, lint, build, migration, and seed
 - Verified the acquisition-screening v2 and thesis cleanup pass with `npm run db:migrate`, `npm run backfill:thesis`, `npm run typecheck`, `npm test`, `npm run lint`, and `npm run build`
 - Verified production reconciliation with `npm run reconcile:production`, a second idempotence rerun, and the live export route at `https://microflowops.com/biztracker/exports/businesses`

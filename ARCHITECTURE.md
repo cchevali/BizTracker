@@ -42,6 +42,8 @@
 - `scripts/researched-listings-2026-04-14.lib.ts`: upsert logic for the 2026-04-14 researched additions batch
 - `scripts/researched-listings-2026-04-15.data.ts`: full managed listing records for the 2026-04-15 researched additions batch, including the Columbus-area plumbing, Southeast Michigan HVAC, Fairfax remodeling, and Charlotte commercial HVAC follow-up listings
 - `scripts/researched-listings-2026-04-15.lib.ts`: upsert logic for the 2026-04-15 researched additions batch
+- `scripts/researched-listings-2026-04-15-requested.data.ts`: full managed listing records for the 2026-04-15 requested 12-listing researched batch, including workbook-informed dedupe and conservative first-pass underwriting for HVAC, plumbing, pool, landscaping, air-duct, lawn-care, and pest-control additions
+- `scripts/researched-listings-2026-04-15-requested.lib.ts`: upsert logic for the 2026-04-15 requested 12-listing researched batch
 - `scripts/managed-listing-batch.lib.ts`: shared normalized source-url, BizBuySell ad-id, and normalized title-location dedupe helpers for managed public listing batches
 - `scripts/reconciliation-seed.data.ts`: baseline curated records that production reconciliation must restore if the production DB was never seeded
 - `scripts/reconciliation-env.ts`: env-file loading and production-target safety checks for reconciliation scripts
@@ -69,7 +71,7 @@
 11. External ChatGPT listing batches can be normalized offline through `scripts/normalize-chatgpt-listings.ts`, which standardizes score semantics before later import.
 12. `scripts/import-business-listings.ts` imports normalized listing batches into PostgreSQL, keyed conservatively by `sourceUrl` when available so repeat runs skip existing records instead of overwriting them.
 13. `scripts/backfill-acquisition-thesis.ts` performs the April 7, 2026 thesis cleanup pass by marking selected deals as passed, seeding missing public listings, and backfilling acquisition-thesis fields plus analysis notes for active records.
-14. The thesis backfill runner now also upserts the 2026-04-11 high-value public listing batch plus the 2026-04-12, 2026-04-14, and 2026-04-15 researched additions batches, matching managed rows by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location before refreshing listing facts, skeptical assessment text, deal status, and matching history rows.
+14. The thesis backfill runner now also upserts the 2026-04-11 high-value public listing batch plus the 2026-04-12, 2026-04-14, 2026-04-15, and 2026-04-15 requested researched additions batches, matching managed rows by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location before refreshing listing facts, skeptical assessment text, deal status, and matching history rows.
 15. Managed public rows can preserve live public sale-pending context by mapping those listings into the existing `LETTER_OF_INTENT` enum plus pending-style tags until a dedicated pending status exists in the schema.
 16. `scripts/reconcile-production-data.ts` is the safe production repair path when schema/code is live but the Neon database still lacks the baseline curated records, thesis cleanup pass, or any of the managed public listing batches.
 17. `scripts/verify-biztracker-reconciliation.ts` provides the same production data assertions for manual use and for the GitHub Actions production deploy job.

@@ -7,6 +7,7 @@ import { highValueListingSeeds } from "./high-value-listings-2026-04-11.data";
 import { researchedListingSeeds } from "./researched-listings-2026-04-12.data";
 import { researchedListingSeeds as researchedListingSeeds20260414 } from "./researched-listings-2026-04-14.data";
 import { researchedListingSeeds as researchedListingSeeds20260415 } from "./researched-listings-2026-04-15.data";
+import { researchedListingSeeds as researchedListingSeeds20260415Requested } from "./researched-listings-2026-04-15-requested.data";
 import {
   assertProductionTarget,
   type ReconciliationTarget,
@@ -42,7 +43,7 @@ type VerificationSummary = {
   }>;
 };
 
-const MINIMUM_EXPECTED_ACTIVE_COUNT = 57;
+const MINIMUM_EXPECTED_ACTIVE_COUNT = 69;
 const MINIMUM_EXPECTED_PASSED_COUNT = 7;
 const HVAC_BENCHMARK_NAME =
   "Profitable HVAC Air Quality & Duct Cleaning Business Franchise";
@@ -59,6 +60,12 @@ const sampleBusinessNames = [
   "Residential HVAC Company - Southeast Michigan",
   "High-end Residential Remodeling and contracting service",
   "Longstanding Commercial HVAC Business - SBA Pre-Qualified",
+  "Established Commercial HVAC and Refrigeration Service Company",
+  "Premier NJ Residential Pool Service Co. - 37 yrs - Recurring Contracts",
+  "$2.0 Million Plumbing Contractor, $350K Net; SBA Pre-Approved! (17923)",
+  "Great South Charlotte pool company with high end clientele",
+  "Commercial HVAC Filter Change-Out & Maintenance",
+  "Well Established HVAC Company Serving Southern Maryland",
 ] as const;
 
 export async function verifyBizTrackerReconciliation({
@@ -101,6 +108,9 @@ export async function verifyBizTrackerReconciliation({
       ...researchedListingSeeds.map((seed) => seed.businessName),
       ...researchedListingSeeds20260414.map((seed) => seed.businessName),
       ...researchedListingSeeds20260415.map((seed) => seed.businessName),
+      ...researchedListingSeeds20260415Requested.map(
+        (seed) => seed.businessName,
+      ),
     ];
 
     const missingRequiredBusinessesResult = await client.query<{

@@ -66,3 +66,8 @@
 - Tightened `findManagedBusinessForSeed` so the shared managed-batch dedupe helper works cleanly with narrower test fixtures as well as full Prisma-loaded business rows.
 - Updated `scripts/backfill-acquisition-thesis.lib.ts`, `scripts/verify-biztracker-reconciliation.ts`, and the researched-batch tests to include the new 2026-04-15 batch.
 - Reconciled and re-verified production, bringing the live tracker to `64 total / 57 active / 7 passed`, and confirmed the public workbook export returns all four new source URLs exactly once.
+- Added `scripts/researched-listings-2026-04-15-requested.data.ts` and `scripts/researched-listings-2026-04-15-requested.lib.ts` for a fifth repo-managed researched listing batch covering the requested 12 missing BizBuySell listings.
+- Used the user-supplied `biztracker-export-2026-04-15T17-55-12Z.xlsx` workbook plus the live production database as the dedupe baseline before seeding any of those 12 requested listings.
+- Added conservative first-pass underwriting for those 12 listings, including pending-status handling for the Central Ohio landscaping page, null preservation for unsupported public fields, and explicit notes for public inconsistencies such as conflicting ask prices, headcounts, lease dates, or earnings labels.
+- Updated `scripts/backfill-acquisition-thesis.lib.ts`, `scripts/verify-biztracker-reconciliation.ts`, and the researched-batch tests to include the new requested batch.
+- Reconciled and re-verified production again, bringing the live tracker to `76 total / 69 active / 7 passed`, and confirmed the public app search/status filters plus export workbook surface each new source URL exactly once.
