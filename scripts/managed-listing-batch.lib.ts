@@ -127,12 +127,17 @@ export async function loadManagedBusinesses(prisma: PrismaClient) {
 }
 
 export function findManagedBusinessForSeed<
+  Business extends {
+    businessName: string;
+    sourceUrl: string | null;
+    location: string;
+  },
   Seed extends {
     businessName: string;
     sourceUrl: string;
     location: string;
   },
->(businesses: LoadedManagedBusiness[], seed: Seed) {
+>(businesses: Business[], seed: Seed) {
   const normalizedSeedSourceUrl = normalizeSourceUrl(seed.sourceUrl);
 
   if (normalizedSeedSourceUrl) {

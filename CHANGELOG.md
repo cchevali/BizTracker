@@ -59,3 +59,10 @@
 - Added `scripts/managed-listing-batch.lib.ts` so managed public listing batches now dedupe by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location before creating new records.
 - Added first-pass underwriting, benchmark notes, skeptical analysis text, and anomaly handling for two Colorado Springs FedEx route listings, the Midvale commercial real-estate service listing, the Grand Rapids restoration listing with the raw public ask preserved, and the Grand Rapids multi-unit paint-and-dent franchise.
 - Added tests for the shared dedupe helper and the 2026-04-14 researched batch, then verified `npm run typecheck`, `npm test`, `npm run lint`, `npm run reconcile:production`, `npm run verify:production-data`, the live export route, and filtered public search/export views.
+
+## 2026-04-15
+- Added `scripts/researched-listings-2026-04-15.data.ts` and `scripts/researched-listings-2026-04-15.lib.ts` for a fourth repo-managed researched listing batch covering the requested Columbus plumbing, Southeast Michigan HVAC, Fairfax remodeling, and Charlotte commercial HVAC candidates.
+- Added conservative first-pass underwriting for those four listings, including live-page-backed notes, strategic fit/risk text, and explicit handling of the Ohio plumbing page's current `Sale Pending` status through the existing `LETTER_OF_INTENT` enum plus pending tags.
+- Tightened `findManagedBusinessForSeed` so the shared managed-batch dedupe helper works cleanly with narrower test fixtures as well as full Prisma-loaded business rows.
+- Updated `scripts/backfill-acquisition-thesis.lib.ts`, `scripts/verify-biztracker-reconciliation.ts`, and the researched-batch tests to include the new 2026-04-15 batch.
+- Reconciled and re-verified production, bringing the live tracker to `64 total / 57 active / 7 passed`, and confirmed the public workbook export returns all four new source URLs exactly once.

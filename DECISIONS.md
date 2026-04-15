@@ -114,3 +114,8 @@ Consequences: `scripts/backfill-acquisition-thesis.ts` now owns both managed pub
 Decision: Add the 2026-04-14 researched public listings as a third repo-managed batch and strengthen managed-batch dedupe to match by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location.
 Reason: The 2026-04-14 workbook snapshot could lag live production, and BizBuySell listing variants can shift slugs or titles while still representing the same ad, so source-url-only matching was too brittle for safe follow-up imports.
 Consequences: `scripts/backfill-acquisition-thesis.ts` now owns three managed public listing batches, reconciliation expects the five new listings to exist after repair, and future public-listing refreshes are less likely to create duplicates when URLs or titles drift.
+
+## 2026-04-15
+Decision: Add the 2026-04-15 requested public listings as a fourth repo-managed batch and map live public `Sale Pending` / LOI-style listings into the existing `LETTER_OF_INTENT` tracker status.
+Reason: The user-provided workbook export was the source of truth for what already existed, the four requested listings needed reproducible research-grade inserts rather than ad hoc DB edits, and the schema still lacks a generic pending enum even though the Ohio plumbing page is currently marked `Sale Pending`.
+Consequences: `scripts/backfill-acquisition-thesis.ts` and production reconciliation now own four managed public listing batches, the tracker can preserve strategically relevant pending listings without inventing a new schema state, and future sessions should keep using `LETTER_OF_INTENT` plus pending-style tags until a dedicated pending status is introduced.

@@ -40,6 +40,8 @@
 - `scripts/researched-listings-2026-04-12.lib.ts`: source-url upsert logic for the 2026-04-12 researched additions batch
 - `scripts/researched-listings-2026-04-14.data.ts`: full managed listing records for the 2026-04-14 researched additions batch, including the new Colorado Springs FedEx, Midvale commercial real estate, Grand Rapids restoration, and Grand Rapids franchise follow-up listings
 - `scripts/researched-listings-2026-04-14.lib.ts`: upsert logic for the 2026-04-14 researched additions batch
+- `scripts/researched-listings-2026-04-15.data.ts`: full managed listing records for the 2026-04-15 researched additions batch, including the Columbus-area plumbing, Southeast Michigan HVAC, Fairfax remodeling, and Charlotte commercial HVAC follow-up listings
+- `scripts/researched-listings-2026-04-15.lib.ts`: upsert logic for the 2026-04-15 researched additions batch
 - `scripts/managed-listing-batch.lib.ts`: shared normalized source-url, BizBuySell ad-id, and normalized title-location dedupe helpers for managed public listing batches
 - `scripts/reconciliation-seed.data.ts`: baseline curated records that production reconciliation must restore if the production DB was never seeded
 - `scripts/reconciliation-env.ts`: env-file loading and production-target safety checks for reconciliation scripts
@@ -67,12 +69,13 @@
 11. External ChatGPT listing batches can be normalized offline through `scripts/normalize-chatgpt-listings.ts`, which standardizes score semantics before later import.
 12. `scripts/import-business-listings.ts` imports normalized listing batches into PostgreSQL, keyed conservatively by `sourceUrl` when available so repeat runs skip existing records instead of overwriting them.
 13. `scripts/backfill-acquisition-thesis.ts` performs the April 7, 2026 thesis cleanup pass by marking selected deals as passed, seeding missing public listings, and backfilling acquisition-thesis fields plus analysis notes for active records.
-14. The thesis backfill runner now also upserts the 2026-04-11 high-value public listing batch plus the 2026-04-12 and 2026-04-14 researched additions batches, matching managed rows by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location before refreshing listing facts, skeptical assessment text, deal status, and matching history rows.
-15. `scripts/reconcile-production-data.ts` is the safe production repair path when schema/code is live but the Neon database still lacks the baseline curated records, thesis cleanup pass, or any of the managed public listing batches.
-16. `scripts/verify-biztracker-reconciliation.ts` provides the same production data assertions for manual use and for the GitHub Actions production deploy job.
-17. `.github/workflows/vercel-deploy.yml` now validates Vercel access explicitly, retries `vercel pull`, and deploys directly with `vercel deploy --format=json` instead of relying on a separate prebuilt artifact step.
-18. `scripts/manual-production-deploy.ts` mirrors that safer direct-deploy path for local fallback use, then smoke-checks the stable public URLs instead of the raw deployment URL.
-19. In production, `microflowops.com/biztracker` requests are rewritten by `C:\dev\OSHA_Leads\web\next.config.mjs` to the standalone BizTracker Vercel deployment, which serves the app with `NEXT_PUBLIC_BASE_PATH=/biztracker`.
+14. The thesis backfill runner now also upserts the 2026-04-11 high-value public listing batch plus the 2026-04-12, 2026-04-14, and 2026-04-15 researched additions batches, matching managed rows by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location before refreshing listing facts, skeptical assessment text, deal status, and matching history rows.
+15. Managed public rows can preserve live public sale-pending context by mapping those listings into the existing `LETTER_OF_INTENT` enum plus pending-style tags until a dedicated pending status exists in the schema.
+16. `scripts/reconcile-production-data.ts` is the safe production repair path when schema/code is live but the Neon database still lacks the baseline curated records, thesis cleanup pass, or any of the managed public listing batches.
+17. `scripts/verify-biztracker-reconciliation.ts` provides the same production data assertions for manual use and for the GitHub Actions production deploy job.
+18. `.github/workflows/vercel-deploy.yml` now validates Vercel access explicitly, retries `vercel pull`, and deploys directly with `vercel deploy --format=json` instead of relying on a separate prebuilt artifact step.
+19. `scripts/manual-production-deploy.ts` mirrors that safer direct-deploy path for local fallback use, then smoke-checks the stable public URLs instead of the raw deployment URL.
+20. In production, `microflowops.com/biztracker` requests are rewritten by `C:\dev\OSHA_Leads\web\next.config.mjs` to the standalone BizTracker Vercel deployment, which serves the app with `NEXT_PUBLIC_BASE_PATH=/biztracker`.
 
 ## Database Model Summary
 - `Business`: primary acquisition record with financials, qualitative assessment, legacy ratings, acquisition-thesis fields, manual diligence notes, score, status, tags, and timestamps
