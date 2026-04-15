@@ -1,81 +1,39 @@
 # SESSION_HANDOFF
 
 ## What Changed
-- Added the new managed researched batch in:
-  - `scripts/researched-listings-2026-04-15.data.ts`
-  - `scripts/researched-listings-2026-04-15.lib.ts`
-- Added four researched listings with conservative underwriting, short fit/risk notes, and follow-up diligence questions:
-  - `Growing Central Ohio Plumbing Business for Sale`
-  - `Residential HVAC Company - Southeast Michigan`
-  - `High-end Residential Remodeling and contracting service`
-  - `Longstanding Commercial HVAC Business - SBA Pre-Qualified`
-- Wired the new batch into:
-  - `scripts/backfill-acquisition-thesis.lib.ts`
-  - `scripts/verify-biztracker-reconciliation.ts`
-- Added tests in:
-  - `tests/researched-listings-2026-04-15-batch.test.ts`
-  - updated `tests/researched-listings-batch.test.ts` for cross-batch uniqueness
-- Tightened `findManagedBusinessForSeed` in `scripts/managed-listing-batch.lib.ts` so the shared dedupe helper accepts slimmer business fixtures cleanly in tests and still returns the matched row type.
-- Updated `CONTEXT.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `TASKS.md`, and `CHANGELOG.md` to reflect the new batch, the pending-status mapping, and the live production state.
+- Updated exactly one production business record:
+  - `cmnv3ombh0009hsv0vf1l59ni`
+  - public URL: `https://microflowops.com/biztracker/businesses/cmnv3ombh0009hsv0vf1l59ni`
+- Replaced the old listing-level profile with a diligence-informed profile based on the uploaded Joe Frei data-room materials.
+- Preserved existing history and added two new durable history events:
+  - `UPDATED`: `Updated diligence-informed profile fields from Joe Frei data-room review.`
+  - `STATUS_CHANGED`: `RESEARCHING` -> `UNDER_REVIEW`
+- Did not touch any other business record.
 
-## Dedupe Baseline Used
-- Used the user-provided workbook snapshot:
-  - `C:\Users\lever\Downloads\biztracker-export-2026-04-14T17-13-22Z.xlsx`
-- Parsed the `businesses` sheet and confirmed all four requested source URLs were missing by:
-  - normalized `source_url`
-  - normalized `business_name + location`
-- Also confirmed the workbook had `53` active exported rows before insert, which matched the prior live 2026-04-14 state.
-- No duplicate requested rows were skipped in this session because all four targets were missing from the workbook baseline.
+## Data Sources Used
+- `C:\Users\lever\Downloads\Joe-Frei-Excavating-Adjusted-Earnings-as-of-12-31-2025.xlsx`
+- `C:\Users\lever\Downloads\Joe-Frei-Misc-Questions-and-Answers-1-20-2026.docx`
+- The uploaded PDF packet was also used as the factual basis for the rewritten memo, especially the tax-return and balance-sheet references captured in the user request.
 
-## Live Listing Notes
-- The Ohio plumbing page currently shows `Sale Pending`, so the tracker stores it as:
-  - `dealStatus = LETTER_OF_INTENT`
-  - tag `pending`
-- The Southeast Michigan HVAC page explicitly requires a qualifying Michigan mechanical license or licensed employee, so it was scored conservatively on transferability and quit-the-job fit.
-- The Fairfax remodeling page conflicts on SDE (`881,782` on the summary vs `1,013,212` in the description for 2024), so it was kept low-confidence.
-- The Charlotte commercial HVAC page still withholds revenue/SDE/EBITDA and shows the owner involved full time, so it remains a lower-confidence watchlist record.
+## Key Record Outcome
+- Status is now `UNDER_REVIEW`.
+- Revenue is now `1420669`.
+- SDE is now `584073` based on the adjusted-earnings support.
+- EBITDA was cleared to `null` so the stale copied listing EBITDA is no longer carried.
+- Summary, fit, risks, benchmark notes, financing notes, operational ratings, tags, and durable notes were all rewritten to reflect the diligence packet rather than the old listing blurb.
+- Durable notes now mention the third-party LOI through `2026-04-17`, the 2023/2024 tax-return support, the 2025 internal-book step-up, the working-capital snapshot, the FF&E reconciliation problem, the Joe/Dayna handoff load, the referral / municipal revenue mix, the no-maintenance-contract profile, and the quality-of-earnings cautions around cash receipts and rent normalization.
 
 ## Verification
-- Passed locally:
-  - `npm run typecheck`
-  - `npm test -- managed-listing-batch.lib researched-listings-2026-04-15-batch researched-listings-batch`
-- Passed against production:
-  - `npm run reconcile:production`
-  - `npm run verify:production-data`
-- Live export verification after reconcile:
-  - downloaded `https://microflowops.com/biztracker/exports/businesses`
-  - confirmed `57` active business rows
-  - confirmed each newly added source URL appears exactly once in the live export
+- Queried the production database directly and confirmed the updated record values.
+- Confirmed the latest public detail page renders:
+  - `Under review`
+  - the new summary text
+  - the new diligence memo LOI phrase
 
-## Production Outcome
-- `npm run reconcile:production` created exactly 4 new records and updated 0 of the new 2026-04-15 records.
-- Production now verifies at:
-  - `64 total / 57 active / 7 passed`
-- New source URLs now live in production:
-  - `https://www.bizbuysell.com/business-opportunity/growing-central-ohio-plumbing-business-for-sale/2464974/`
-  - `https://www.bizbuysell.com/business-opportunity/residential-hvac-company-southeast-michigan/2455495/`
-  - `https://www.bizbuysell.com/business-opportunity/high-end-residential-remodeling-and-contracting-service/2458857/`
-  - `https://www.bizbuysell.com/business-opportunity/longstanding-commercial-hvac-business-sba-pre-qualified/2388349/`
-- Ran `npm run deploy:production:manual` successfully after the reconcile:
-  - deployment URL: `https://microflowops-biztracker-jgo4lfgqv-chases-projects-6e9e1ba6.vercel.app`
-  - smoke checks passed for:
-    - `https://microflowops-biztracker.vercel.app/biztracker`
-    - `https://microflowops.com/biztracker`
-    - `https://microflowops.com/biztracker/exports/businesses`
-
-## Git / Push State
-- Production data has been reconciled and deployed successfully from this workspace.
-- Committed and pushed to `origin/main`:
-  - commit: `c0e4e07b50b4db13ec86bb53a4581517b607cb2c`
-  - message: `Add 2026-04-15 researched listing batch`
-- The repo worktree was clean immediately before this handoff-only follow-up update.
+## Repo State
+- No lasting code or schema changes were kept from this session.
+- The only repo file changed locally is this refreshed handoff note.
 
 ## What Should Be Worked On Next
-- Rotate the GitHub repo `VERCEL_TOKEN` and rerun the GitHub-hosted production workflow; that unrelated deploy auth issue is still not fixed.
-- Consider adding a dedicated public pending/deal-stage status instead of continuing to map sale-pending listings into `LETTER_OF_INTENT`.
-- Add a disposable-database integration test that exercises the full reconciliation runner, not just the batch/unit test paths.
-
-## Risks Or Bugs
-- The tracker still has no dedicated generic pending enum, so public `Sale Pending` listings are currently represented through `LETTER_OF_INTENT` plus tags.
-- Managed-batch dedupe is strong for repo-managed listing batches, but the older thesis-only `newListingSeeds` path in `backfill-acquisition-thesis.data.ts` still uses simpler matching logic.
-- GitHub Actions production deploy auth is still expected to fail until the repo `VERCEL_TOKEN` is rotated.
+- If this business becomes actionable after the third-party LOI window, the next step should be a tighter QoE pass on cash receipts, rent normalization, and true owner / spouse replacement cost rather than more listing-level research.
+- Separately, the standing repo-level next task is still rotating the GitHub `VERCEL_TOKEN`.
