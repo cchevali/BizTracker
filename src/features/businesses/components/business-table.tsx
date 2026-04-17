@@ -13,6 +13,7 @@ import {
   getPrimaryUseCaseLabel,
   type BusinessListItem,
 } from "../domain/business.types";
+import { PipelineBadge } from "./pipeline-badge";
 import { StatusBadge } from "./status-badge";
 
 type BusinessTableProps = {
@@ -35,6 +36,7 @@ export function BusinessTable({ businesses }: BusinessTableProps) {
               <th className="px-5 py-4 font-medium">Cash High</th>
               <th className="px-5 py-4 font-medium">Conservative Cash</th>
               <th className="px-5 py-4 font-medium">Benchmark</th>
+              <th className="px-5 py-4 font-medium">Bucket</th>
               <th className="px-5 py-4 font-medium">Status</th>
               <th className="px-5 py-4 font-medium">Updated</th>
             </tr>
@@ -104,6 +106,9 @@ export function BusinessTable({ businesses }: BusinessTableProps) {
                     <p>{getBooleanLabel(business.beatsCurrentBenchmark)}</p>
                     <p>Score {formatScore(business.overallScore)}</p>
                   </div>
+                </td>
+                <td className="px-5 py-4 text-sm">
+                  <PipelineBadge bucket={business.pipelineBucket} />
                 </td>
                 <td className="px-5 py-4 text-sm">
                   <StatusBadge status={business.dealStatus} />

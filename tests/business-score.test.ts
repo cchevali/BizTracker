@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  deriveAiResistanceScore,
   deriveOverallScoreFromRatings,
   normalizeImportedOverallScore,
 } from "@/features/businesses/domain/business-score";
@@ -57,5 +58,40 @@ describe("business-score", () => {
         brotherOperatorFitRating: null,
       }),
     ).toBe(70);
+  });
+
+  it("keeps pool and landscaping services in the physical-service AI bucket", () => {
+    expect(
+      deriveAiResistanceScore({
+        businessName:
+          "Premier NJ Residential Pool Service Co. - 37 yrs - Recurring Contracts",
+        category: "home services",
+        subcategory: "residential pool service and repair",
+        summary: "Residential pool service and repair business with recurring contracts.",
+      }),
+    ).toBe(4);
+
+    expect(
+      deriveAiResistanceScore({
+        businessName:
+          "Established Landscaping, Snow Plowing, Hardscape & Concrete Company",
+        category: "outdoor services",
+        subcategory: "landscaping, snow plowing, hardscape, and concrete",
+        summary: "Commercial landscaping and snow plowing company with crews.",
+      }),
+    ).toBe(4);
+
+    expect(
+      deriveAiResistanceScore({
+        businessName: "Commercial Cleaning Business with Recurring Revenue!",
+        category: "facility services",
+        subcategory: "commercial cleaning and demolition",
+        summary:
+          "Commercial cleaning business with recurring janitorial contracts and a team of employees.",
+        whyItMayFit: "Could support delegated field management.",
+        risks: "Labor complexity and staffing noise.",
+        notes: "Operational notes should not change the category-level AI bucket.",
+      }),
+    ).toBe(4);
   });
 });

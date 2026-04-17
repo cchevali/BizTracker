@@ -3,15 +3,19 @@ import type { DealStatus, PrimaryUseCase } from "@/generated/prisma/enums";
 import { uniqueStrings } from "@/lib/utils";
 
 import {
+  DEFAULT_PIPELINE_VIEW,
   DEFAULT_SORT_OPTION,
   DEFAULT_VIEW_MODE,
   filterQueryKeys,
+  pipelineViewOptions,
   primaryUseCaseOptions,
   sortOptionValues,
   viewModes,
   type BusinessFilters,
   type FilterQueryKey,
   type FilterQueryRecord,
+  type NullableBooleanFilter,
+  type PipelineView,
   type SearchParamsInput,
   type SortOption,
   type ViewMode,
@@ -83,12 +87,26 @@ function parseBoolean(value: string) {
   return undefined;
 }
 
+function parseNullableBooleanFilter(value: string): NullableBooleanFilter | undefined {
+  const normalized = value.trim().toLowerCase();
+
+  if (normalized === "true" || normalized === "false" || normalized === "unknown") {
+    return normalized;
+  }
+
+  return undefined;
+}
+
 function isViewMode(value: string): value is ViewMode {
   return (viewModes as readonly string[]).includes(value);
 }
 
 function isSortOption(value: string): value is SortOption {
   return (sortOptionValues as readonly string[]).includes(value);
+}
+
+function isPipelineView(value: string): value is PipelineView {
+  return pipelineViewOptions.some((option) => option.value === value);
 }
 
 function isDealStatus(value: string): value is DealStatus {
@@ -127,6 +145,7 @@ export function parseBusinessFilters(
   const q = takeFirst(input.q).trim();
   const rawView = takeFirst(input.view);
   const rawSort = takeFirst(input.sort);
+  const rawPipeline = takeFirst(input.pipeline).trim();
   const rawState = takeFirst(input.state).trim().toUpperCase();
   const rawCategory = takeFirst(input.category).trim();
   const rawStatus = takeFirst(input.status).trim();
@@ -136,6 +155,9 @@ export function parseBusinessFilters(
     q,
     view: isViewMode(rawView) ? rawView : DEFAULT_VIEW_MODE,
     sort: isSortOption(rawSort) ? rawSort : DEFAULT_SORT_OPTION,
+    pipelineView: isPipelineView(rawPipeline)
+      ? rawPipeline
+      : DEFAULT_PIPELINE_VIEW,
     state: rawState,
     category: rawCategory,
     minAsk: parseNonNegativeNumber(takeFirst(input.minAsk)),
@@ -159,11 +181,11 @@ export function parseBusinessFilters(
     minConservativeCashAfterBrother: parseNumber(
       takeFirst(input.minConservativeCashAfterBrother),
     ),
-    sellerFinancingAvailable: parseBoolean(
+    sellerFinancingAvailable: parseNullableBooleanFilter(
       takeFirst(input.sellerFinancingAvailable),
     ),
-    homeBasedFlag: parseBoolean(takeFirst(input.homeBasedFlag)),
-    opsManagerExists: parseBoolean(takeFirst(input.opsManagerExists)),
+    homeBasedFlag: parseNullableBooleanFilter(takeFirst(input.homeBasedFlag)),
+    opsManagerExists: parseNullableBooleanFilter(takeFirst(input.opsManagerExists)),
     maxStaleListingRisk: parseRating(takeFirst(input.maxStaleListingRisk)),
     minDataConfidenceScore: parseRating(
       takeFirst(input.minDataConfidenceScore),
@@ -189,6 +211,10 @@ export function serializeBusinessFilters(
 
   if (filters.sort !== DEFAULT_SORT_OPTION) {
     serialized.sort = filters.sort;
+  }
+
+  if (filters.pipelineView !== DEFAULT_PIPELINE_VIEW) {
+    serialized.pipeline = filters.pipelineView;
   }
 
   if (filters.state) {
@@ -264,17 +290,15 @@ export function serializeBusinessFilters(
   }
 
   if (filters.sellerFinancingAvailable !== undefined) {
-    serialized.sellerFinancingAvailable = String(
-      filters.sellerFinancingAvailable,
-    );
+    serialized.sellerFinancingAvailable = filters.sellerFinancingAvailable;
   }
 
   if (filters.homeBasedFlag !== undefined) {
-    serialized.homeBasedFlag = String(filters.homeBasedFlag);
+    serialized.homeBasedFlag = filters.homeBasedFlag;
   }
 
   if (filters.opsManagerExists !== undefined) {
-    serialized.opsManagerExists = String(filters.opsManagerExists);
+    serialized.opsManagerExists = filters.opsManagerExists;
   }
 
   if (filters.maxStaleListingRisk !== undefined) {
@@ -339,6 +363,7 @@ export function patchBusinessListQuery(
 export function countActiveFilters(filters: BusinessFilters) {
   const values = [
     filters.q,
+    filters.pipelineView !== DEFAULT_PIPELINE_VIEW ? filters.pipelineView : "",
     filters.state,
     filters.category,
     filters.minAsk,

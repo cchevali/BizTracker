@@ -8,6 +8,7 @@ import { researchedListingSeeds } from "./researched-listings-2026-04-12.data";
 import { researchedListingSeeds as researchedListingSeeds20260414 } from "./researched-listings-2026-04-14.data";
 import { researchedListingSeeds as researchedListingSeeds20260415 } from "./researched-listings-2026-04-15.data";
 import { researchedListingSeeds as researchedListingSeeds20260415Requested } from "./researched-listings-2026-04-15-requested.data";
+import { researchedListingSeeds as researchedListingSeeds20260417Requested } from "./researched-listings-2026-04-17-requested.data";
 import {
   assertProductionTarget,
   type ReconciliationTarget,
@@ -19,11 +20,16 @@ type VerificationSummary = {
   counts: {
     total: number;
     active: number;
+    watchlist: number;
+    comp_only: number;
+    unverified: number;
     passed: number;
   };
   hvacBenchmarkPresent: boolean;
   missingRequiredBusinesses: string[];
   archiveNamesStillActive: string[];
+  nonLowercaseCategories: string[];
+  nonPublicActiveNames: string[];
   activeBackfillCoverage: {
     activeCount: number;
     aiResistancePopulated: number;
@@ -35,6 +41,8 @@ type VerificationSummary = {
   sampleBusinesses: Array<{
     businessName: string;
     dealStatus: string;
+    pipelineBucket: string;
+    publicSourceVerified: boolean;
     aiResistanceScore: number | null;
     financeabilityRating: number | null;
     keepDayJobFit: number | null;
@@ -43,29 +51,29 @@ type VerificationSummary = {
   }>;
 };
 
-const MINIMUM_EXPECTED_ACTIVE_COUNT = 69;
-const MINIMUM_EXPECTED_PASSED_COUNT = 7;
+const MINIMUM_EXPECTED_ACTIVE_COUNT = 15;
+const MINIMUM_EXPECTED_WATCHLIST_COUNT = 10;
+const MINIMUM_EXPECTED_COMP_ONLY_COUNT = 15;
+const MINIMUM_EXPECTED_UNVERIFIED_COUNT = 5;
+const MINIMUM_EXPECTED_PASSED_COUNT = 20;
 const HVAC_BENCHMARK_NAME =
   "Profitable HVAC Air Quality & Duct Cleaning Business Franchise";
 const sampleBusinessNames = [
   HVAC_BENCHMARK_NAME,
   "High Income Recession-Proof HVAC Services Business",
-  "Plumbing and Heating Service",
-  "Northeast Virginia Multi-trade Company",
-  "23 FedEx Ground Routes - Buffalo, NY - Seller & Vehicle Financing",
-  "Healthcare Staffing Agency for Sale, 5+M in Revenue with 60+ staffs",
-  "19 FedEx Ground Routes, Colorado Springs, CO",
-  "Commercial Real Estate Service",
-  "Growing Central Ohio Plumbing Business for Sale",
-  "Residential HVAC Company - Southeast Michigan",
-  "High-end Residential Remodeling and contracting service",
-  "Longstanding Commercial HVAC Business - SBA Pre-Qualified",
-  "Established Commercial HVAC and Refrigeration Service Company",
   "Premier NJ Residential Pool Service Co. - 37 yrs - Recurring Contracts",
-  "$2.0 Million Plumbing Contractor, $350K Net; SBA Pre-Approved! (17923)",
-  "Great South Charlotte pool company with high end clientele",
-  "Commercial HVAC Filter Change-Out & Maintenance",
-  "Well Established HVAC Company Serving Southern Maryland",
+  "Blue Ridge HVAC Services",
+  "Northshore Commercial Cleaning",
+  "Northeast Virginia Multi-trade Company",
+  "Commercial Cleaning Business with Recurring Revenue!",
+  "23 FedEx Ground Routes - Buffalo, NY - Seller & Vehicle Financing",
+  "19 FedEx Ground Routes, Colorado Springs, CO",
+  "Established Secure Document & Specialty Disposal Business – South FL",
+  "Commercial Real Estate Service",
+  "Anchor Point Bookkeeping Co.",
+  "Established Landscaping & Snow Removal Company | $500K SDE | 30+ Years",
+  "Established Landscaping, Snow Plowing, Hardscape & Concrete Company",
+  "Scalable Landscaping Platform | 50% Recurring Revenue | Tampa",
 ] as const;
 
 export async function verifyBizTrackerReconciliation({
@@ -83,11 +91,17 @@ export async function verifyBizTrackerReconciliation({
     const countsResult = await client.query<{
       total: number;
       active: number;
+      watchlist: number;
+      comp_only: number;
+      unverified: number;
       passed: number;
     }>(`
       select
         count(*)::int as total,
-        count(*) filter (where "dealStatus" <> 'PASSED')::int as active,
+        count(*) filter (where "pipelineBucket" = 'ACTIVE')::int as active,
+        count(*) filter (where "pipelineBucket" = 'WATCHLIST')::int as watchlist,
+        count(*) filter (where "pipelineBucket" = 'COMP_ONLY')::int as comp_only,
+        count(*) filter (where "pipelineBucket" = 'UNVERIFIED')::int as unverified,
         count(*) filter (where "dealStatus" = 'PASSED')::int as passed
       from "Business"
     `);
@@ -109,6 +123,9 @@ export async function verifyBizTrackerReconciliation({
       ...researchedListingSeeds20260414.map((seed) => seed.businessName),
       ...researchedListingSeeds20260415.map((seed) => seed.businessName),
       ...researchedListingSeeds20260415Requested.map(
+        (seed) => seed.businessName,
+      ),
+      ...researchedListingSeeds20260417Requested.map(
         (seed) => seed.businessName,
       ),
     ];
@@ -142,6 +159,21 @@ export async function verifyBizTrackerReconciliation({
       [ARCHIVE_BUSINESS_NAMES],
     );
 
+    const nonLowercaseCategoriesResult = await client.query<{ category: string }>(`
+      select distinct category
+      from "Business"
+      where category <> lower(category)
+      order by category
+    `);
+
+    const nonPublicActiveNamesResult = await client.query<{ businessName: string }>(`
+      select "businessName"
+      from "Business"
+      where "pipelineBucket" = 'ACTIVE'
+        and "publicSourceVerified" = false
+      order by "businessName"
+    `);
+
     const activeBackfillCoverageResult = await client.query<{
       active_count: number;
       ai_resistance_populated: number;
@@ -158,12 +190,14 @@ export async function verifyBizTrackerReconciliation({
         count(*) filter (where "quitDayJobFit" is not null)::int as quit_day_job_populated,
         count(*) filter (where "primaryUseCase" is not null)::int as primary_use_case_populated
       from "Business"
-      where "dealStatus" <> 'PASSED'
+      where "pipelineBucket" in ('ACTIVE', 'WATCHLIST')
     `);
 
     const sampleBusinessesResult = await client.query<{
       businessName: string;
       dealStatus: string;
+      pipelineBucket: string;
+      publicSourceVerified: boolean;
       aiResistanceScore: number | null;
       financeabilityRating: number | null;
       keepDayJobFit: number | null;
@@ -174,6 +208,8 @@ export async function verifyBizTrackerReconciliation({
         select
           "businessName",
           "dealStatus",
+          "pipelineBucket",
+          "publicSourceVerified",
           "aiResistanceScore",
           "financeabilityRating",
           "keepDayJobFit",
@@ -193,6 +229,12 @@ export async function verifyBizTrackerReconciliation({
         (row) => row.business_name,
       ),
       archiveNamesStillActive: archiveNamesStillActiveResult.rows.map(
+        (row) => row.businessName,
+      ),
+      nonLowercaseCategories: nonLowercaseCategoriesResult.rows.map(
+        (row) => row.category,
+      ),
+      nonPublicActiveNames: nonPublicActiveNamesResult.rows.map(
         (row) => row.businessName,
       ),
       activeBackfillCoverage: {
@@ -219,6 +261,24 @@ export async function verifyBizTrackerReconciliation({
       );
     }
 
+    if (summary.counts.watchlist < MINIMUM_EXPECTED_WATCHLIST_COUNT) {
+      failures.push(
+        `Watchlist count ${summary.counts.watchlist} is below the expected minimum ${MINIMUM_EXPECTED_WATCHLIST_COUNT}.`,
+      );
+    }
+
+    if (summary.counts.comp_only < MINIMUM_EXPECTED_COMP_ONLY_COUNT) {
+      failures.push(
+        `Comp-only count ${summary.counts.comp_only} is below the expected minimum ${MINIMUM_EXPECTED_COMP_ONLY_COUNT}.`,
+      );
+    }
+
+    if (summary.counts.unverified < MINIMUM_EXPECTED_UNVERIFIED_COUNT) {
+      failures.push(
+        `Unverified count ${summary.counts.unverified} is below the expected minimum ${MINIMUM_EXPECTED_UNVERIFIED_COUNT}.`,
+      );
+    }
+
     if (summary.counts.passed < MINIMUM_EXPECTED_PASSED_COUNT) {
       failures.push(
         `Passed count ${summary.counts.passed} is below the expected minimum ${MINIMUM_EXPECTED_PASSED_COUNT}.`,
@@ -238,6 +298,18 @@ export async function verifyBizTrackerReconciliation({
     if (summary.archiveNamesStillActive.length > 0) {
       failures.push(
         `Archive candidates still active: ${summary.archiveNamesStillActive.join(", ")}`,
+      );
+    }
+
+    if (summary.nonLowercaseCategories.length > 0) {
+      failures.push(
+        `Found non-lowercase categories: ${summary.nonLowercaseCategories.join(", ")}`,
+      );
+    }
+
+    if (summary.nonPublicActiveNames.length > 0) {
+      failures.push(
+        `Active pipeline still contains unverified source rows: ${summary.nonPublicActiveNames.join(", ")}`,
       );
     }
 

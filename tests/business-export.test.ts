@@ -39,6 +39,8 @@ function createBusiness(overrides: Partial<BusinessDetail> = {}): BusinessDetail
     brokerFirm: "Atlantic Deal Group",
     listingSource: "BizBuySell",
     dealStatus: "UNDER_REVIEW",
+    pipelineBucket: "ACTIVE",
+    publicSourceVerified: false,
     ownerDependenceRating: 3,
     recurringRevenueRating: 5,
     transferabilityRating: 4,
@@ -103,6 +105,7 @@ describe("business export dataset", () => {
       q: "hvac",
       view: "cards",
       sort: "score",
+      pipelineView: "active",
       state: "NC",
       category: "Home Services",
       minAsk: 1000000,
@@ -183,6 +186,7 @@ describe("business export dataset", () => {
         { field: "schema_version", value: 2 },
         { field: "export_scope", value: "current filtered view" },
         { field: "business_count", value: 1 },
+        { field: "pipeline_view", value: "active" },
         { field: "sort_label", value: "Score (high to low)" },
         { field: "status_label", value: "Under review" },
         { field: "query_json", value: JSON.stringify(query) },
@@ -253,6 +257,8 @@ describe("business export dataset", () => {
       "conservative_sde_used",
       "paper_cash_after_brother",
       "conservative_cash_after_brother",
+      "pipeline_bucket",
+      "public_source_verified",
     ]);
   });
 

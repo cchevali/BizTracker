@@ -47,7 +47,7 @@ function createBusinessFormData(overrides: Record<string, string> = {}) {
 }
 
 describe("business.schemas", () => {
-  it("parses a valid business form and derives the overall score", () => {
+  it("parses a valid business form and derives the thesis-weighted overall score", () => {
     const result = parseBusinessForm(createBusinessFormData());
 
     expect(result.success).toBe(true);
@@ -58,7 +58,7 @@ describe("business.schemas", () => {
 
     expect(result.data.stateCode).toBe("NC");
     expect(result.data.tags).toEqual(["hvac", "recurring"]);
-    expect(result.data.overallScore).toBe(80);
+    expect(result.data.overallScore).toBe(77);
     expect(result.data.sourceUrl).toBe("https://chat.openai.com/c/sample-deal");
   });
 

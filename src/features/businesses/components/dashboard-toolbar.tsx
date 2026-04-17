@@ -13,6 +13,7 @@ import {
 import {
   sortOptions,
   viewModeOptions,
+  pipelineViewOptions,
   type BusinessFilters,
   type FilterQueryRecord,
 } from "../domain/business.types";
@@ -48,6 +49,10 @@ export function DashboardToolbar({
   query,
   totalCount,
 }: DashboardToolbarProps) {
+  const pipelineLabel =
+    pipelineViewOptions.find((option) => option.value === filters.pipelineView)
+      ?.label ?? "Active only";
+
   return (
     <Panel className="p-4 sm:p-5">
       <div className="flex flex-col gap-4 sm:gap-5">
@@ -59,6 +64,9 @@ export function DashboardToolbar({
             <h2 className="mt-1 text-xl font-semibold text-[var(--color-ink)]">
               Acquisition pipeline
             </h2>
+            <p className="mt-1 text-sm text-[var(--color-muted-ink)]">
+              View: {pipelineLabel}
+            </p>
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">

@@ -33,6 +33,7 @@ describe("business.filters", () => {
       q: "HVAC leads",
       view: "table",
       sort: "ask-price",
+      pipelineView: "active",
       state: "NC",
       category: "Home Services",
       minAsk: 1250000,

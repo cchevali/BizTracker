@@ -23,6 +23,16 @@ export const DealStatus = {
 export type DealStatus = (typeof DealStatus)[keyof typeof DealStatus]
 
 
+export const PipelineBucket = {
+  ACTIVE: 'ACTIVE',
+  WATCHLIST: 'WATCHLIST',
+  COMP_ONLY: 'COMP_ONLY',
+  UNVERIFIED: 'UNVERIFIED'
+} as const
+
+export type PipelineBucket = (typeof PipelineBucket)[keyof typeof PipelineBucket]
+
+
 export const PrimaryUseCase = {
   bridge_while_employed: 'bridge_while_employed',
   full_time_replacement: 'full_time_replacement',

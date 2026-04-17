@@ -115,6 +115,8 @@ function createExistingBusiness(overrides: Record<string, unknown> = {}) {
     brokerFirm: "Gulf Coast M&A",
     listingSource: "Referral",
     dealStatus: "WATCHLIST",
+    pipelineBucket: "ACTIVE",
+    publicSourceVerified: false,
     ownerDependenceRating: 3,
     recurringRevenueRating: 5,
     transferabilityRating: 4,
@@ -175,6 +177,9 @@ describe("business-repository mutations", () => {
     expect(prismaMock.business.create).toHaveBeenCalledWith({
       data: {
         ...input,
+        category: "professional services",
+        pipelineBucket: "UNVERIFIED",
+        publicSourceVerified: false,
         historyEvents: {
           create: {
             eventType: HistoryEventType.CREATED,
@@ -224,6 +229,7 @@ describe("business-repository mutations", () => {
       q: "",
       view: "table",
       sort: "score",
+      pipelineView: "active",
       state: "",
       category: "",
       minAsk: undefined,
@@ -252,6 +258,9 @@ describe("business-repository mutations", () => {
     expect(prismaMock.business.findMany).toHaveBeenCalledWith({
       where: {
         AND: [
+          {
+            pipelineBucket: "ACTIVE",
+          },
           {
             dealStatus: {
               in: [
@@ -345,6 +354,8 @@ describe("business-repository mutations", () => {
       where: { id: existing.id },
       data: {
         ...input,
+        category: "professional services",
+        publicSourceVerified: false,
         historyEvents: {
           create: [
             {

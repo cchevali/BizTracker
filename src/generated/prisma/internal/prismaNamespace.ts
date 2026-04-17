@@ -762,6 +762,8 @@ export const BusinessScalarFieldEnum = {
   brokerFirm: 'brokerFirm',
   listingSource: 'listingSource',
   dealStatus: 'dealStatus',
+  pipelineBucket: 'pipelineBucket',
+  publicSourceVerified: 'publicSourceVerified',
   ownerDependenceRating: 'ownerDependenceRating',
   recurringRevenueRating: 'recurringRevenueRating',
   transferabilityRating: 'transferabilityRating',
@@ -945,6 +947,27 @@ export type ListEnumDealStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'PipelineBucket'
+ */
+export type EnumPipelineBucketFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineBucket'>
+    
+
+
+/**
+ * Reference to a field of type 'PipelineBucket[]'
+ */
+export type ListEnumPipelineBucketFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineBucket[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'PrimaryUseCase'
  */
 export type EnumPrimaryUseCaseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrimaryUseCase'>
@@ -955,13 +978,6 @@ export type EnumPrimaryUseCaseFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'PrimaryUseCase[]'
  */
 export type ListEnumPrimaryUseCaseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrimaryUseCase[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

@@ -10,6 +10,7 @@ import { formatTagsForInput } from "../domain/business.filters";
 import {
   dealStatusOptions,
   nullableBooleanOptions,
+  pipelineViewOptions,
   primaryUseCaseOptions,
   type BusinessFilters,
   type FilterOptionSet,
@@ -58,6 +59,19 @@ export function FilterPanel({
           </label>
 
           <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block space-y-2">
+              <span className="text-sm font-medium text-[var(--color-ink)]">
+                Pipeline view
+              </span>
+              <Select name="pipeline" defaultValue={filters.pipelineView}>
+                {pipelineViewOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Select>
+            </label>
+
             <label className="block space-y-2">
               <span className="text-sm font-medium text-[var(--color-ink)]">
                 Min score
@@ -116,7 +130,7 @@ export function FilterPanel({
               </div>
 
               <p className="text-xs leading-5 text-[var(--color-muted-ink)]">
-                Mobile keeps filtering intentionally narrower than desktop, but still defaults to the active pipeline instead of passed deals.
+                Mobile keeps filtering intentionally narrower than desktop and now defaults to active contenders only.
               </p>
             </>
           ) : (
@@ -153,10 +167,23 @@ export function FilterPanel({
 
               <label className="block space-y-2">
                 <span className="text-sm font-medium text-[var(--color-ink)]">
-                  Deal status
+                  Pipeline view
+                </span>
+                <Select name="pipeline" defaultValue={filters.pipelineView}>
+                  {pipelineViewOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
+              </label>
+
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-[var(--color-ink)]">
+                  Workflow status
                 </span>
                 <Select name="status" defaultValue={filters.status ?? ""}>
-                  <option value="">Active pipeline (default)</option>
+                  <option value="">Any workflow status</option>
                   {dealStatusOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -364,20 +391,13 @@ export function FilterPanel({
                   </span>
                   <Select
                     name="sellerFinancingAvailable"
-                    defaultValue={
-                      filters.sellerFinancingAvailable === undefined
-                        ? ""
-                        : String(filters.sellerFinancingAvailable)
-                    }
+                    defaultValue={filters.sellerFinancingAvailable ?? ""}
                   >
-                    <option value="">Either</option>
-                    {nullableBooleanOptions
-                      .filter((option) => option.value !== "")
-                      .map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
+                    {nullableBooleanOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
                   </Select>
                 </label>
 
@@ -387,20 +407,13 @@ export function FilterPanel({
                   </span>
                   <Select
                     name="homeBasedFlag"
-                    defaultValue={
-                      filters.homeBasedFlag === undefined
-                        ? ""
-                        : String(filters.homeBasedFlag)
-                    }
+                    defaultValue={filters.homeBasedFlag ?? ""}
                   >
-                    <option value="">Either</option>
-                    {nullableBooleanOptions
-                      .filter((option) => option.value !== "")
-                      .map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
+                    {nullableBooleanOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
                   </Select>
                 </label>
 
@@ -410,20 +423,13 @@ export function FilterPanel({
                   </span>
                   <Select
                     name="opsManagerExists"
-                    defaultValue={
-                      filters.opsManagerExists === undefined
-                        ? ""
-                        : String(filters.opsManagerExists)
-                    }
+                    defaultValue={filters.opsManagerExists ?? ""}
                   >
-                    <option value="">Either</option>
-                    {nullableBooleanOptions
-                      .filter((option) => option.value !== "")
-                      .map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
+                    {nullableBooleanOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
                   </Select>
                 </label>
               </div>

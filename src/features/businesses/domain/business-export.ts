@@ -3,6 +3,7 @@ import { countActiveFilters } from "./business.filters";
 import {
   getDealStatusLabel,
   getHistoryEventLabel,
+  pipelineViewOptions,
   sortOptions,
   type BusinessDetail,
   type BusinessFilters,
@@ -32,6 +33,8 @@ export type BusinessExportBusinessRow = {
   listing_source: string;
   deal_status: string;
   deal_status_label: string;
+  pipeline_bucket: string;
+  public_source_verified: string;
   owner_dependence_rating: number | null;
   recurring_revenue_rating: number | null;
   transferability_rating: number | null;
@@ -173,6 +176,8 @@ export const businessExportColumns = {
     "conservative_sde_used",
     "paper_cash_after_brother",
     "conservative_cash_after_brother",
+    "pipeline_bucket",
+    "public_source_verified",
   ] as const satisfies ReadonlyArray<keyof BusinessExportBusinessRow>,
   notes: [
     "business_id",
@@ -208,10 +213,24 @@ function formatString(value: string | null | undefined) {
 
 function formatBoolean(value: boolean | null | undefined) {
   if (value === null || value === undefined) {
-    return "";
+    return "Unknown";
   }
 
   return value ? "Yes" : "No";
+}
+
+function formatNullableBooleanFilter(
+  value: BusinessFilters["sellerFinancingAvailable"],
+) {
+  if (value === undefined) {
+    return "";
+  }
+
+  if (value === "unknown") {
+    return "Unknown";
+  }
+
+  return value === "true" ? "Yes" : "No";
 }
 
 function formatTags(tags: string[]) {
@@ -270,6 +289,16 @@ function createMetadataRows(
     {
       field: "sort",
       value: filters.sort,
+    },
+    {
+      field: "pipeline_view",
+      value: filters.pipelineView,
+    },
+    {
+      field: "pipeline_view_label",
+      value:
+        pipelineViewOptions.find((option) => option.value === filters.pipelineView)
+          ?.label ?? filters.pipelineView,
     },
     {
       field: "sort_label",
@@ -357,15 +386,15 @@ function createMetadataRows(
     },
     {
       field: "seller_financing_available",
-      value: formatBoolean(filters.sellerFinancingAvailable),
+      value: formatNullableBooleanFilter(filters.sellerFinancingAvailable),
     },
     {
       field: "home_based_flag",
-      value: formatBoolean(filters.homeBasedFlag),
+      value: formatNullableBooleanFilter(filters.homeBasedFlag),
     },
     {
       field: "ops_manager_exists",
-      value: formatBoolean(filters.opsManagerExists),
+      value: formatNullableBooleanFilter(filters.opsManagerExists),
     },
     {
       field: "max_stale_listing_risk",
@@ -436,6 +465,8 @@ function mapBusinessRow(business: BusinessDetail): BusinessExportBusinessRow {
     listing_source: formatString(business.listingSource),
     deal_status: business.dealStatus,
     deal_status_label: getDealStatusLabel(business.dealStatus),
+    pipeline_bucket: business.pipelineBucket,
+    public_source_verified: formatBoolean(business.publicSourceVerified),
     owner_dependence_rating: business.ownerDependenceRating,
     recurring_revenue_rating: business.recurringRevenueRating,
     transferability_rating: business.transferabilityRating,

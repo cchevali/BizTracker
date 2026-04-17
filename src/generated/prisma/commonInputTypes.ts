@@ -73,6 +73,18 @@ export type EnumDealStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumDealStatusFilter<$PrismaModel> | $Enums.DealStatus
 }
 
+export type EnumPipelineBucketFilter<$PrismaModel = never> = {
+  equals?: $Enums.PipelineBucket | Prisma.EnumPipelineBucketFieldRefInput<$PrismaModel>
+  in?: $Enums.PipelineBucket[] | Prisma.ListEnumPipelineBucketFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PipelineBucket[] | Prisma.ListEnumPipelineBucketFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPipelineBucketFilter<$PrismaModel> | $Enums.PipelineBucket
+}
+
+export type BoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
 export type EnumPrimaryUseCaseNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.PrimaryUseCase | Prisma.EnumPrimaryUseCaseFieldRefInput<$PrismaModel> | null
   in?: $Enums.PrimaryUseCase[] | Prisma.ListEnumPrimaryUseCaseFieldRefInput<$PrismaModel> | null
@@ -188,6 +200,24 @@ export type EnumDealStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumDealStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumDealStatusFilter<$PrismaModel>
+}
+
+export type EnumPipelineBucketWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PipelineBucket | Prisma.EnumPipelineBucketFieldRefInput<$PrismaModel>
+  in?: $Enums.PipelineBucket[] | Prisma.ListEnumPipelineBucketFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PipelineBucket[] | Prisma.ListEnumPipelineBucketFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPipelineBucketWithAggregatesFilter<$PrismaModel> | $Enums.PipelineBucket
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPipelineBucketFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPipelineBucketFilter<$PrismaModel>
+}
+
+export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
 export type EnumPrimaryUseCaseNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -412,6 +442,18 @@ export type NestedEnumDealStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumDealStatusFilter<$PrismaModel> | $Enums.DealStatus
 }
 
+export type NestedEnumPipelineBucketFilter<$PrismaModel = never> = {
+  equals?: $Enums.PipelineBucket | Prisma.EnumPipelineBucketFieldRefInput<$PrismaModel>
+  in?: $Enums.PipelineBucket[] | Prisma.ListEnumPipelineBucketFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PipelineBucket[] | Prisma.ListEnumPipelineBucketFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPipelineBucketFilter<$PrismaModel> | $Enums.PipelineBucket
+}
+
+export type NestedBoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
 export type NestedEnumPrimaryUseCaseNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.PrimaryUseCase | Prisma.EnumPrimaryUseCaseFieldRefInput<$PrismaModel> | null
   in?: $Enums.PrimaryUseCase[] | Prisma.ListEnumPrimaryUseCaseFieldRefInput<$PrismaModel> | null
@@ -542,6 +584,24 @@ export type NestedEnumDealStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumDealStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumDealStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumPipelineBucketWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PipelineBucket | Prisma.EnumPipelineBucketFieldRefInput<$PrismaModel>
+  in?: $Enums.PipelineBucket[] | Prisma.ListEnumPipelineBucketFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PipelineBucket[] | Prisma.ListEnumPipelineBucketFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPipelineBucketWithAggregatesFilter<$PrismaModel> | $Enums.PipelineBucket
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPipelineBucketFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPipelineBucketFilter<$PrismaModel>
+}
+
+export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
 export type NestedEnumPrimaryUseCaseNullableWithAggregatesFilter<$PrismaModel = never> = {

@@ -102,6 +102,8 @@ export type BusinessMinAggregateOutputType = {
   brokerFirm: string | null
   listingSource: string | null
   dealStatus: $Enums.DealStatus | null
+  pipelineBucket: $Enums.PipelineBucket | null
+  publicSourceVerified: boolean | null
   ownerDependenceRating: number | null
   recurringRevenueRating: number | null
   transferabilityRating: number | null
@@ -156,6 +158,8 @@ export type BusinessMaxAggregateOutputType = {
   brokerFirm: string | null
   listingSource: string | null
   dealStatus: $Enums.DealStatus | null
+  pipelineBucket: $Enums.PipelineBucket | null
+  publicSourceVerified: boolean | null
   ownerDependenceRating: number | null
   recurringRevenueRating: number | null
   transferabilityRating: number | null
@@ -210,6 +214,8 @@ export type BusinessCountAggregateOutputType = {
   brokerFirm: number
   listingSource: number
   dealStatus: number
+  pipelineBucket: number
+  publicSourceVerified: number
   ownerDependenceRating: number
   recurringRevenueRating: number
   transferabilityRating: number
@@ -323,6 +329,8 @@ export type BusinessMinAggregateInputType = {
   brokerFirm?: true
   listingSource?: true
   dealStatus?: true
+  pipelineBucket?: true
+  publicSourceVerified?: true
   ownerDependenceRating?: true
   recurringRevenueRating?: true
   transferabilityRating?: true
@@ -377,6 +385,8 @@ export type BusinessMaxAggregateInputType = {
   brokerFirm?: true
   listingSource?: true
   dealStatus?: true
+  pipelineBucket?: true
+  publicSourceVerified?: true
   ownerDependenceRating?: true
   recurringRevenueRating?: true
   transferabilityRating?: true
@@ -431,6 +441,8 @@ export type BusinessCountAggregateInputType = {
   brokerFirm?: true
   listingSource?: true
   dealStatus?: true
+  pipelineBucket?: true
+  publicSourceVerified?: true
   ownerDependenceRating?: true
   recurringRevenueRating?: true
   transferabilityRating?: true
@@ -573,6 +585,8 @@ export type BusinessGroupByOutputType = {
   brokerFirm: string | null
   listingSource: string | null
   dealStatus: $Enums.DealStatus
+  pipelineBucket: $Enums.PipelineBucket
+  publicSourceVerified: boolean
   ownerDependenceRating: number | null
   recurringRevenueRating: number | null
   transferabilityRating: number | null
@@ -651,6 +665,8 @@ export type BusinessWhereInput = {
   brokerFirm?: Prisma.StringNullableFilter<"Business"> | string | null
   listingSource?: Prisma.StringNullableFilter<"Business"> | string | null
   dealStatus?: Prisma.EnumDealStatusFilter<"Business"> | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFilter<"Business"> | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFilter<"Business"> | boolean
   ownerDependenceRating?: Prisma.IntNullableFilter<"Business"> | number | null
   recurringRevenueRating?: Prisma.IntNullableFilter<"Business"> | number | null
   transferabilityRating?: Prisma.IntNullableFilter<"Business"> | number | null
@@ -708,6 +724,8 @@ export type BusinessOrderByWithRelationInput = {
   brokerFirm?: Prisma.SortOrderInput | Prisma.SortOrder
   listingSource?: Prisma.SortOrderInput | Prisma.SortOrder
   dealStatus?: Prisma.SortOrder
+  pipelineBucket?: Prisma.SortOrder
+  publicSourceVerified?: Prisma.SortOrder
   ownerDependenceRating?: Prisma.SortOrderInput | Prisma.SortOrder
   recurringRevenueRating?: Prisma.SortOrderInput | Prisma.SortOrder
   transferabilityRating?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -768,6 +786,8 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   brokerFirm?: Prisma.StringNullableFilter<"Business"> | string | null
   listingSource?: Prisma.StringNullableFilter<"Business"> | string | null
   dealStatus?: Prisma.EnumDealStatusFilter<"Business"> | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFilter<"Business"> | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFilter<"Business"> | boolean
   ownerDependenceRating?: Prisma.IntNullableFilter<"Business"> | number | null
   recurringRevenueRating?: Prisma.IntNullableFilter<"Business"> | number | null
   transferabilityRating?: Prisma.IntNullableFilter<"Business"> | number | null
@@ -825,6 +845,8 @@ export type BusinessOrderByWithAggregationInput = {
   brokerFirm?: Prisma.SortOrderInput | Prisma.SortOrder
   listingSource?: Prisma.SortOrderInput | Prisma.SortOrder
   dealStatus?: Prisma.SortOrder
+  pipelineBucket?: Prisma.SortOrder
+  publicSourceVerified?: Prisma.SortOrder
   ownerDependenceRating?: Prisma.SortOrderInput | Prisma.SortOrder
   recurringRevenueRating?: Prisma.SortOrderInput | Prisma.SortOrder
   transferabilityRating?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -888,6 +910,8 @@ export type BusinessScalarWhereWithAggregatesInput = {
   brokerFirm?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   listingSource?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   dealStatus?: Prisma.EnumDealStatusWithAggregatesFilter<"Business"> | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketWithAggregatesFilter<"Business"> | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolWithAggregatesFilter<"Business"> | boolean
   ownerDependenceRating?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
   recurringRevenueRating?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
   transferabilityRating?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
@@ -943,6 +967,8 @@ export type BusinessCreateInput = {
   brokerFirm?: string | null
   listingSource?: string | null
   dealStatus?: $Enums.DealStatus
+  pipelineBucket?: $Enums.PipelineBucket
+  publicSourceVerified?: boolean
   ownerDependenceRating?: number | null
   recurringRevenueRating?: number | null
   transferabilityRating?: number | null
@@ -1000,6 +1026,8 @@ export type BusinessUncheckedCreateInput = {
   brokerFirm?: string | null
   listingSource?: string | null
   dealStatus?: $Enums.DealStatus
+  pipelineBucket?: $Enums.PipelineBucket
+  publicSourceVerified?: boolean
   ownerDependenceRating?: number | null
   recurringRevenueRating?: number | null
   transferabilityRating?: number | null
@@ -1057,6 +1085,8 @@ export type BusinessUpdateInput = {
   brokerFirm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listingSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dealStatus?: Prisma.EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFieldUpdateOperationsInput | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ownerDependenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   recurringRevenueRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1114,6 +1144,8 @@ export type BusinessUncheckedUpdateInput = {
   brokerFirm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listingSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dealStatus?: Prisma.EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFieldUpdateOperationsInput | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ownerDependenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   recurringRevenueRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1171,6 +1203,8 @@ export type BusinessCreateManyInput = {
   brokerFirm?: string | null
   listingSource?: string | null
   dealStatus?: $Enums.DealStatus
+  pipelineBucket?: $Enums.PipelineBucket
+  publicSourceVerified?: boolean
   ownerDependenceRating?: number | null
   recurringRevenueRating?: number | null
   transferabilityRating?: number | null
@@ -1226,6 +1260,8 @@ export type BusinessUpdateManyMutationInput = {
   brokerFirm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listingSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dealStatus?: Prisma.EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFieldUpdateOperationsInput | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ownerDependenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   recurringRevenueRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1281,6 +1317,8 @@ export type BusinessUncheckedUpdateManyInput = {
   brokerFirm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listingSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dealStatus?: Prisma.EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFieldUpdateOperationsInput | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ownerDependenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   recurringRevenueRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1344,6 +1382,8 @@ export type BusinessCountOrderByAggregateInput = {
   brokerFirm?: Prisma.SortOrder
   listingSource?: Prisma.SortOrder
   dealStatus?: Prisma.SortOrder
+  pipelineBucket?: Prisma.SortOrder
+  publicSourceVerified?: Prisma.SortOrder
   ownerDependenceRating?: Prisma.SortOrder
   recurringRevenueRating?: Prisma.SortOrder
   transferabilityRating?: Prisma.SortOrder
@@ -1427,6 +1467,8 @@ export type BusinessMaxOrderByAggregateInput = {
   brokerFirm?: Prisma.SortOrder
   listingSource?: Prisma.SortOrder
   dealStatus?: Prisma.SortOrder
+  pipelineBucket?: Prisma.SortOrder
+  publicSourceVerified?: Prisma.SortOrder
   ownerDependenceRating?: Prisma.SortOrder
   recurringRevenueRating?: Prisma.SortOrder
   transferabilityRating?: Prisma.SortOrder
@@ -1481,6 +1523,8 @@ export type BusinessMinOrderByAggregateInput = {
   brokerFirm?: Prisma.SortOrder
   listingSource?: Prisma.SortOrder
   dealStatus?: Prisma.SortOrder
+  pipelineBucket?: Prisma.SortOrder
+  publicSourceVerified?: Prisma.SortOrder
   ownerDependenceRating?: Prisma.SortOrder
   recurringRevenueRating?: Prisma.SortOrder
   transferabilityRating?: Prisma.SortOrder
@@ -1580,6 +1624,14 @@ export type EnumDealStatusFieldUpdateOperationsInput = {
   set?: $Enums.DealStatus
 }
 
+export type EnumPipelineBucketFieldUpdateOperationsInput = {
+  set?: $Enums.PipelineBucket
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type NullableEnumPrimaryUseCaseFieldUpdateOperationsInput = {
   set?: $Enums.PrimaryUseCase | null
 }
@@ -1649,6 +1701,8 @@ export type BusinessCreateWithoutNoteEntriesInput = {
   brokerFirm?: string | null
   listingSource?: string | null
   dealStatus?: $Enums.DealStatus
+  pipelineBucket?: $Enums.PipelineBucket
+  publicSourceVerified?: boolean
   ownerDependenceRating?: number | null
   recurringRevenueRating?: number | null
   transferabilityRating?: number | null
@@ -1705,6 +1759,8 @@ export type BusinessUncheckedCreateWithoutNoteEntriesInput = {
   brokerFirm?: string | null
   listingSource?: string | null
   dealStatus?: $Enums.DealStatus
+  pipelineBucket?: $Enums.PipelineBucket
+  publicSourceVerified?: boolean
   ownerDependenceRating?: number | null
   recurringRevenueRating?: number | null
   transferabilityRating?: number | null
@@ -1777,6 +1833,8 @@ export type BusinessUpdateWithoutNoteEntriesInput = {
   brokerFirm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listingSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dealStatus?: Prisma.EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFieldUpdateOperationsInput | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ownerDependenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   recurringRevenueRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1833,6 +1891,8 @@ export type BusinessUncheckedUpdateWithoutNoteEntriesInput = {
   brokerFirm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listingSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dealStatus?: Prisma.EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFieldUpdateOperationsInput | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ownerDependenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   recurringRevenueRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1889,6 +1949,8 @@ export type BusinessCreateWithoutHistoryEventsInput = {
   brokerFirm?: string | null
   listingSource?: string | null
   dealStatus?: $Enums.DealStatus
+  pipelineBucket?: $Enums.PipelineBucket
+  publicSourceVerified?: boolean
   ownerDependenceRating?: number | null
   recurringRevenueRating?: number | null
   transferabilityRating?: number | null
@@ -1945,6 +2007,8 @@ export type BusinessUncheckedCreateWithoutHistoryEventsInput = {
   brokerFirm?: string | null
   listingSource?: string | null
   dealStatus?: $Enums.DealStatus
+  pipelineBucket?: $Enums.PipelineBucket
+  publicSourceVerified?: boolean
   ownerDependenceRating?: number | null
   recurringRevenueRating?: number | null
   transferabilityRating?: number | null
@@ -2017,6 +2081,8 @@ export type BusinessUpdateWithoutHistoryEventsInput = {
   brokerFirm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listingSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dealStatus?: Prisma.EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFieldUpdateOperationsInput | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ownerDependenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   recurringRevenueRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -2073,6 +2139,8 @@ export type BusinessUncheckedUpdateWithoutHistoryEventsInput = {
   brokerFirm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listingSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dealStatus?: Prisma.EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+  pipelineBucket?: Prisma.EnumPipelineBucketFieldUpdateOperationsInput | $Enums.PipelineBucket
+  publicSourceVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ownerDependenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   recurringRevenueRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   transferabilityRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -2169,6 +2237,8 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   brokerFirm?: boolean
   listingSource?: boolean
   dealStatus?: boolean
+  pipelineBucket?: boolean
+  publicSourceVerified?: boolean
   ownerDependenceRating?: boolean
   recurringRevenueRating?: boolean
   transferabilityRating?: boolean
@@ -2227,6 +2297,8 @@ export type BusinessSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   brokerFirm?: boolean
   listingSource?: boolean
   dealStatus?: boolean
+  pipelineBucket?: boolean
+  publicSourceVerified?: boolean
   ownerDependenceRating?: boolean
   recurringRevenueRating?: boolean
   transferabilityRating?: boolean
@@ -2282,6 +2354,8 @@ export type BusinessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   brokerFirm?: boolean
   listingSource?: boolean
   dealStatus?: boolean
+  pipelineBucket?: boolean
+  publicSourceVerified?: boolean
   ownerDependenceRating?: boolean
   recurringRevenueRating?: boolean
   transferabilityRating?: boolean
@@ -2337,6 +2411,8 @@ export type BusinessSelectScalar = {
   brokerFirm?: boolean
   listingSource?: boolean
   dealStatus?: boolean
+  pipelineBucket?: boolean
+  publicSourceVerified?: boolean
   ownerDependenceRating?: boolean
   recurringRevenueRating?: boolean
   transferabilityRating?: boolean
@@ -2372,7 +2448,7 @@ export type BusinessSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessName" | "sourceUrl" | "category" | "subcategory" | "location" | "stateCode" | "askingPrice" | "revenue" | "sde" | "ebitda" | "employees" | "summary" | "whyItMayFit" | "risks" | "brokerName" | "brokerFirm" | "listingSource" | "dealStatus" | "ownerDependenceRating" | "recurringRevenueRating" | "transferabilityRating" | "scheduleControlFitRating" | "brotherOperatorFitRating" | "aiResistanceScore" | "keepDayJobFit" | "quitDayJobFit" | "primaryUseCase" | "beatsCurrentBenchmark" | "benchmarkNotes" | "financeabilityRating" | "sellerFinancingAvailable" | "sellerFinancingNotes" | "operatorSkillDependency" | "licenseDependency" | "afterHoursBurden" | "capexRisk" | "regretIfWrongScore" | "dataConfidenceScore" | "staleListingRisk" | "keyPersonRisk" | "homeBasedFlag" | "recurringRevenuePercent" | "ownerHoursClaimed" | "opsManagerExists" | "freshnessVerifiedAt" | "cashToCloseNotes" | "overallScore" | "notes" | "tags" | "createdAt" | "updatedAt", ExtArgs["result"]["business"]>
+export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessName" | "sourceUrl" | "category" | "subcategory" | "location" | "stateCode" | "askingPrice" | "revenue" | "sde" | "ebitda" | "employees" | "summary" | "whyItMayFit" | "risks" | "brokerName" | "brokerFirm" | "listingSource" | "dealStatus" | "pipelineBucket" | "publicSourceVerified" | "ownerDependenceRating" | "recurringRevenueRating" | "transferabilityRating" | "scheduleControlFitRating" | "brotherOperatorFitRating" | "aiResistanceScore" | "keepDayJobFit" | "quitDayJobFit" | "primaryUseCase" | "beatsCurrentBenchmark" | "benchmarkNotes" | "financeabilityRating" | "sellerFinancingAvailable" | "sellerFinancingNotes" | "operatorSkillDependency" | "licenseDependency" | "afterHoursBurden" | "capexRisk" | "regretIfWrongScore" | "dataConfidenceScore" | "staleListingRisk" | "keyPersonRisk" | "homeBasedFlag" | "recurringRevenuePercent" | "ownerHoursClaimed" | "opsManagerExists" | "freshnessVerifiedAt" | "cashToCloseNotes" | "overallScore" | "notes" | "tags" | "createdAt" | "updatedAt", ExtArgs["result"]["business"]>
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   noteEntries?: boolean | Prisma.Business$noteEntriesArgs<ExtArgs>
   historyEvents?: boolean | Prisma.Business$historyEventsArgs<ExtArgs>
@@ -2407,6 +2483,8 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     brokerFirm: string | null
     listingSource: string | null
     dealStatus: $Enums.DealStatus
+    pipelineBucket: $Enums.PipelineBucket
+    publicSourceVerified: boolean
     ownerDependenceRating: number | null
     recurringRevenueRating: number | null
     transferabilityRating: number | null
@@ -2884,6 +2962,8 @@ export interface BusinessFieldRefs {
   readonly brokerFirm: Prisma.FieldRef<"Business", 'String'>
   readonly listingSource: Prisma.FieldRef<"Business", 'String'>
   readonly dealStatus: Prisma.FieldRef<"Business", 'DealStatus'>
+  readonly pipelineBucket: Prisma.FieldRef<"Business", 'PipelineBucket'>
+  readonly publicSourceVerified: Prisma.FieldRef<"Business", 'Boolean'>
   readonly ownerDependenceRating: Prisma.FieldRef<"Business", 'Int'>
   readonly recurringRevenueRating: Prisma.FieldRef<"Business", 'Int'>
   readonly transferabilityRating: Prisma.FieldRef<"Business", 'Int'>

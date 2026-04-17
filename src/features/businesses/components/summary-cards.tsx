@@ -15,8 +15,8 @@ const summaryItems = [
   },
   {
     key: "active",
-    label: "Active pipeline",
-    helper: "Not passed or closed",
+    label: "Active contenders",
+    helper: "Visible active bucket",
   },
   {
     key: "averageScore",

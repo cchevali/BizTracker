@@ -19,6 +19,7 @@ import { HistoryTimeline } from "@/features/businesses/components/history-timeli
 import { NoteForm } from "@/features/businesses/components/note-form";
 import { StatusBadge } from "@/features/businesses/components/status-badge";
 import { StatusForm } from "@/features/businesses/components/status-form";
+import { PipelineBadge } from "@/features/businesses/components/pipeline-badge";
 import { getBusinessById } from "@/features/businesses/data/business-repository";
 import { getPrimaryUseCaseLabel } from "@/features/businesses/domain/business.types";
 
@@ -70,6 +71,7 @@ export default async function BusinessDetailPage({ params }: DetailPageProps) {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-3">
+            <PipelineBadge bucket={business.pipelineBucket} />
             <StatusBadge status={business.dealStatus} />
             <Badge tone="neutral">{business.location}</Badge>
             {business.listingSource ? (
@@ -433,6 +435,12 @@ export default async function BusinessDetailPage({ params }: DetailPageProps) {
                   ) : (
                     <strong className="text-[var(--color-ink)]">—</strong>
                   )}
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <span>Public source verified</span>
+                  <strong className="text-right text-[var(--color-ink)]">
+                    {formatBoolean(business.publicSourceVerified)}
+                  </strong>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <span>Broker</span>

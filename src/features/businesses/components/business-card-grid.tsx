@@ -14,6 +14,7 @@ import {
   getPrimaryUseCaseLabel,
   type BusinessListItem,
 } from "../domain/business.types";
+import { PipelineBadge } from "./pipeline-badge";
 import { StatusBadge } from "./status-badge";
 
 type BusinessCardGridProps = {
@@ -38,7 +39,10 @@ export function BusinessCardGrid({ businesses }: BusinessCardGridProps) {
                 {business.subcategory ? ` • ${business.subcategory}` : ""}
               </p>
             </div>
-            <StatusBadge status={business.dealStatus} />
+            <div className="flex flex-col items-end gap-2">
+              <PipelineBadge bucket={business.pipelineBucket} />
+              <StatusBadge status={business.dealStatus} />
+            </div>
           </div>
 
           <p className="flex-1 text-sm leading-6 text-[var(--color-muted-ink)]">

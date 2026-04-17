@@ -93,6 +93,8 @@ export const BusinessScalarFieldEnum = {
   brokerFirm: 'brokerFirm',
   listingSource: 'listingSource',
   dealStatus: 'dealStatus',
+  pipelineBucket: 'pipelineBucket',
+  publicSourceVerified: 'publicSourceVerified',
   ownerDependenceRating: 'ownerDependenceRating',
   recurringRevenueRating: 'recurringRevenueRating',
   transferabilityRating: 'transferabilityRating',

@@ -23,11 +23,31 @@ import {
   type DashboardSummary,
   type FilterOptionSet,
 } from "../domain/business.types";
+import { normalizeBusinessCategory, isPublicListingSourceUrl } from "../domain/business-source";
 
 const defaultOrderBy: Prisma.BusinessOrderByWithRelationInput[] = [
   { updatedAt: "desc" },
   { createdAt: "desc" },
 ];
+
+function buildNullableBooleanClause(
+  fieldName: "sellerFinancingAvailable" | "homeBasedFlag" | "opsManagerExists",
+  filterValue: BusinessFilters[typeof fieldName],
+) {
+  if (filterValue === undefined) {
+    return null;
+  }
+
+  if (filterValue === "unknown") {
+    return {
+      [fieldName]: null,
+    } satisfies Prisma.BusinessWhereInput;
+  }
+
+  return {
+    [fieldName]: filterValue === "true",
+  } satisfies Prisma.BusinessWhereInput;
+}
 
 function buildWhereInput(filters: BusinessFilters): Prisma.BusinessWhereInput {
   const andClauses: Prisma.BusinessWhereInput[] = [];
@@ -71,11 +91,41 @@ function buildWhereInput(filters: BusinessFilters): Prisma.BusinessWhereInput {
     });
   }
 
+  if (filters.pipelineView === "active") {
+    andClauses.push({
+      pipelineBucket: "ACTIVE",
+    });
+  } else if (filters.pipelineView === "active-plus-watchlist") {
+    andClauses.push({
+      pipelineBucket: {
+        in: ["ACTIVE", "WATCHLIST"],
+      },
+    });
+  } else if (filters.pipelineView === "watchlist") {
+    andClauses.push({
+      pipelineBucket: "WATCHLIST",
+    });
+  } else if (filters.pipelineView === "comp-only") {
+    andClauses.push({
+      pipelineBucket: "COMP_ONLY",
+    });
+  } else if (filters.pipelineView === "unverified") {
+    andClauses.push({
+      pipelineBucket: "UNVERIFIED",
+    });
+  }
+
+  const shouldDefaultToActiveStatuses =
+    !filters.status &&
+    (filters.pipelineView === "active" ||
+      filters.pipelineView === "active-plus-watchlist" ||
+      filters.pipelineView === "watchlist");
+
   if (filters.status) {
     andClauses.push({
       dealStatus: filters.status,
     });
-  } else {
+  } else if (shouldDefaultToActiveStatuses) {
     andClauses.push({
       dealStatus: {
         in: activeDealStatuses,
@@ -156,22 +206,31 @@ function buildWhereInput(filters: BusinessFilters): Prisma.BusinessWhereInput {
     });
   }
 
-  if (filters.sellerFinancingAvailable !== undefined) {
-    andClauses.push({
-      sellerFinancingAvailable: filters.sellerFinancingAvailable,
-    });
+  const sellerFinancingClause = buildNullableBooleanClause(
+    "sellerFinancingAvailable",
+    filters.sellerFinancingAvailable,
+  );
+
+  if (sellerFinancingClause) {
+    andClauses.push(sellerFinancingClause);
   }
 
-  if (filters.homeBasedFlag !== undefined) {
-    andClauses.push({
-      homeBasedFlag: filters.homeBasedFlag,
-    });
+  const homeBasedClause = buildNullableBooleanClause(
+    "homeBasedFlag",
+    filters.homeBasedFlag,
+  );
+
+  if (homeBasedClause) {
+    andClauses.push(homeBasedClause);
   }
 
-  if (filters.opsManagerExists !== undefined) {
-    andClauses.push({
-      opsManagerExists: filters.opsManagerExists,
-    });
+  const opsManagerClause = buildNullableBooleanClause(
+    "opsManagerExists",
+    filters.opsManagerExists,
+  );
+
+  if (opsManagerClause) {
+    andClauses.push(opsManagerClause);
   }
 
   if (filters.maxStaleListingRisk !== undefined) {
@@ -238,9 +297,9 @@ function buildDashboardSummary(businesses: DashboardData["businesses"]): Dashboa
           )
         : null,
     active: businesses.filter((business) =>
-      activeDealStatuses.includes(business.dealStatus),
+      business.pipelineBucket === "ACTIVE",
     ).length,
-    watchlist: businesses.filter((business) => business.dealStatus === "WATCHLIST")
+    watchlist: businesses.filter((business) => business.pipelineBucket === "WATCHLIST")
       .length,
     passed: businesses.filter((business) => business.dealStatus === "PASSED")
       .length,
@@ -495,7 +554,7 @@ function buildBusinessData(input: BusinessFormInput) {
   return {
     businessName: input.businessName,
     sourceUrl: input.sourceUrl,
-    category: input.category,
+    category: normalizeBusinessCategory(input.category),
     subcategory: input.subcategory,
     location: input.location,
     stateCode: input.stateCode,
@@ -511,6 +570,7 @@ function buildBusinessData(input: BusinessFormInput) {
     brokerFirm: input.brokerFirm,
     listingSource: input.listingSource,
     dealStatus: input.dealStatus,
+    publicSourceVerified: isPublicListingSourceUrl(input.sourceUrl),
     ownerDependenceRating: input.ownerDependenceRating,
     recurringRevenueRating: input.recurringRevenueRating,
     transferabilityRating: input.transferabilityRating,
@@ -559,7 +619,7 @@ function normalizeExistingBusiness(business: BusinessFormComparisonTarget) {
   return {
     businessName: business.businessName,
     sourceUrl: business.sourceUrl ?? undefined,
-    category: business.category,
+    category: normalizeBusinessCategory(business.category),
     subcategory: business.subcategory ?? undefined,
     location: business.location,
     stateCode: business.stateCode ?? undefined,
@@ -575,6 +635,7 @@ function normalizeExistingBusiness(business: BusinessFormComparisonTarget) {
     brokerFirm: business.brokerFirm ?? undefined,
     listingSource: business.listingSource ?? undefined,
     dealStatus: business.dealStatus,
+    publicSourceVerified: business.publicSourceVerified,
     ownerDependenceRating: business.ownerDependenceRating ?? undefined,
     recurringRevenueRating: business.recurringRevenueRating ?? undefined,
     transferabilityRating: business.transferabilityRating ?? undefined,
@@ -612,6 +673,8 @@ function normalizeExistingBusiness(business: BusinessFormComparisonTarget) {
 function normalizeInput(input: BusinessFormInput) {
   return {
     ...input,
+    category: normalizeBusinessCategory(input.category),
+    publicSourceVerified: isPublicListingSourceUrl(input.sourceUrl),
     freshnessVerifiedAt: input.freshnessVerifiedAt?.toISOString(),
     tags: [...input.tags].sort(),
   };
@@ -621,6 +684,7 @@ const changedFieldLabels: Record<keyof ReturnType<typeof normalizeInput>, string
   businessName: "business name",
   sourceUrl: "source URL",
   category: "category",
+  publicSourceVerified: "public source verification",
   subcategory: "subcategory",
   location: "location",
   stateCode: "state",
@@ -700,9 +764,12 @@ function summarizeChangedFields(changedFields: string[]) {
 }
 
 export async function createBusiness(input: BusinessFormInput) {
+  const publicSourceVerified = isPublicListingSourceUrl(input.sourceUrl);
+
   return prisma.business.create({
     data: {
       ...buildBusinessData(input),
+      pipelineBucket: publicSourceVerified ? "ACTIVE" : "UNVERIFIED",
       historyEvents: {
         create: {
           eventType: HistoryEventType.CREATED,

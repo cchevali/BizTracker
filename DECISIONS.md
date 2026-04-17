@@ -124,3 +124,28 @@ Consequences: `scripts/backfill-acquisition-thesis.ts` and production reconcilia
 Decision: Add the requested 12-listing public batch as a fifth repo-managed researched batch and require workbook-plus-live-DB dedupe before seeding any new requested public listings.
 Reason: The user explicitly supplied a tracker export workbook as the dedupe source of truth, but workbook snapshots can lag the live database, so safe requested-listing adds needed both the workbook and the current DB checked before creating managed rows.
 Consequences: `scripts/researched-listings-2026-04-15-requested.*` now own these 12 listings through the normal managed-batch path, future sessions should repeat the same workbook-plus-DB dedupe workflow for similar user-requested public batches, and production verification now expects the live tracker to include those rows after reconciliation.
+
+## 2026-04-17
+Decision: For requested public-listing adds, only seed listings that can be validated from the exact requested URL or from an exact-title/location live relist; skip inaccessible requested URLs instead of substituting similar alternatives.
+Reason: The April 17 request included two inaccessible BizBuySell URLs plus one Clifton listing that had been relisted under a different live BizBuySell ad id, and the tracker needs reproducible live facts rather than guessed near-matches.
+Consequences: The Clifton listing is stored under its current live `2445240` URL, the Wayne County and Tampa Bay requests stay unseeded until updated live links are available, and future sessions should document any URL swap explicitly in the repo docs and handoff.
+
+## 2026-04-17
+Decision: Add explicit `pipelineBucket` and `publicSourceVerified` fields instead of overloading `dealStatus` alone to hide distractions or flag weak sources.
+Reason: The tracker needed a conservative, non-destructive way to separate serious active contenders from watchlist, comp-only, and unverified rows without deleting history or inventing new workflow semantics for every record.
+Consequences: Default dashboard views now key off `pipelineBucket`, public-source quality is queryable and exportable, and future sessions can rebucket rows without losing audit trail or overusing `PASSED` as the only archive mechanism.
+
+## 2026-04-17
+Decision: Run a repo-managed thesis realignment pass after the managed public listing batches so category normalization, source verification, AI resistance, and conservative ranking are all reproducible.
+Reason: The user asked for a broad re-ranking and cleanup across existing rows, and one-off manual DB edits would have been fragile, non-repeatable, and easy to drift from production over time.
+Consequences: `scripts/thesis-realignment-2026-04-17.*` now owns the brother-local / buyer-remote rebucketing logic, production reconciliation restores that state automatically, and future scoring or bucket changes should flow through the realignment data/lib rather than ad hoc DB updates.
+
+## 2026-04-17
+Decision: Reinterpret `overall_score` as the current thesis-weighted ranking signal instead of preserving the old legacy average semantics.
+Reason: The user explicitly asked for overall ranking to lean much harder on brother-operator fit, schedule control, transferability, financeability, recurring revenue, management depth, and conservative post-brother cash while penalizing weak source quality, platform dependence, and buy-a-job economics.
+Consequences: `src/features/businesses/domain/business-score.ts` now derives a more opinionated thesis score, production reconciliation rewrites existing rankings accordingly, and future sessions should treat `overall_score` as the live acquisition-priority signal rather than as a stable historical average.
+
+## 2026-04-17
+Decision: Allow requested public listings to canonicalize to a live direct relist or a live direct mirror-marketplace individual page when the requested URL is stale, but only if the title, location, and economics still match exactly.
+Reason: The Wayne County landscaping candidate no longer had a usable live BizBuySell page, the user-supplied BizQuest `BW2487125` URL was also stale, and the tracker still needed a conservative way to preserve the real opportunity without inventing a source URL or seeding a merely similar listing.
+Consequences: Wayne is now stored under the live direct BizQuest individual page `BW2480416`, Clifton remains on the live BizBuySell relist `2445240`, Tampa uses its live BizBuySell page `2479308`, and future sessions should document dead or stale requested URLs explicitly in notes, docs, and handoff rather than silently substituting near-matches.

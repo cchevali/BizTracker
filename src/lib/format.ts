@@ -53,7 +53,7 @@ export function formatRating(value: number | null | undefined) {
 
 export function formatBoolean(value: boolean | null | undefined) {
   if (value === null || value === undefined) {
-    return "—";
+    return "Unknown";
   }
 
   return value ? "Yes" : "No";

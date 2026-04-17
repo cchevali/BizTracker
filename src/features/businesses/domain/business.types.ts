@@ -1,6 +1,7 @@
 import type {
   DealStatus,
   HistoryEventType,
+  PipelineBucket,
   PrimaryUseCase,
 } from "@/generated/prisma/enums";
 
@@ -29,6 +30,7 @@ export type SortOption = (typeof sortOptionValues)[number];
 
 export const DEFAULT_VIEW_MODE: ViewMode = "table";
 export const DEFAULT_SORT_OPTION: SortOption = "ask-price";
+export const DEFAULT_PIPELINE_VIEW = "active" as const;
 
 export const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: "ask-price", label: "Ask price (low to high)" },
@@ -55,6 +57,27 @@ export const viewModeOptions: Array<{ value: ViewMode; label: string }> = [
   { value: "cards", label: "Cards" },
 ];
 
+export const pipelineViewOptions = [
+  { value: "active", label: "Active only" },
+  { value: "active-plus-watchlist", label: "Active + watchlist" },
+  { value: "watchlist", label: "Watchlist only" },
+  { value: "comp-only", label: "Comp only" },
+  { value: "unverified", label: "Unverified" },
+  { value: "all", label: "All retained records" },
+] as const;
+
+export type PipelineView = (typeof pipelineViewOptions)[number]["value"];
+
+export const pipelineBucketOptions: Array<{
+  value: PipelineBucket;
+  label: string;
+}> = [
+  { value: "ACTIVE", label: "Active" },
+  { value: "WATCHLIST", label: "Watchlist" },
+  { value: "COMP_ONLY", label: "Comp only" },
+  { value: "UNVERIFIED", label: "Unverified" },
+];
+
 export const dealStatusOptions: Array<{ value: DealStatus; label: string }> = [
   { value: "NEW", label: "New" },
   { value: "WATCHLIST", label: "Watchlist" },
@@ -79,10 +102,16 @@ export const primaryUseCaseOptions: Array<{
 ];
 
 export const nullableBooleanOptions = [
-  { value: "", label: "Not set" },
+  { value: "", label: "Any" },
   { value: "true", label: "Yes" },
   { value: "false", label: "No" },
+  { value: "unknown", label: "Unknown" },
 ] as const;
+
+export type NullableBooleanFilter =
+  | (typeof nullableBooleanOptions)[1]["value"]
+  | (typeof nullableBooleanOptions)[2]["value"]
+  | (typeof nullableBooleanOptions)[3]["value"];
 
 export const activeDealStatuses: DealStatus[] = [
   "NEW",
@@ -97,6 +126,7 @@ export const filterQueryKeys = [
   "q",
   "view",
   "sort",
+  "pipeline",
   "state",
   "category",
   "minAsk",
@@ -133,6 +163,7 @@ export type BusinessFilters = {
   q: string;
   view: ViewMode;
   sort: SortOption;
+  pipelineView: PipelineView;
   state: string;
   category: string;
   minAsk?: number;
@@ -150,9 +181,9 @@ export type BusinessFilters = {
   minFinanceabilityRating?: number;
   maxCashToCloseHigh?: number;
   minConservativeCashAfterBrother?: number;
-  sellerFinancingAvailable?: boolean;
-  homeBasedFlag?: boolean;
-  opsManagerExists?: boolean;
+  sellerFinancingAvailable?: NullableBooleanFilter;
+  homeBasedFlag?: NullableBooleanFilter;
+  opsManagerExists?: NullableBooleanFilter;
   maxStaleListingRisk?: number;
   minDataConfidenceScore?: number;
   beatsCurrentBenchmark?: boolean;
@@ -179,6 +210,8 @@ export type BusinessListItem = BusinessScenario & {
   updatedAt: string;
   listingSource: string | null;
   brokerFirm: string | null;
+  pipelineBucket: PipelineBucket;
+  publicSourceVerified: boolean;
   aiResistanceScore: number | null;
   financeabilityRating: number | null;
   sellerFinancingAvailable: boolean | null;
@@ -485,10 +518,16 @@ export function getPrimaryUseCaseLabel(value: PrimaryUseCase | null | undefined)
 
 export function getBooleanLabel(value: boolean | null | undefined) {
   if (value === null || value === undefined) {
-    return "—";
+    return "Unknown";
   }
 
   return value ? "Yes" : "No";
+}
+
+export function getPipelineBucketLabel(value: PipelineBucket) {
+  return (
+    pipelineBucketOptions.find((option) => option.value === value)?.label ?? value
+  );
 }
 
 export function getHistoryEventLabel(eventType: HistoryEventType) {

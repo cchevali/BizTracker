@@ -52,6 +52,8 @@ function mapBusinessBase(record: Business): BusinessListItem {
     updatedAt: record.updatedAt.toISOString(),
     listingSource: record.listingSource,
     brokerFirm: record.brokerFirm,
+    pipelineBucket: record.pipelineBucket,
+    publicSourceVerified: record.publicSourceVerified,
     aiResistanceScore: record.aiResistanceScore,
     financeabilityRating: record.financeabilityRating,
     sellerFinancingAvailable: record.sellerFinancingAvailable,

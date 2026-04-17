@@ -1,7 +1,11 @@
 import { DealStatus } from "@/generated/prisma/enums";
 import { z } from "zod";
 
-import { deriveOverallScoreFromRatings } from "./business-score";
+import {
+  deriveOverallScoreFromThesis,
+} from "./business-score";
+import { calculateBusinessScenario } from "./business-scenario";
+import { normalizeBusinessCategory } from "./business-source";
 import {
   parseBusinessFilters,
   serializeBusinessFilters,
@@ -235,7 +239,9 @@ const businessFormSchema = z
   .object({
     businessName: requiredTextField("Business name", 2, 120),
     sourceUrl: optionalUrlField("Source URL"),
-    category: requiredTextField("Category", 2, 80),
+    category: requiredTextField("Category", 2, 80).transform((value) =>
+      normalizeBusinessCategory(value),
+    ),
     subcategory: optionalTextField("Subcategory", 80),
     location: requiredTextField("Location", 2, 120),
     stateCode: z
@@ -441,12 +447,32 @@ const businessFormSchema = z
       return value;
     }
 
-    const overallScore = deriveOverallScoreFromRatings({
+    const scenario = calculateBusinessScenario({
+      askingPrice: value.askingPrice,
+      sde: value.sde,
+    });
+
+    const overallScore = deriveOverallScoreFromThesis({
       ownerDependenceRating: value.ownerDependenceRating,
       recurringRevenueRating: value.recurringRevenueRating,
       transferabilityRating: value.transferabilityRating,
       scheduleControlFitRating: value.scheduleControlFitRating,
       brotherOperatorFitRating: value.brotherOperatorFitRating,
+      aiResistanceScore: value.aiResistanceScore,
+      financeabilityRating: value.financeabilityRating,
+      operatorSkillDependency: value.operatorSkillDependency,
+      licenseDependency: value.licenseDependency,
+      afterHoursBurden: value.afterHoursBurden,
+      capexRisk: value.capexRisk,
+      staleListingRisk: value.staleListingRisk,
+      keyPersonRisk: value.keyPersonRisk,
+      keepDayJobFit: value.keepDayJobFit,
+      quitDayJobFit: value.quitDayJobFit,
+      dataConfidenceScore: value.dataConfidenceScore,
+      opsManagerExists: value.opsManagerExists,
+      conservativeCashAfterBrother: scenario.conservativeCashAfterBrother,
+      cashToCloseHigh: scenario.cashToCloseHigh,
+      sde: value.sde,
     });
 
     return {

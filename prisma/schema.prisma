@@ -18,6 +18,13 @@ enum DealStatus {
   CLOSED
 }
 
+enum PipelineBucket {
+  ACTIVE
+  WATCHLIST
+  COMP_ONLY
+  UNVERIFIED
+}
+
 enum PrimaryUseCase {
   bridge_while_employed
   full_time_replacement
@@ -52,6 +59,8 @@ model Business {
   brokerFirm               String?
   listingSource            String?
   dealStatus               DealStatus             @default(NEW)
+  pipelineBucket           PipelineBucket         @default(ACTIVE)
+  publicSourceVerified     Boolean                @default(false)
   ownerDependenceRating    Int?
   recurringRevenueRating   Int?
   transferabilityRating    Int?
@@ -92,6 +101,8 @@ model Business {
   @@index([category])
   @@index([stateCode])
   @@index([dealStatus])
+  @@index([pipelineBucket])
+  @@index([publicSourceVerified])
   @@index([askingPrice])
   @@index([sde])
   @@index([overallScore])
