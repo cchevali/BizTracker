@@ -167,21 +167,22 @@ export const researchedListingSeeds = [
     ebitda: null,
     employees: 40,
     summary:
-      "Central Ohio commercial landscaping and hardscaping company in sale-pending status with 40 employees, heavy equipment included, and a 90 percent commercial revenue base.",
+      "Central Ohio commercial landscaping and hardscaping company in sale-pending status with 40 employees, lawn-maintenance/snow-removal/hardscaping service lines, and a 90 percent commercial revenue base.",
     whyItMayFit:
-      "The crew depth and commercial-repeat angle are attractive, especially for a brother-operator model, and the listing is one of the few in the batch that clearly shows real labor depth.",
+      "This is now most useful as a sale-pending comp for Wayne/Clifton-style landscaping and snow businesses because the crew depth, commercial mix, and mixed service lines provide a strong structure reference even though the deal is no longer a live target.",
     risks:
-      "The page is already under contract, capex intensity is high, and snow plus holiday-light work can create a much more seasonal and labor-heavy ownership experience than the service-business thesis prefers.",
+      "The live page is already under contract, so this should not sit in the default active pipeline, and the capex-heavy mixed service model is still more operationally intense than the cleanest current thesis fits.",
     brokerName: "Matt Valantine",
     brokerFirm: "Valantine",
     listingSource: "BizBuySell",
     dealStatus: DealStatus.LETTER_OF_INTENT,
     notes:
-      "Observed: the live page is marked Sale Pending and the description says Under Contract, ask 1350000, revenue 2800000, SDE 403000, Ohio relocatable with a Central Ohio title, 40 employees listed with count peaks to 60 during the year, 400000 of FF&E included, real estate owned but not included with a stated 900000 value, 90 percent commercial revenue, no state landscaping license requirement, and services spanning maintenance, hardscaping, snow removal, and holiday lights. Inference: this is a real operating company with a serious bench, but it is also a much more labor-heavy and equipment-heavy outdoor-services business than the quieter boring-business thesis sweet spot. Missing: how much revenue is contractual maintenance versus one-time project work, whether there is a true operations layer below the owner, winter margin stability, and customer concentration inside the commercial book. Top 3 follow-up questions: 1) What percentage of gross profit comes from recurring maintenance versus hardscape projects, snow, and holiday lighting? 2) Who runs crews, bids, and customer communication when the owner is away? 3) What does normalized annual maintenance capex look like across trucks, mowers, loaders, and snow equipment?",
+      "Observed: the live page is marked Sale Pending and the description says Under Contract, ask 1350000, revenue 2800000, SDE 403000, Ohio relocatable with a Central Ohio title, Established: Not Disclosed in the header, 40 employees listed with count peaks to 60 during the year, 400000 of FF&E included, real estate owned but not included with a stated 900000 value, 90 percent commercial revenue, no state landscaping license requirement, and services spanning year-round lawn maintenance, landscaping/hardscaping, snow removal, and holiday lights. Inference: this is a useful comp for Wayne/Clifton-style landscaping and snow businesses because it shows real crew depth and mixed service lines, but it should now be treated as a sale-pending structure and valuation reference rather than an actively available target. Missing: how much revenue is contractual maintenance versus one-time project work, whether there is a true operations layer below the owner, winter margin stability, customer concentration inside the commercial book, and any reliable founding-year detail beyond the description's over-40-years language. Top 3 follow-up questions: 1) What percentage of gross profit comes from recurring maintenance versus hardscape projects, snow, and holiday lighting? 2) Who runs crews, bids, and customer communication when the owner is away? 3) What does normalized annual maintenance capex look like across trucks, mowers, loaders, and snow equipment?",
     tags: [
       "landscaping",
       "commercial",
       "pending",
+      "comp-reference",
       "crew-based",
       "capital-heavy",
     ],
@@ -208,7 +209,7 @@ export const researchedListingSeeds = [
       primaryUseCase: PrimaryUseCase.either,
       beatsCurrentBenchmark: false,
       benchmarkNotes:
-        "Compared against Profitable HVAC Air Quality & Duct Cleaning Business Franchise in Fairfax County. The bench is much deeper here, but the pending status, equipment load, and seasonal labor profile keep it behind the benchmark.",
+        "Useful sale-pending comp for Wayne/Clifton-style landscaping and snow businesses because the workforce depth, 90 percent commercial mix, and mixed service lines are strong structural reference points, even though it is no longer a live target.",
       freshnessVerifiedAt: RESEARCHED_LISTING_VERIFIED_AT,
       staleListingRisk: 1,
       homeBasedFlag: null,
@@ -221,19 +222,19 @@ export const researchedListingSeeds = [
     },
     analysis: {
       thesisFit:
-        "Good brother-operator candidate on structure, but not a low-chaos fit.",
+        "Useful sale-pending comp with real crew depth, but not a current live contender.",
       mainReasons:
-        "A true crew bench and commercial revenue make this more transferable than most smaller service listings.",
+        "A true crew bench, strong commercial mix, and landscaping-plus-snow service stack make it a valuable structural comparison for larger outdoor-service platforms.",
       failureModes:
-        "Seasonality, capex, and missing management-layer detail could all make the operation much heavier than the headline SDE suggests.",
+        "Sale-pending status removes it from the live pipeline, and the business is still heavy on equipment, seasonality, and execution complexity.",
       keepDayJobView:
-        "Better than most because the team is large, though snow and seasonal crew issues still create real ownership pull.",
+        "Not especially useful as a current bridge candidate because the page is already under contract, though it remains a good comp for how larger crew-based landscaping platforms are packaged.",
       quitDayJobView:
-        "Also reasonable because the company is big enough to matter if the under-contract status ever reopens.",
+        "Also best treated as historical reference until the sale-pending status clears or a new live relist appears.",
       benchmarkComparison:
-        "It stays behind the benchmark because it is far more asset-heavy and much less elegant operationally.",
+        "It is more useful today as a valuation and structure comp than as a benchmark-beating target because the process is already under contract.",
       confidence:
-        "Confidence is good on the public facts and still limited on contract mix and management depth.",
+        "Confidence is good on the public facts and high that the listing is no longer actively available, though contract mix and management depth are still under-disclosed.",
     },
   },
   {

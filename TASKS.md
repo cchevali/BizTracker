@@ -35,6 +35,8 @@
 - Reconciled production after the 2026-04-17 thesis realignment, bringing the live tracker to `77 total / 32 active / 14 watchlist / 25 comp-only / 6 unverified / 29 passed`, with no unverified rows left in the active bucket
 - Expanded the 2026-04-17 requested researched batch to add the live Tampa BizBuySell listing and the live Wayne BizQuest individual listing, while keeping Clifton normalized to the live `2445240` BizBuySell relist and preserving the existing row/history
 - Reconciled production after the Wayne/Tampa patch, bringing the live tracker to `79 total / 34 active / 14 watchlist / 25 comp-only / 6 unverified / 29 passed`, with Wayne (`89`), Clifton (`88`), and Tampa (`79`) all verified in the active bucket
+- Reclassified `Established/Commercial Landscaping /Hardscaping Business - Central OH` as a verified sale-pending comp-only reference, preserving its `LETTER_OF_INTENT` status and canonical BizBuySell URL while removing it from the default active pipeline
+- Reconciled production after the Central Ohio comp update, bringing the live tracker to `79 total / 33 active / 14 watchlist / 26 comp-only / 6 unverified / 29 passed`
 - Hardened Vercel deploy automation with explicit credential validation, retryable `vercel pull`, direct CLI deploys, and a repo-native manual production deploy fallback with smoke checks
 - Reconciled and manually deployed production after the 2026-04-12 researched batch, bringing the live tracker to `55 total / 48 active / 7 passed`
 - Reconciled production after the 2026-04-14 researched batch, bringing the live tracker to `60 total / 53 active / 7 passed`, and verified the live export plus public search/filter views for the new rows

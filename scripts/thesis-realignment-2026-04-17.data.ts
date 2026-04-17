@@ -20,7 +20,6 @@ export const promotedBusinessNames = [
   "Established Landscaping, Snow Plowing, Hardscape & Concrete Company",
   "High Income Recession-Proof HVAC Services Business",
   "Premier NJ Residential Pool Service Co. - 37 yrs - Recurring Contracts",
-  "Established/Commercial Landscaping /Hardscaping Business - Central OH",
   "Commercial Landscaping Company- $1M+ Revenue and Strong Cash Flow",
 ] as const;
 
@@ -34,6 +33,7 @@ export const demotedBusinessNames = [
   "3 FedEx Linehaul Routes - Stafford, VA - Highly Profitable",
   "Northeast Virginia Multi-trade Company",
   "Great South Charlotte pool company with high end clientele",
+  "Established/Commercial Landscaping /Hardscaping Business - Central OH",
   "Highly Profitable, Established HVAC Service Provider with Real Estate",
   "Growing Central Ohio Plumbing Business for Sale",
   "$2.0 Million Plumbing Contractor, $350K Net; SBA Pre-Approved! (17923)",
@@ -70,6 +70,7 @@ export const movedOutOfDefaultActiveViewBusinessNames = [
   "Stable Route-Based Business with Long-Term Clients",
   "Established Cleaning Business - Multi-State Commercial Clients",
   "Northeast Virginia Multi-trade Company",
+  "Established/Commercial Landscaping /Hardscaping Business - Central OH",
 ] as const;
 
 export const intentionallyUnchangedBusinessNames = [
@@ -161,15 +162,19 @@ export const thesisRealignmentOverrides: Record<
       "Kept high because operability and recurring service structure outweigh the geography penalty under the current thesis.",
   },
   "Established/Commercial Landscaping /Hardscaping Business - Central OH": {
-    pipelineBucket: PipelineBucket.ACTIVE,
-    overallScore: 82,
+    pipelineBucket: PipelineBucket.COMP_ONLY,
+    dealStatus: DealStatus.LETTER_OF_INTENT,
+    overallScore: 68,
+    beatsCurrentBenchmark: false,
+    benchmarkNotes:
+      "Retained as a sale-pending comp for Wayne/Clifton-style landscaping and snow businesses because the crew depth, commercial mix, and multi-service operating shape are still useful valuation and structure references.",
     whyItMayFitAppend:
-      "It earns a modest promotion because real crew depth and commercial outdoor-service work translate well to a brother-local field-oversight model.",
+      "It is now retained mainly as a sale-pending comparable for larger landscaping and snow businesses rather than as a default active contender.",
     risksAppend:
-      "The remaining caution is project mix and equipment intensity rather than a lack of category fit.",
-    tagAdditions: ["promoted-fit"],
+      "It should not be treated as a live acquisition target because the public page is marked Sale Pending and Under Contract.",
+    tagAdditions: ["comp-only", "sale-pending-comp", "valuation-comp"],
     noteReason:
-      "Promoted modestly because the revised thesis gives more credit to crew-led outdoor-service businesses with repeat commercial work.",
+      "Moved to comp-only because the verified public listing is sale pending / under contract and is more useful now as a structure and valuation reference than as a live pipeline target.",
   },
   "Commercial Landscaping Company- $1M+ Revenue and Strong Cash Flow": {
     pipelineBucket: PipelineBucket.ACTIVE,

@@ -149,3 +149,8 @@ Consequences: `src/features/businesses/domain/business-score.ts` now derives a m
 Decision: Allow requested public listings to canonicalize to a live direct relist or a live direct mirror-marketplace individual page when the requested URL is stale, but only if the title, location, and economics still match exactly.
 Reason: The Wayne County landscaping candidate no longer had a usable live BizBuySell page, the user-supplied BizQuest `BW2487125` URL was also stale, and the tracker still needed a conservative way to preserve the real opportunity without inventing a source URL or seeding a merely similar listing.
 Consequences: Wayne is now stored under the live direct BizQuest individual page `BW2480416`, Clifton remains on the live BizBuySell relist `2445240`, Tampa uses its live BizBuySell page `2479308`, and future sessions should document dead or stale requested URLs explicitly in notes, docs, and handoff rather than silently substituting near-matches.
+
+## 2026-04-17
+Decision: When a verified public listing is sale pending and the user wants it retained only for market memory, keep the sale-stage status but rebucket it to `COMP_ONLY` instead of leaving it in `ACTIVE`.
+Reason: The Central Ohio landscaping listing remained a useful Wayne/Clifton-style valuation and structure comp, but the live page is clearly marked `Sale Pending` / `Under Contract`, so keeping it in the default active pipeline overstated current availability.
+Consequences: `Established/Commercial Landscaping /Hardscaping Business - Central OH` now stays `LETTER_OF_INTENT` for sale-stage fidelity while living in `COMP_ONLY`, and future sale-pending public rows can follow the same pattern when they should be preserved as historical comps rather than active targets.
