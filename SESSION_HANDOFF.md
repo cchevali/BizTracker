@@ -1,21 +1,13 @@
 # SESSION_HANDOFF
 
 ## What Changed
-- Added a new repo-managed requested batch for five retained landscaping comparison records:
-  - `scripts/researched-listings-2026-04-23-requested.data.ts`
-  - `scripts/researched-listings-2026-04-23-requested.lib.ts`
-- Wired that batch into the normal backfill and verification path:
-  - `scripts/backfill-acquisition-thesis.lib.ts`
-  - `scripts/verify-biztracker-reconciliation.ts`
-- Added thesis-realignment overrides so all five rows stay verified `COMP_ONLY` records instead of entering the default active contender view:
+- Updated the thesis-realignment overrides so the five 2026-04-23 landscaping additions now live in the `ACTIVE` bucket instead of `COMP_ONLY`:
   - `scripts/thesis-realignment-2026-04-17.data.ts`
-- Added focused regression coverage:
-  - `tests/researched-listings-2026-04-23-requested-batch.test.ts`
-  - `tests/researched-listings-batch.test.ts`
+- Added a regression check for that active-bucket treatment:
+  - `tests/thesis-realignment-2026-04-17-data.test.ts`
 - Updated the repo truth files:
   - `CHANGELOG.md`
   - `CONTEXT.md`
-  - `ARCHITECTURE.md`
   - `DECISIONS.md`
   - `TASKS.md`
   - `SESSION_HANDOFF.md`
@@ -24,17 +16,17 @@
 - Reconciled production with `npx tsx scripts/reconcile-production-data.ts`.
 - Live production now verifies at:
   - `84 total`
-  - `33 active`
+  - `38 active`
   - `14 watchlist`
-  - `31 comp-only`
+  - `26 comp-only`
   - `6 unverified`
   - `29 passed`
-- New production rows created exactly once:
-  - `Established Landscape company with 40 years in business and solid Hist` -> `NEW`, `COMP_ONLY`, verified, score `84`
-  - `High-Margin Landscaping Co. with Route Density in Growth Corridor` -> `LETTER_OF_INTENT`, `COMP_ONLY`, verified, score `85`
-  - `Established Commercial Landscaping — KC Metro — Recurring Contracts` -> `NEW`, `COMP_ONLY`, verified, score `83`
-  - `39-Year Landscaping Business – Loyal Clients & High Profits` -> `NEW`, `COMP_ONLY`, verified, score `77`
-  - `Highly Profitable Full-Service Landscaping & Snow Removal Company` -> `NEW`, `COMP_ONLY`, verified, score `82`
+- Updated 2026-04-23 landscaping rows now resolve to:
+  - `Established Landscape company with 40 years in business and solid Hist` -> `NEW`, `ACTIVE`, verified, score `84`
+  - `High-Margin Landscaping Co. with Route Density in Growth Corridor` -> `LETTER_OF_INTENT`, `ACTIVE`, verified, score `85`
+  - `Established Commercial Landscaping — KC Metro — Recurring Contracts` -> `NEW`, `ACTIVE`, verified, score `83`
+  - `39-Year Landscaping Business – Loyal Clients & High Profits` -> `NEW`, `ACTIVE`, verified, score `77`
+  - `Highly Profitable Full-Service Landscaping & Snow Removal Company` -> `NEW`, `ACTIVE`, verified, score `82`
 - Existing key landscaping rows stayed unchanged in their core identity:
   - Wayne remains on `BW2480416`, `ACTIVE`, score `89`
   - Clifton remains on BizBuySell `2445240`, `ACTIVE`, score `88`
@@ -52,19 +44,14 @@
 
 ## Verification
 - Local checks passed:
-  - `npx vitest run tests/researched-listings-2026-04-23-requested-batch.test.ts tests/researched-listings-batch.test.ts tests/researched-listings-2026-04-17-requested-batch.test.ts tests/researched-listings-2026-04-15-requested-batch.test.ts tests/thesis-realignment-2026-04-17-data.test.ts`
+  - `npx vitest run tests/thesis-realignment-2026-04-17-data.test.ts tests/researched-listings-2026-04-23-requested-batch.test.ts`
   - `npm run typecheck`
-  - `npm run lint`
 - Production reconciliation passed:
   - `npx tsx scripts/reconcile-production-data.ts`
 - Live app checks passed:
-  - `https://microflowops.com/biztracker?pipeline=comp-only&state=MA`
-  - `https://microflowops.com/biztracker?pipeline=comp-only&state=TX`
-  - `https://microflowops.com/biztracker?pipeline=comp-only&state=MO`
-  - `https://microflowops.com/biztracker?pipeline=comp-only&state=AZ`
-  - `https://microflowops.com/biztracker?pipeline=comp-only&state=NY`
-  - `https://microflowops.com/biztracker?pipeline=comp-only&q=landscaping`
-  - `https://microflowops.com/biztracker?pipeline=comp-only&q=landscaping&view=cards`
+  - `https://microflowops.com/biztracker?q=landscaping`
+  - `https://microflowops.com/biztracker?state=MA`
+  - `https://microflowops.com/biztracker?state=TX`
 - Verification still confirms:
   - no missing required businesses
   - no non-lowercase categories
@@ -72,8 +59,8 @@
   - thesis fields are populated across `ACTIVE` + `WATCHLIST`
 
 ## Field-Level Assumptions
-- `COMP_ONLY` exists in the schema, so all five new rows use the real pipeline bucket instead of a tag-only fallback.
-- The Texas BizQuest listing is stored as `LETTER_OF_INTENT` rather than `NEW` because the live page is explicitly marked `Sale Pending`; that matches the app's existing pending-listing convention while still keeping the row in `COMP_ONLY`.
+- The five 2026-04-23 landscaping rows now use the real `ACTIVE` pipeline bucket in production after the follow-up rebucket.
+- The Texas BizQuest listing is still stored as `LETTER_OF_INTENT` rather than `NEW` because the live page is explicitly marked `Sale Pending`; that matches the app's existing pending-listing convention while still letting the row remain active.
 - `homeBasedFlag` is `true` for the Scottsdale listing because the live page says it operates from a home-based office.
 - `sellerFinancingAvailable` is `true` for the Texas and Kansas City rows because their live public pages explicitly mention seller financing.
 - Advanced derived cash fields were not manually stored; the tracker continues deriving scenario outputs from asking price and SDE.

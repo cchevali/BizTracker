@@ -159,3 +159,8 @@ Consequences: `Established/Commercial Landscaping /Hardscaping Business - Centra
 Decision: Add requested landscaping comparison rows as their own repo-managed batch and force them into `COMP_ONLY` through thesis-realignment overrides instead of seeding them as default active contenders.
 Reason: The user wanted five new verified landscaping records retained for comparison without polluting the day-to-day contender view, and the existing managed-batch plus realignment path is the safest reproducible way to seed live production while preserving dedupe, history, and source verification.
 Consequences: `scripts/researched-listings-2026-04-23-requested.*` now own those five comps, future refreshes for the exact same public listings should update that batch rather than patching rows manually, and pending comparison rows like the Texas BizQuest listing continue to use the existing `LETTER_OF_INTENT` status plus `COMP_ONLY` bucket instead of inventing a new pending enum.
+
+## 2026-04-23
+Decision: Rebucket the five new 2026-04-23 landscaping rows into `ACTIVE` after follow-up user direction, while keeping the Texas page's pending stage mapped to `LETTER_OF_INTENT`.
+Reason: The follow-up request explicitly asked for those rows to show as active on the site, overriding the earlier comp-only presentation choice.
+Consequences: The default active dashboard now includes those five verified landscaping records, live production counts shift from `33 active / 31 comp-only` to `38 active / 26 comp-only`, and the repo-managed realignment overrides now represent that active-bucket policy.

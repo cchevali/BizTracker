@@ -39,6 +39,7 @@
 - Reconciled production after the Central Ohio comp update, bringing the live tracker to `79 total / 33 active / 14 watchlist / 26 comp-only / 6 unverified / 29 passed`
 - Added a repo-managed 2026-04-23 requested researched public listing batch for five new retained landscaping comparison records in MA, TX, MO, AZ, and NY after confirming the live DB had no duplicate source URLs or normalized title-location matches
 - Reconciled production after the 2026-04-23 retained landscaping comp batch, bringing the live tracker to `84 total / 33 active / 14 watchlist / 31 comp-only / 6 unverified / 29 passed`, and verified the live app surfaces the new comps under `pipeline=comp-only` searches by state and by `landscaping` in both table and card views
+- Rebucketed those five 2026-04-23 landscaping rows from `COMP_ONLY` to `ACTIVE` after follow-up user direction, preserved the Texas row's `LETTER_OF_INTENT` pending status, and reconciled production to `84 total / 38 active / 14 watchlist / 26 comp-only / 6 unverified / 29 passed`
 - Hardened Vercel deploy automation with explicit credential validation, retryable `vercel pull`, direct CLI deploys, and a repo-native manual production deploy fallback with smoke checks
 - Reconciled and manually deployed production after the 2026-04-12 researched batch, bringing the live tracker to `55 total / 48 active / 7 passed`
 - Reconciled production after the 2026-04-14 researched batch, bringing the live tracker to `60 total / 53 active / 7 passed`, and verified the live export plus public search/filter views for the new rows

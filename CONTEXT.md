@@ -27,7 +27,7 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Realistic seed data
 - Production deployment on Vercel with Neon Postgres and a `/biztracker` base path
 - GitHub Actions-based auto-deploys for preview and production Vercel releases
-- Live production currently verifies at `84 total / 33 active / 14 watchlist / 31 comp-only / 6 unverified / 29 passed` after the 2026-04-23 retained landscaping comp batch on top of the 2026-04-17 conservative thesis realignment
+- Live production currently verifies at `84 total / 38 active / 14 watchlist / 26 comp-only / 6 unverified / 29 passed` after the follow-up 2026-04-23 rebucket that moved the five new landscaping rows into the active pipeline on top of the 2026-04-17 conservative thesis realignment
 
 ## Key Assumptions
 - This is currently a personal/internal tool, not a multi-user SaaS app.
