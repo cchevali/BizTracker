@@ -200,6 +200,52 @@ export const thesisRealignmentOverrides: Record<
     noteReason:
       "Kept active but below the top tier because the verified Tampa listing is attractive on recurring maintenance and crew scale, yet still under-discloses management depth compared with Wayne and Clifton.",
   },
+  "Established Landscape company with 40 years in business and solid Hist": {
+    pipelineBucket: PipelineBucket.COMP_ONLY,
+    overallScore: 84,
+    beatsCurrentBenchmark: false,
+    benchmarkNotes:
+      "Competes on scale and raw SDE, but it does not beat Wayne on ask-to-SDE efficiency, capital burden, or apparent simplicity.",
+    noteReason:
+      "Stored as comp-only because it is a useful verified landscaping benchmark, but the current thesis does not want larger capital-heavy comparison rows cluttering the default active pipeline.",
+  },
+  "High-Margin Landscaping Co. with Route Density in Growth Corridor": {
+    pipelineBucket: PipelineBucket.COMP_ONLY,
+    dealStatus: DealStatus.LETTER_OF_INTENT,
+    overallScore: 85,
+    beatsCurrentBenchmark: false,
+    benchmarkNotes:
+      "Closest new comp to Wayne on economics, but still pricier on ask-to-SDE and currently sale pending.",
+    noteReason:
+      "Stored as comp-only because the verified public page is sale pending and is now more useful as a retained Wayne-style comparison than as a live default-pipeline target.",
+  },
+  "Established Commercial Landscaping — KC Metro — Recurring Contracts": {
+    pipelineBucket: PipelineBucket.COMP_ONLY,
+    overallScore: 83,
+    beatsCurrentBenchmark: false,
+    benchmarkNotes:
+      "Good commercial recurring structure, but Wayne still wins on listed price-to-SDE and likely simplicity.",
+    noteReason:
+      "Stored as comp-only because it is a strong verified commercial-landscaping benchmark, but the current thesis reserves the default active view for a tighter working set of live contenders.",
+  },
+  "39-Year Landscaping Business – Loyal Clients & High Profits": {
+    pipelineBucket: PipelineBucket.COMP_ONLY,
+    overallScore: 77,
+    beatsCurrentBenchmark: false,
+    benchmarkNotes:
+      "Valid comp on earnings and longevity, but not as clean a Wayne-style brother-operator fit.",
+    noteReason:
+      "Stored as comp-only because it is a useful verified national landscaping comparison row, but the owner-active and tree-service mix make it less clean than the core active targets.",
+  },
+  "Highly Profitable Full-Service Landscaping & Snow Removal Company": {
+    pipelineBucket: PipelineBucket.COMP_ONLY,
+    overallScore: 82,
+    beatsCurrentBenchmark: false,
+    benchmarkNotes:
+      "Huge SDE comp, but Wayne still looks cleaner on entry price, simplicity, and likely transition risk.",
+    noteReason:
+      "Stored as comp-only because it is a high-end verified landscaping benchmark, but the capital load and under-disclosed management depth make it a better comp than default active contender.",
+  },
   "Blue Ridge HVAC Services": {
     pipelineBucket: PipelineBucket.UNVERIFIED,
     overallScore: 82,

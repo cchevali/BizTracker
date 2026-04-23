@@ -9,6 +9,7 @@ import { researchedListingSeeds as researchedListingSeeds20260414 } from "./rese
 import { researchedListingSeeds as researchedListingSeeds20260415 } from "./researched-listings-2026-04-15.data";
 import { researchedListingSeeds as researchedListingSeeds20260415Requested } from "./researched-listings-2026-04-15-requested.data";
 import { researchedListingSeeds as researchedListingSeeds20260417Requested } from "./researched-listings-2026-04-17-requested.data";
+import { researchedListingSeeds as researchedListingSeeds20260423Requested } from "./researched-listings-2026-04-23-requested.data";
 import {
   assertProductionTarget,
   type ReconciliationTarget,
@@ -74,6 +75,11 @@ const sampleBusinessNames = [
   "Established Landscaping & Snow Removal Company | $500K SDE | 30+ Years",
   "Established Landscaping, Snow Plowing, Hardscape & Concrete Company",
   "Scalable Landscaping Platform | 50% Recurring Revenue | Tampa",
+  "Established Landscape company with 40 years in business and solid Hist",
+  "High-Margin Landscaping Co. with Route Density in Growth Corridor",
+  "Established Commercial Landscaping — KC Metro — Recurring Contracts",
+  "39-Year Landscaping Business – Loyal Clients & High Profits",
+  "Highly Profitable Full-Service Landscaping & Snow Removal Company",
 ] as const;
 
 export async function verifyBizTrackerReconciliation({
@@ -126,6 +132,9 @@ export async function verifyBizTrackerReconciliation({
         (seed) => seed.businessName,
       ),
       ...researchedListingSeeds20260417Requested.map(
+        (seed) => seed.businessName,
+      ),
+      ...researchedListingSeeds20260423Requested.map(
         (seed) => seed.businessName,
       ),
     ];

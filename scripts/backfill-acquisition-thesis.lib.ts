@@ -17,6 +17,7 @@ import { upsertResearchedListingBatch20260414 } from "./researched-listings-2026
 import { upsertResearchedListingBatch20260415 } from "./researched-listings-2026-04-15.lib";
 import { upsertResearchedListingBatch20260415Requested } from "./researched-listings-2026-04-15-requested.lib";
 import { upsertResearchedListingBatch20260417Requested } from "./researched-listings-2026-04-17-requested.lib";
+import { upsertResearchedListingBatch20260423Requested } from "./researched-listings-2026-04-23-requested.lib";
 import { runThesisRealignment20260417 } from "./thesis-realignment-2026-04-17.lib";
 
 const backfillFieldNames = [
@@ -70,6 +71,8 @@ export type AcquisitionThesisBackfillSummary = {
   researched20260415RequestedUpdatedNames: string[];
   researched20260417RequestedCreatedNames: string[];
   researched20260417RequestedUpdatedNames: string[];
+  researched20260423RequestedCreatedNames: string[];
+  researched20260423RequestedUpdatedNames: string[];
   thesisRealignmentUpdatedNames: string[];
   thesisRealignmentPromotedNames: string[];
   thesisRealignmentDemotedNames: string[];
@@ -388,6 +391,8 @@ export async function runAcquisitionThesisBackfill(
     await upsertResearchedListingBatch20260415Requested(prisma);
   const researched20260417RequestedSummary =
     await upsertResearchedListingBatch20260417Requested(prisma);
+  const researched20260423RequestedSummary =
+    await upsertResearchedListingBatch20260423Requested(prisma);
   const thesisRealignmentSummary = await runThesisRealignment20260417(prisma);
 
   return {
@@ -411,6 +416,10 @@ export async function runAcquisitionThesisBackfill(
       researched20260417RequestedSummary.createdNames,
     researched20260417RequestedUpdatedNames:
       researched20260417RequestedSummary.updatedNames,
+    researched20260423RequestedCreatedNames:
+      researched20260423RequestedSummary.createdNames,
+    researched20260423RequestedUpdatedNames:
+      researched20260423RequestedSummary.updatedNames,
     thesisRealignmentUpdatedNames: thesisRealignmentSummary.updatedNames,
     thesisRealignmentPromotedNames: thesisRealignmentSummary.promotedNames,
     thesisRealignmentDemotedNames: thesisRealignmentSummary.demotedNames,
@@ -463,6 +472,12 @@ export function printAcquisitionThesisBackfillSummary(
   );
   console.log(
     `Updated 2026-04-17 requested researched listings: ${summary.researched20260417RequestedUpdatedNames.length}`,
+  );
+  console.log(
+    `Created 2026-04-23 requested researched listings: ${summary.researched20260423RequestedCreatedNames.length}`,
+  );
+  console.log(
+    `Updated 2026-04-23 requested researched listings: ${summary.researched20260423RequestedUpdatedNames.length}`,
   );
   console.log(
     `Updated rows during 2026-04-17 thesis realignment: ${summary.thesisRealignmentUpdatedNames.length}`,
@@ -562,6 +577,20 @@ export function printAcquisitionThesisBackfillSummary(
   if (summary.researched20260417RequestedUpdatedNames.length > 0) {
     console.log("Updated 2026-04-17 requested researched listings:");
     for (const businessName of summary.researched20260417RequestedUpdatedNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.researched20260423RequestedCreatedNames.length > 0) {
+    console.log("Created 2026-04-23 requested researched listings:");
+    for (const businessName of summary.researched20260423RequestedCreatedNames) {
+      console.log(`- ${businessName}`);
+    }
+  }
+
+  if (summary.researched20260423RequestedUpdatedNames.length > 0) {
+    console.log("Updated 2026-04-23 requested researched listings:");
+    for (const businessName of summary.researched20260423RequestedUpdatedNames) {
       console.log(`- ${businessName}`);
     }
   }

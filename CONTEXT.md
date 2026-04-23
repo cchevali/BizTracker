@@ -20,14 +20,14 @@ This app tracks small businesses that may be acquisition targets. It supports ma
 - Create and edit forms with validation
 - Default active pipeline behavior that now centers on `pipelineBucket = ACTIVE`, with optional `WATCHLIST` browsing and hidden-by-default `COMP_ONLY`, `UNVERIFIED`, and `Passed` records
 - Thesis cleanup/backfill CLI that archives low-fit deals, adds discussed public listings, and backfills active businesses
-- Repo-managed public listing upsert batches keyed by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location for the serious 2026-04-11 candidates plus the 2026-04-12, 2026-04-14, 2026-04-15, 2026-04-15 requested, and 2026-04-17 requested researched additions, including Wayne County MI, Clifton NJ, and Tampa FL outdoor-services contenders with full listing facts, skeptical assessment text, workbook-informed dedupe, and history coherence
+- Repo-managed public listing upsert batches keyed by normalized `sourceUrl`, then BizBuySell ad id, then normalized title + location for the serious 2026-04-11 candidates plus the 2026-04-12, 2026-04-14, 2026-04-15, 2026-04-15 requested, 2026-04-17 requested, and 2026-04-23 requested researched additions, including Wayne County MI, Clifton NJ, Tampa FL, and five retained national landscaping comparison rows in MA, TX, MO, AZ, and NY with full listing facts, skeptical assessment text, live-DB dedupe, and history coherence
 - Conservative thesis realignment tooling that normalizes category casing, marks public-source verification, rebuckets rows into `ACTIVE` / `WATCHLIST` / `COMP_ONLY` / `UNVERIFIED`, and appends explicit note/history context for major ranking changes
 - Production-safe reconciliation and verification scripts that compare the live Neon database against the expected thesis-cleanup state
 - Repo-native Vercel access validation and a manual production deploy script with smoke checks for the standalone app, public path, and workbook export
 - Realistic seed data
 - Production deployment on Vercel with Neon Postgres and a `/biztracker` base path
 - GitHub Actions-based auto-deploys for preview and production Vercel releases
-- Live production currently verifies at `79 total / 33 active / 14 watchlist / 26 comp-only / 6 unverified / 29 passed` after the Central Ohio sale-pending comp update on top of the 2026-04-17 conservative thesis realignment
+- Live production currently verifies at `84 total / 33 active / 14 watchlist / 31 comp-only / 6 unverified / 29 passed` after the 2026-04-23 retained landscaping comp batch on top of the 2026-04-17 conservative thesis realignment
 
 ## Key Assumptions
 - This is currently a personal/internal tool, not a multi-user SaaS app.

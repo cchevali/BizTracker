@@ -89,3 +89,12 @@
 - Reclassified `Established/Commercial Landscaping /Hardscaping Business - Central OH` as a sale-pending comp-only reference instead of an active contender, while preserving its live BizBuySell source, `LETTER_OF_INTENT` status, notes, and history.
 - Added a small thesis-realignment regression test so the Central Ohio sale-pending landscaping listing stays out of the default active pipeline in future sessions.
 - Reconciled and re-verified production after the Central Ohio comp-only update, bringing the live tracker to `79 total / 33 active / 14 watchlist / 26 comp-only / 6 unverified / 29 passed`.
+
+## 2026-04-23
+- Added `scripts/researched-listings-2026-04-23-requested.data.ts` and `scripts/researched-listings-2026-04-23-requested.lib.ts` for a sixth repo-managed requested public-listing batch covering five retained landscaping comparison rows in Massachusetts, Texas, Missouri, Arizona, and New York.
+- Used the live production database as the dedupe baseline before seeding, and confirmed none of the five requested source URLs or normalized name-plus-location pairs already existed alongside Wayne, Clifton, Tampa, Gwinnett, or the Central Ohio comp.
+- Added first-pass underwriting, benchmark notes, skeptical analysis text, and follow-up diligence questions for all five landscaping comps while preserving nullable fields when the public pages did not support a confident value.
+- Kept the new rows out of the default active pipeline by adding thesis-realignment overrides that force them into `COMP_ONLY` while preserving verified public sources and the current tracker styling.
+- Mapped the Texas BizQuest comp to `LETTER_OF_INTENT` instead of `NEW` because the live public page is currently marked `Sale Pending`, matching the app's existing pending-listing convention; the other four new comps remain `NEW`.
+- Updated `scripts/backfill-acquisition-thesis.lib.ts`, `scripts/verify-biztracker-reconciliation.ts`, `scripts/thesis-realignment-2026-04-17.data.ts`, and the researched-batch tests to include the new 2026-04-23 requested batch.
+- Reconciled and re-verified production, bringing the live tracker to `84 total / 33 active / 14 watchlist / 31 comp-only / 6 unverified / 29 passed`, and confirmed the live app surfaces the new comps under `pipeline=comp-only` searches by state and by `landscaping` in both table and card views.

@@ -154,3 +154,8 @@ Consequences: Wayne is now stored under the live direct BizQuest individual page
 Decision: When a verified public listing is sale pending and the user wants it retained only for market memory, keep the sale-stage status but rebucket it to `COMP_ONLY` instead of leaving it in `ACTIVE`.
 Reason: The Central Ohio landscaping listing remained a useful Wayne/Clifton-style valuation and structure comp, but the live page is clearly marked `Sale Pending` / `Under Contract`, so keeping it in the default active pipeline overstated current availability.
 Consequences: `Established/Commercial Landscaping /Hardscaping Business - Central OH` now stays `LETTER_OF_INTENT` for sale-stage fidelity while living in `COMP_ONLY`, and future sale-pending public rows can follow the same pattern when they should be preserved as historical comps rather than active targets.
+
+## 2026-04-23
+Decision: Add requested landscaping comparison rows as their own repo-managed batch and force them into `COMP_ONLY` through thesis-realignment overrides instead of seeding them as default active contenders.
+Reason: The user wanted five new verified landscaping records retained for comparison without polluting the day-to-day contender view, and the existing managed-batch plus realignment path is the safest reproducible way to seed live production while preserving dedupe, history, and source verification.
+Consequences: `scripts/researched-listings-2026-04-23-requested.*` now own those five comps, future refreshes for the exact same public listings should update that batch rather than patching rows manually, and pending comparison rows like the Texas BizQuest listing continue to use the existing `LETTER_OF_INTENT` status plus `COMP_ONLY` bucket instead of inventing a new pending enum.
